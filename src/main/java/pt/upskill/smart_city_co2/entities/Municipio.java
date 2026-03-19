@@ -18,7 +18,7 @@ public class Municipio {
 
     //Relação 1para1 Municipio-Utilizador
     @OneToOne
-    private Utilizador utilizadorM;
+    private User userM;
 
     //Relação 1para1 Municipio-Utilizador
     @OneToMany(mappedBy = "municipioR")
@@ -28,8 +28,8 @@ public class Municipio {
     public Municipio(){}
 
     //GETTERS e SETTERS
-    public Utilizador getUtilizadorM() {return utilizadorM;}
-    public void setUtilizadorM(Utilizador utilizadorM) {this.utilizadorM = utilizadorM;}
+    public User getUserM() {return userM;}
+    public void setUserM(User userM) {this.userM = userM;}
 
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}

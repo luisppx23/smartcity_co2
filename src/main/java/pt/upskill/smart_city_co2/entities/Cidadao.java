@@ -23,7 +23,7 @@ public class Cidadao {
 
     //Relação 1para1 Utilizador-Cidadão
     @OneToOne
-    private Utilizador utilizadorC;
+    private User userC;
 
     //CONSTRUTOR VAZIO
     public Cidadao(){}
@@ -35,8 +35,8 @@ public class Cidadao {
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
-    public Utilizador getUtilizadorC() {return utilizadorC;}
-    public void setUtilizadorC(Utilizador utilizadorC) {this.utilizadorC = utilizadorC;}
+    public User getUserC() {return userC;}
+    public void setUserC(User userC) {this.userC = userC;}
 
     public String getNome() {
         return nome;
