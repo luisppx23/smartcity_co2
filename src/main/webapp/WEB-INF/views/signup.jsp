@@ -18,16 +18,31 @@
         <div class="card-body">
             <form method="POST" action="/auth/signUpAction">
                 <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="nome" name="nome" placeholder="O seu nome">
+                    <label for="firstName" class="form-label">Primeiro Nome</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="João">
                 </div>
                 <div class="mb-3">
+                    <label for="lastName" class="form-label">Último Nome</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Silva">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="O seu email">
+                </div>
+                <div class="mb-3">
+                    <label for="tipo">Tipo de Conta:</label>
+                    <select id="tipo" name="tipo">
+                        <option value="cidadao">Cidadão</option>
+                        <option value="municipio">Município</option>
+                    </select>
+                </div>
+                <div>
                     <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="O seu username">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="O seu username">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="A sua password">
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">

@@ -9,6 +9,8 @@ import pt.upskill.smart_city_co2.entities.User;
 import pt.upskill.smart_city_co2.models.SignUpModel;
 import pt.upskill.smart_city_co2.repositories.UserRepository;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthService {
 
@@ -21,9 +23,17 @@ public class AuthService {
     public User register(SignUpModel signUpModel) {
         User user = new User();
         user.setUsername(signUpModel.getUsername());
+        user.setFirstName(signUpModel.getFirstName());
+        user.setLastName(signUpModel.getLastName());
+        user.setEmail(signUpModel.getEmail());
+        user.setTipo(signUpModel.getTipo());
+
 
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
         user.setPassword(encodedPassword);
+
+        user.setAtivo(true);  // Active by default
+        user.setData_registo(LocalDateTime.now());
 
         return userRepository.save(user);
     }

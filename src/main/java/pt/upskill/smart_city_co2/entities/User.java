@@ -1,7 +1,9 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,8 +14,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String firstName;
+    private String lastName;
     private String username;
-    private Date data_registo;
+    private LocalDateTime data_registo;
     private String email;
     private String password;
     private String tipo;
@@ -46,10 +50,10 @@ public class User {
     public Municipio getMunicipio() {return municipio;}
     public void setMunicipio(Municipio municipio) {this.municipio = municipio;}
 
-    public Date getData_registo() {
+    public LocalDateTime getData_registo() {
         return data_registo;
     }
-    public void setData_registo(Date data_registo) {
+    public void setData_registo(LocalDateTime data_registo) {
         this.data_registo = data_registo;
     }
 
@@ -83,5 +87,25 @@ public class User {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

@@ -2,6 +2,7 @@ package pt.upskill.smart_city_co2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +22,11 @@ public class AuthController {
     }
 
     @GetMapping(value = "/autenticadoTeste")
-    public String autenticadoTestePage() {
+    public String autenticadoTestePage(Model model) {
+        User user = authService.getAuthenticatedUser();
+        model.addAttribute("user", user);  // Now this should work
         return "autenticadoTeste";
     }
-
 
     @GetMapping(value = "/signup")
     public String signUpPage() {
@@ -36,5 +38,4 @@ public class AuthController {
         User user = authService.register(signUp);
         return "login";
     }
-
 }
