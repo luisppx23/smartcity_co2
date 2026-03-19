@@ -20,6 +20,11 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping(value = "/autenticadoTeste")
+    public String autenticadoTestePage() {
+        return "autenticadoTeste";
+    }
+
 
     @GetMapping(value = "/signup")
     public String signUpPage() {

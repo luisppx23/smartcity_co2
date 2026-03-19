@@ -21,11 +21,14 @@ public class SecurityWebConfig {
             auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
             auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**").permitAll();
             auth.requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll();
-            auth.requestMatchers("/**").denyAll();
+            auth.anyRequest().authenticated();
+
         });
         httpSecurity.formLogin(login -> {
             login.loginPage("/auth/login");
             login.loginProcessingUrl("/login");
+            login.defaultSuccessUrl("/auth/autenticadoTeste", true);
+            login.permitAll();
         });
         httpSecurity.authenticationProvider(userAuthenticationProvider);
         return httpSecurity.build();
