@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String password;
     private String tipo;
-    private Boolean ativo;
+    private boolean ativo;
 
 
     //Relação 1para1 Utilizador-Cidadão
@@ -31,6 +31,18 @@ public class User {
     //Relação 1para1 Utilizador-Município
     @OneToOne(mappedBy = "userM")
     private Municipio municipio;
+
+    public User(String firstName,String lastName, String username, LocalDateTime data_registo, String email, String password,String tipo,boolean ativo){
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.username=username;
+        this.data_registo=data_registo;
+        this.email=email;
+        this.password=password;
+        this.tipo=tipo;
+        this.ativo=ativo;
+    }
+
 
     //CONSTRUTOR VAZIO
     public User(){}
