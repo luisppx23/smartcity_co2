@@ -32,7 +32,7 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
         user.setPassword(encodedPassword);
 
-        user.setAtivo(true);  // Active by default
+        user.setAtivo(true);
         user.setData_registo(LocalDateTime.now());
 
         return userRepository.save(user);
@@ -72,7 +72,6 @@ public class AuthService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
-        // IMPORTANTE: Use o PasswordEncoder do Spring Security para encriptar
         user.setPassword(passwordEncoder.encode(novaPassword));
         userRepository.save(user);
     }
