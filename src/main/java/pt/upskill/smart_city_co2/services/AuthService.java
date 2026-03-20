@@ -63,4 +63,19 @@ public class AuthService {
         String username = auth.getPrincipal().toString();
         return getUser(username);
     }
+
+    public boolean verificarDadosRecuperacao(String username, String email) {
+        return userRepository.findByUsernameAndEmail(username, email).isPresent();
+    }
+
+    public void atualizarPassword(String username, String novaPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
+
+        // IMPORTANTE: Use o PasswordEncoder do Spring Security para encriptar
+        user.setPassword(passwordEncoder.encode(novaPassword));
+        userRepository.save(user);
+    }
+
+
 }

@@ -30,6 +30,12 @@
                         Login
                     </button>
                 </div>
+                <div class="mt-3 text-center">
+                    <a href="/auth/recuperarPassword">Esqueceu-se da password?</a>
+                </div>
+                <div class="mt-1 text-center">
+                    <span>Ainda não tem conta? <a href="/auth/signup">Registe-se aqui</a></span>
+                </div>
             </form>
         </div>
     </div>
