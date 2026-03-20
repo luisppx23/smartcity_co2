@@ -24,6 +24,12 @@ public class Municipio {
     @OneToMany(mappedBy = "municipioR")
     private List<RelatorioMensal> relatoriosMensais;
 
+    public Municipio(String nome,double objetivo_co2_mes_hab,String nif){
+        this.nome=nome;
+        this.objetivo_co2_mes_hab=objetivo_co2_mes_hab;
+        this.nif=nif;
+    }
+
     //CONSTRUTOR VAZIO
     public Municipio(){}
 
