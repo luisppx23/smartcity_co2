@@ -22,11 +22,21 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping(value = "/autenticadoTeste")
-    public String autenticadoTestePage(Model model) {
+    @GetMapping("/autenticado")
+    public String direcionarUtilizador(Model model) {
         User user = authService.getAuthenticatedUser();
-        model.addAttribute("user", user);  // Now this should work
-        return "autenticadoTeste";
+
+        if (user == null) {
+            return "redirect:/auth/login";
+        }
+
+        model.addAttribute("user", user);
+
+        if ("municipio".equalsIgnoreCase(user.getTipo())) {
+            return "autenticadoTesteMunicipio";
+        } else {
+            return "autenticadoTesteCidadao";
+        }
     }
 
     @GetMapping(value = "/signup")

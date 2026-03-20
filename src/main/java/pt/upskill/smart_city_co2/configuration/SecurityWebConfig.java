@@ -27,7 +27,7 @@ public class SecurityWebConfig {
         httpSecurity.formLogin(login -> {
             login.loginPage("/auth/login");
             login.loginProcessingUrl("/login");
-            login.defaultSuccessUrl("/auth/autenticadoTeste", true);
+            login.defaultSuccessUrl("/auth/autenticado", true);
             login.permitAll();
         });
         httpSecurity.authenticationProvider(userAuthenticationProvider);

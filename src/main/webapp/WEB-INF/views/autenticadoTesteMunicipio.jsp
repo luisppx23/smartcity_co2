@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body background-color="yellow">
 <div class="container">
     <div class="card mt-4">
         <div class="card-header">
-            <h2>Autenticado</h2>
+            <h2>Autenticado Municipio</h2>
             <p>Bem vindo, ${user.firstName} ${user.lastName}</p>
             <p>Username: ${user.username}</p>
             <p>Email: ${user.email}</p>
@@ -18,7 +18,7 @@
             <p>Ativo: ${user.ativo}</p>
             <p>Tipo: ${user.tipo}</p>
 
-
+            <a href="/logout" class="btn btn-danger">Logout</a>
 
 
         </div>
