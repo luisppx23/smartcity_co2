@@ -14,7 +14,7 @@ public class Veiculo {
 
     private String marca;
     private String modelo;
-    private String tipoDeCombustivel;
+    private TipoDeCombustivel tipoDeCombustivel;
     private double CO2_kg_km;
 
     //Relação 1para1 Veiculo-Proprietario
@@ -29,7 +29,7 @@ public class Veiculo {
     public Veiculo(){}
 
     //CONSTRUTOR PARA SERVICE
-    public Veiculo(String matricula, String marca, String modelo, String tipoDeCombustivel,double CO2_kg_km ){
+    public Veiculo(String matricula, String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double CO2_kg_km ){
         this.matricula=matricula;
         this.marca=marca;
         this.modelo=modelo;
@@ -62,12 +62,10 @@ public class Veiculo {
         this.modelo = modelo;
     }
 
-    public String getTipoDeCombustivel() {
+    public TipoDeCombustivel getTipoDeCombustivel() {
         return tipoDeCombustivel;
     }
-    public void setTipoDeCombustivel(String tipoDeCombustivel) {
-        this.tipoDeCombustivel = tipoDeCombustivel;
-    }
+    public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
 
     public double getCO2_kg_km() {
         return CO2_kg_km;

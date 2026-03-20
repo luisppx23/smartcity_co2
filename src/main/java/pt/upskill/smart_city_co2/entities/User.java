@@ -1,10 +1,7 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
-
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class User {
@@ -32,6 +29,7 @@ public class User {
     @OneToOne(mappedBy = "userM")
     private Municipio municipio;
 
+    //Construtor para UserService
     public User(String firstName,String lastName, String username, LocalDateTime data_registo, String email, String password,String tipo,boolean ativo){
         this.firstName=firstName;
         this.lastName=lastName;
@@ -47,7 +45,7 @@ public class User {
     //CONSTRUTOR VAZIO
     public User(){}
 
-
+    //GETTERS E SETTERS
     public String getUsername() {
         return username;
     }
