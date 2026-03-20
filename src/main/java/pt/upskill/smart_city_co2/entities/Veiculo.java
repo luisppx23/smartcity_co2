@@ -1,6 +1,7 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
+import pt.upskill.smart_city_co2.TipoDeCombustivel;
 
 import java.util.List;
 
@@ -13,8 +14,8 @@ public class Veiculo {
 
     private String marca;
     private String modelo;
-    private String combustivel;
-    private Double CO2_kg_km;
+    private String tipoDeCombustivel;
+    private double CO2_kg_km;
 
     //Relação 1para1 Veiculo-Proprietario
     @OneToOne(mappedBy = "veiculoP")
@@ -26,6 +27,15 @@ public class Veiculo {
 
     //CONSTRUTOR VAZIO
     public Veiculo(){}
+
+    //CONSTRUTOR PARA SERVICE
+    public Veiculo(String matricula, String marca, String modelo, String tipoDeCombustivel,double CO2_kg_km ){
+        this.matricula=matricula;
+        this.marca=marca;
+        this.modelo=modelo;
+        this.tipoDeCombustivel=tipoDeCombustivel;
+        this.CO2_kg_km=CO2_kg_km;
+    }
 
     //GETTERS e SETTERS
     public Proprietario getPropriedade() {return propriedade;}
@@ -52,17 +62,17 @@ public class Veiculo {
         this.modelo = modelo;
     }
 
-    public String getCombustivel() {
-        return combustivel;
+    public String getTipoDeCombustivel() {
+        return tipoDeCombustivel;
     }
-    public void setCombustivel(String combustivel) {
-        this.combustivel = combustivel;
+    public void setTipoDeCombustivel(String tipoDeCombustivel) {
+        this.tipoDeCombustivel = tipoDeCombustivel;
     }
 
-    public Double getCO2_kg_km() {
+    public double getCO2_kg_km() {
         return CO2_kg_km;
     }
-    public void setCO2_kg_km(Double CO2_kg_km) {
+    public void setCO2_kg_km(double CO2_kg_km) {
         this.CO2_kg_km = CO2_kg_km;
     }
 
