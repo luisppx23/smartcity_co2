@@ -12,6 +12,7 @@
 
         <div>
             <span>${user.firstName} ${user.lastName}</span>
+            <a href="/logout" class="btn btn-danger">Logout</a>
         </div>
     </div>
 </nav>

@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body background-color="orange">
+<body>
 <div class="container">
     <div class="card mt-4">
         <div class="card-header">
@@ -20,11 +20,6 @@
             <p>Data de Criação de conta: ${user.data_registo}</p>
             <p>Ativo: ${user.ativo}</p>
             <p>Tipo: ${user.tipo}</p>
-
-            <a href="/logout" class="btn btn-danger">Logout</a>
-
-
-
         </div>
     </div>
 </div>
