@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="/styles/estilos.css">
 </head>
 <body>
+<header class="d-flex flex-column align-items-center">
+    <img src="/images/logotipo_versao_3.jpeg" alt="Logótipo do Site" width="180" height="250">
+    <h2>Portal Smart City</h2>
+</header>
 <div class="container">
     <div class="card mt-4 mx-auto" style="max-width: 500px;">
         <div class="card-header bg-success text-white">

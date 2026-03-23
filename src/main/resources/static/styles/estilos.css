@@ -1,1 +1,32 @@
 /*Os vossos estilos personalizados!*/
+
+:root {
+    --btn-primary: #198754;
+    --btn-primary-rgb: 25, 135, 84;
+}
+
+.btn-primary {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+.btn-primary:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #157347;
+    border-color: #146c43;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+a {
+    color: green;
+}
+
+a:hover {
+    color: darkgreen;
+}
+
