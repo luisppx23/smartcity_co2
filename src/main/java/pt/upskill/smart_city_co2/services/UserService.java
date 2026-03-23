@@ -23,10 +23,10 @@ public class UserService {
     public void init() {
         if (userRepository.count() > 0) return;
         {
-            userRepository.save(new User("João", "Castor", "joaocastor", LocalDateTime.of(2026, 3, 20, 10, 15, 30), "joao.pastar@gmail.com", passwordEncoder.encode("joao123"), "cidadao", true));
-            userRepository.save(new User("Maria", "Silva", "mariasilva", LocalDateTime.of(2026, 3, 20, 11, 0, 0), "maria.silva@gmail.com", passwordEncoder.encode("maria123"), "cidadao", true));
-            userRepository.save(new User("Carlos", "Ferreira", "carlosf", LocalDateTime.of(2026, 3, 20, 11, 30, 0), "carlos.ferreira@gmail.com", passwordEncoder.encode("carlos123"), "cidadao", true));
-            userRepository.save(new User("Ana", "Costa", "anacosta", LocalDateTime.of(2026, 3, 20, 12, 0, 0), "ana.costa@gmail.com", passwordEncoder.encode("ana123"), "cidadao",true));
+            userRepository.save(new User("João", "Castor", "joaocastor", LocalDateTime.now(), "joao.pastar@gmail.com", passwordEncoder.encode("joao123"), "cidadao", true));
+            userRepository.save(new User("Maria", "Silva", "mariasilva", LocalDateTime.now(), "maria.silva@gmail.com", passwordEncoder.encode("maria123"), "cidadao", true));
+            userRepository.save(new User("Carlos", "Ferreira", "carlosf", LocalDateTime.now(), "carlos.ferreira@gmail.com", passwordEncoder.encode("carlos123"), "cidadao", true));
+            userRepository.save(new User("Ana", "Costa", "anacosta", LocalDateTime.now(), "ana.costa@gmail.com", passwordEncoder.encode("ana123"), "cidadao",true));
         }
     }
 

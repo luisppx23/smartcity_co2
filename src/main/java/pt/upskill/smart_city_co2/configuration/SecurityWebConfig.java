@@ -12,24 +12,37 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityWebConfig {
 
     @Autowired
-    UserAuthenticationProvider userAuthenticationProvider;
+    UserAuthenticationProvider userAuthenticationProvider; // Provedor de autenticação customizado
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        // Desabilita CSRF para simplificar em produção
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
+        // Configuração de regras de autorização
         httpSecurity.authorizeHttpRequests(auth -> {
+            // Requisições de forward (redirecionamentos internos)
             auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
+
+            // Acesso público a rotas de autenticação e recursos estáticos
             auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/images/**").permitAll();
             auth.requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll();
+
+            // Bloqueia qualquer outra requisição não especificada
             auth.anyRequest().denyAll();
         });
+
+        // Formulário de Login sob httpSecurity
         httpSecurity.formLogin(login -> {
-            login.loginPage("/auth/login");
-            login.loginProcessingUrl("/login");
-            login.defaultSuccessUrl("/auth/autenticado", true);
-            login.permitAll();
+            login.loginPage("/auth/login");           // Página personalizada de login
+            login.loginProcessingUrl("/login");       // Endpoint que processa o login
+            login.defaultSuccessUrl("/auth/autenticado", true); // Redireciona para autenticado após login bem-sucedido
+            login.permitAll();                        // acesso geral à página de login
         });
+
+        // Define o provedor de autenticação
         httpSecurity.authenticationProvider(userAuthenticationProvider);
+
         return httpSecurity.build();
     }
 }
