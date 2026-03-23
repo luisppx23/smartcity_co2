@@ -10,35 +10,61 @@
     <link rel="stylesheet" href="/styles/estilos.css">
 </head>
 <body>
-<div class="container">
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2>Login</h2>
-        </div>
-        <div class="card-body">
+<div class="page-overlay"></div>
+
+<div class="page-content">
+    <div class="hero-text">
+        <h2>Transformando quilómetros<br>em consciência.</h2>
+    </div>
+
+    <section class="login-section">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <img src="/images/logo-smart-city.png" alt="Logótipo" class="login-logo">
+                <h1 class="portal-title">Portal Smart City</h1>
+            </div>
+
             <form method="POST" action="/login">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="O seu username">
+                <div class="mb-4">
+                    <label for="username" class="form-label">Email ou Username</label>
+                    <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="username"
+                            name="username"
+                            placeholder="Introduza o seu email ou username"
+                            required
+                    >
                 </div>
-                <div class="mb-3">
+
+                <div class="mb-4">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="O seu username">
+                    <input
+                            type="password"
+                            class="form-control custom-input"
+                            id="password"
+                            name="password"
+                            placeholder="Introduza a sua password"
+                            required
+                    >
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-primary">
-                        Login
+
+                <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-primary custom-btn">
+                        ENTRAR NO FUTURO SUSTENTÁVEL
                     </button>
                 </div>
-                <div class="mt-3 text-center">
+
+                <div class="text-center mb-2">
                     <a href="/auth/recuperarPassword">Esqueceu-se da password?</a>
                 </div>
-                <div class="mt-1 text-center">
+
+                <div class="text-center">
                     <span>Ainda não tem conta? <a href="/auth/signup">Registe-se aqui</a></span>
                 </div>
             </form>
         </div>
-    </div>
+    </section>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

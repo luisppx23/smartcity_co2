@@ -1,32 +1,202 @@
 /*Os vossos estilos personalizados!*/
 
 :root {
-    --btn-primary: #198754;
-    --btn-primary-rgb: 25, 135, 84;
+    --primary-green: #1f5a3d;
+    --primary-green-hover: #17442e;
+    --page-bg: #f3f5f2;
+    --card-bg: rgba(255, 255, 255, 0.93);
+    --text-dark: #111111;
+    --text-muted: #555555;
 }
 
-.btn-primary {
-    background-color: #198754;
-    border-color: #198754;
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
 }
 
-.btn-primary:hover {
-    background-color: #157347;
-    border-color: #146c43;
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: var(--page-bg);
+    background-image: url("/images/background-leaf.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-size: 600px auto
+    position: relative;
 }
 
-.btn-primary:focus,
-.btn-primary:active {
-    background-color: #157347;
-    border-color: #146c43;
-    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+/* camada suave por cima da imagem */
+.page-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.28);
+    z-index: 0;
 }
 
+.page-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px 40px;
+}
+
+/* frase */
+.hero-text {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 0 12px;
+}
+
+.hero-text h2 {
+    margin: 0;
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.12;
+    color: var(--text-dark);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
+}
+
+/* zona login */
+.login-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 390px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 34px 28px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(4px);
+}
+
+/* logo */
+.login-logo {
+    width: 74px;
+    height: auto;
+    margin-bottom: 12px;
+}
+
+/* título */
+.portal-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* labels */
+.form-label {
+    color: #333333;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+/* inputs */
+.custom-input {
+    border: none;
+    border-bottom: 1px solid #c9c9c9;
+    border-radius: 0;
+    background: transparent;
+    padding: 12px 4px;
+    font-size: 1rem;
+    box-shadow: none;
+}
+
+.custom-input:focus {
+    border-bottom: 2px solid var(--primary-green);
+    box-shadow: none;
+    background: transparent;
+}
+
+/* botão */
+.btn-primary.custom-btn {
+    background: linear-gradient(to right, #1f5a3d, #2b6a49);
+    border: none;
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.btn-primary.custom-btn:hover {
+    background: linear-gradient(to right, #17442e, #22553a);
+}
+
+.btn-primary.custom-btn:focus,
+.btn-primary.custom-btn:active {
+    box-shadow: 0 0 0 0.25rem rgba(31, 90, 61, 0.2);
+}
+
+/* links */
 a {
-    color: green;
+    color: var(--primary-green);
+    text-decoration: none;
 }
 
 a:hover {
-    color: darkgreen;
+    color: var(--primary-green-hover);
+    text-decoration: underline;
 }
 
+/* mobile */
+@media (max-width: 768px) {
+    body {
+        background-position: center top;
+        background-size: cover;
+    }
+
+    .page-overlay {
+        background: rgba(255, 255, 255, 0.36);
+    }
+
+    .page-content {
+        padding: 24px 16px 30px;
+    }
+
+    .hero-text {
+        margin-bottom: 20px;
+    }
+
+    .hero-text h2 {
+        font-size: 1.45rem;
+        line-height: 1.15;
+    }
+
+    .login-card {
+        max-width: 340px;
+        padding: 28px 22px;
+        border-radius: 18px;
+    }
+
+    .login-logo {
+        width: 60px;
+    }
+
+    .portal-title {
+        font-size: 1.7rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .custom-input {
+        font-size: 0.95rem;
+        padding: 10px 4px;
+    }
+
+    .btn-primary.custom-btn {
+        font-size: 0.82rem;
+        padding: 12px 14px;
+    }
+}

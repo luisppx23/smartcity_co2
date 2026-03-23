@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>Recuperar Password</title>
@@ -10,29 +10,65 @@
     <link rel="stylesheet" href="/styles/estilos.css">
 </head>
 <body>
-<header class="d-flex flex-column align-items-center">
-    <img src="/images/logotipo_versao_3.jpeg" alt="Logótipo do Site" width="180" height="250">
-    <h2>Portal Smart City</h2>
-</header>
-<div class="container">
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2>Recuperar Password</h2>
+<div class="page-overlay"></div>
+
+<div class="page-content">
+    <div class="auth-wrapper">
+        <div class="hero-text">
+            <h2>Recupere o acesso<br>à sua conta.</h2>
         </div>
-        <div class="card-body">
-            <p class="text-muted">Introduza o seu email para receber as instruções de recuperação.</p>
-            <form method="POST" action="/auth/verificarUtilizadorAction">
-                <div class="mb-3">
-                    <label>Username</label>
-                    <input type="text" class="form-control" name="username" required>
+
+        <section class="login-section">
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <img src="/images/logo-smart-city.png" alt="Logótipo" class="login-logo">
+                    <h1 class="portal-title">Portal Smart City</h1>
                 </div>
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="email" required>
+
+                <div class="text-center mb-4">
+                    <h2 class="section-title">Recuperar Password</h2>
+                    <p class="text-muted custom-muted">
+                        Introduza o seu email para receber as instruções de recuperação.
+                    </p>
                 </div>
-                <button type="submit" class="btn btn-primary">Avançar</button>
-            </form>
-        </div>
+
+                <form method="POST" action="/auth/verificarUtilizadorAction">
+                    <div class="mb-4">
+                        <label for="username" class="form-label">Username</label>
+                        <input
+                                type="text"
+                                class="form-control custom-input"
+                                id="username"
+                                name="username"
+                                placeholder="Introduza o seu username"
+                                required
+                        >
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input
+                                type="email"
+                                class="form-control custom-input"
+                                id="email"
+                                name="email"
+                                placeholder="Introduza o seu email"
+                                required
+                        >
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary custom-btn">
+                            AVANÇAR
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="login">Voltar ao login</a>
+                    </div>
+                </form>
+            </div>
+        </section>
     </div>
 </div>
 </body>
