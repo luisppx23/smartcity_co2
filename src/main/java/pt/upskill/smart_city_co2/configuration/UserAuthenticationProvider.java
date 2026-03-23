@@ -14,34 +14,35 @@ import pt.upskill.smart_city_co2.services.AuthService;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component // Registra como bean gerenciado pelo Spring
+@Component
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    AuthService authService; // Serviço responsável pela validação de credenciais
+    AuthService authService; //responsável pela validação de credenciais
 
+    //metodo da Classe Authentication (o framework de autenticação do Spring)
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        // Extrai username e password do objeto authentication
+        //username e password do objeto authentication
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        // Valida as credenciais e retorna o usuário se forem corretas
+        // Valida as credenciais e retorna o user se forem corretas
         User user = authService.validateLogin(username, password);
 
         if (user != null) {
-            // Cria lista de permissões (roles) do usuário
+            // Cria lista de permissões (roles) do user
             List<GrantedAuthority> roleList = new ArrayList<>();
 
-            // Opção para verificar se é admin (comentada)
+            //FALTA EXPLORAR ISTO - LISTA DE ROLES MEDIANTE A ESPECIFICAÇÃO DA NOSSA BASE DE DADOS
+
             /*if(utilizador.isAdmin()) {
                 roleList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             }*/
 
-            // Alternativa: usar role dinâmica vinda do banco
-            //roleList.add(new SimpleGrantedAuthority("ROLE_" + utilizador.getRole()));
+            //roleList.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
-            // Por enquanto, atribui role USER para todos os usuários autenticados
+            // Por enquanto, atribui role USER para todos os users autenticados
             roleList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
             // Retorna token de autenticação com username, password e roles
