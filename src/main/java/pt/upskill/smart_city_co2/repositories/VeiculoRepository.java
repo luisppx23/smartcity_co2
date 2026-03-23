@@ -13,4 +13,6 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     @Query(value = "SELECT * FROM Veiculo", nativeQuery = true)
     List<Veiculo> customQuery(@Param("matricula") String matricula);
 
+    List<Veiculo> findVeiculoByMatricula(String matricula);
+
 }

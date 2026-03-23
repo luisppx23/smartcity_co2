@@ -15,5 +15,7 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
 
     // Query nativa para obter todos os cidadãos
     @Query(value = "SELECT * FROM Cidadao", nativeQuery = true)
-    List<Cidadao> customQuery(@Param("name") String name);
+    List<Cidadao> customQuery(@Param("nome") String nome);
+
+    List<Cidadao>findCidadaoByNome(String nome);
 }

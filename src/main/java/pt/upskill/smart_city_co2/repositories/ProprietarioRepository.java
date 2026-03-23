@@ -12,6 +12,7 @@ public interface ProprietarioRepository extends JpaRepository<Proprietario, Long
 
     // Query nativa para obter todos os proprietários
     @Query(value = "SELECT * FROM Proprietario", nativeQuery = true)
-    List<Proprietario> customQuery(@Param("name") String name);
+    List<Proprietario> customQuery(@Param("id") Long id);
 
+    List<Proprietario> findProprietarioById(Long id);
 }
