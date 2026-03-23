@@ -26,6 +26,9 @@ public class RelatorioMensal {
     }
 
     //GETTERS e SETTERS
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+
     public Municipio getMunicipio() {
         return municipioR;
     }
@@ -60,4 +63,7 @@ public class RelatorioMensal {
     public void setMes_ano(Date mes_ano) {
         this.mes_ano = mes_ano;
     }
+
+    public Municipio getMunicipioR() {return municipioR;}
+    public void setMunicipioR(Municipio municipioR) {this.municipioR = municipioR;}
 }

@@ -37,10 +37,9 @@ public class Municipio extends User {
     }
     public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) {this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;}
 
-    public String getNIF() {
-        return nif;
-    }
-    public void setNIF(String nif) {
-        this.nif = nif;
-    }
+    public String getNif() {return nif;}
+    public void setNif(String nif) {this.nif = nif;}
+
+    public List<RelatorioMensal> getRelatoriosMensais() {return relatoriosMensais;}
+    public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {this.relatoriosMensais = relatoriosMensais;}
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 public class Proprietario {
     @Id
     @GeneratedValue
-    private Long id; // Como o Country!
+    private Long id;
 
     @ManyToOne
     private Cidadao cidadaoP;
@@ -22,6 +22,9 @@ public class Proprietario {
     public Proprietario(){}
 
     //GETTERS e SETTERS
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
+
     public Cidadao getCidadaoP() {return cidadaoP;}
     public void setCidadaoP(Cidadao cidadaoP) {this.cidadaoP = cidadaoP;}
 

@@ -23,7 +23,6 @@ public class RegistoKms {
     @ManyToOne
     private Veiculo veiculo;
 
-
     //CONSTRUTOR VAZIO
     public RegistoKms(){}
 

@@ -17,11 +17,19 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
+    // Exibe a página de registo de novo user
+    @GetMapping(value = "/signup")
+    public String signUpPage() {
+        return "signup";
+    }
+
+    // Exibe a página de login
     @GetMapping(value = "/login")
     public String loginPage() {
         return "login";
     }
 
+    // Redireciona o user autenticado para a página correspondente ao seu tipo (município ou cidadão)
     @GetMapping("/autenticado")
     public String direcionarUtilizador(Model model) {
         User user = authService.getAuthenticatedUser();
@@ -39,16 +47,13 @@ public class AuthController {
         }
     }
 
-    @GetMapping(value = "/signup")
-    public String signUpPage() {
-        return "signup";
-    }
-
+    //Processa o formulário registo de novo user
     @PostMapping(value = "/signUpAction")
     public String signUpAction(SignUpModel signUp) {
         User user = authService.register(signUp);
         return "login";
     }
+
 
     @GetMapping(value = "/recuperarPassword")
     public String recuperarPasswordPage() {
