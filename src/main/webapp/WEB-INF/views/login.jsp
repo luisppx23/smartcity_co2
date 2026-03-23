@@ -10,10 +10,6 @@
     <link rel="stylesheet" href="/styles/estilos.css">
 </head>
 <body>
-<header class="d-flex flex-column align-items-center">
-    <img src="/images/logotipo_versao_3.jpeg" alt="Logótipo do Site" width="180" height="250">
-    <h2>Portal Smart City</h2>
-</header>
 <div class="container">
     <div class="card mt-4">
         <div class="card-header">
@@ -27,8 +23,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                           placeholder="O seu username">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="O seu username">
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary">
@@ -41,7 +36,6 @@
                 <div class="mt-1 text-center">
                     <span>Ainda não tem conta? <a href="/auth/signup">Registe-se aqui</a></span>
                 </div>
-
             </form>
         </div>
     </div>

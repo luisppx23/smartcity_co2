@@ -15,14 +15,13 @@ public class SecurityWebConfig {
     UserAuthenticationProvider userAuthenticationProvider;
 
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
+    protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(auth -> {
-            auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
+            auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
             auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/images/**").permitAll();
             auth.requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll();
-            auth.anyRequest().authenticated();
-
+            auth.anyRequest().denyAll();
         });
         httpSecurity.formLogin(login -> {
             login.loginPage("/auth/login");
