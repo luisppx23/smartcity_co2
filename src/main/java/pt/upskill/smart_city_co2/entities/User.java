@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     //ATRIBUTOS
@@ -19,15 +20,6 @@ public class User {
     private String password;
     private String tipo;
     private boolean ativo;
-
-
-    //Relação 1para1 Utilizador-Cidadão
-    @OneToOne(mappedBy = "userC")
-    private Cidadao cidadao;
-
-    //Relação 1para1 Utilizador-Município
-    @OneToOne(mappedBy = "userM")
-    private Municipio municipio;
 
     //Construtor para UserService
     public User(String firstName,String lastName, String username, LocalDateTime data_registo, String email, String password,String tipo,boolean ativo){
@@ -53,12 +45,6 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public Cidadao getCidadao() {return cidadao;}
-    public void setCidadao(Cidadao cidadao) {this.cidadao = cidadao;}
-
-    public Municipio getMunicipio() {return municipio;}
-    public void setMunicipio(Municipio municipio) {this.municipio = municipio;}
 
     public LocalDateTime getData_registo() {
         return data_registo;

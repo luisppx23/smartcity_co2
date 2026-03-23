@@ -5,20 +5,11 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Municipio {
-
-    //ATRIBUTOS
-    @Id
-    @GeneratedValue
-    private Long id;
+public class Municipio extends User {
 
     private String nome;
     private double objetivo_co2_mes_hab;
     private String nif;
-
-    //Relação 1para1 Municipio-Utilizador
-    @OneToOne
-    private User userM;
 
     //Relação 1para1 Municipio-Utilizador
     @OneToMany(mappedBy = "municipioR")
@@ -34,12 +25,6 @@ public class Municipio {
     public Municipio(){}
 
     //GETTERS e SETTERS
-    public User getUserM() {return userM;}
-    public void setUserM(User userM) {this.userM = userM;}
-
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
-
     public String getNome() {
         return nome;
     }
