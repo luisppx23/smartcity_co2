@@ -14,5 +14,4 @@ public interface RegistoKmsRepository extends JpaRepository<RegistoKms, Long> {
     @Query(value = "SELECT * FROM RegistoKms", nativeQuery = true)
     List<RegistoKms> customQuery(@Param("kms_mes") double kms_mes);
 
-    List<RegistoKms> findRegistoKmsByKms_mes(double kms_mes);
 }
