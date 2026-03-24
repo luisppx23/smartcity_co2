@@ -30,6 +30,9 @@
                 <p>Tipo: ${user.tipo}</p>
                 <p>Objetivo CO2/mês/hab: ${user.objetivo_co2_mes_hab}</p>
             </div>
+            <div class="mt-3 text-center">
+                <a href="/auth/DashboardMunicipio">Dashboard</a>
+            </div>
         </div>
     </div>
 </div>

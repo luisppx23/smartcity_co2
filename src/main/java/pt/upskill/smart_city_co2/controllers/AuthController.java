@@ -124,6 +124,30 @@ public class AuthController {
         return "Cidadao/RegistoVeiculo";
     }
 
+    // Direciona para pagina de dashboard do municipio
+    @GetMapping("/DashboardMunicipio")
+    public String dashboardMunicipio() {
+        return "Municipio/DashboardMunicipio";
+    }
+
+    // Direciona para pagina de home do municipio
+    @GetMapping("/HomeMunicipio")
+    public String homeMunicipio() {
+        return "Municipio/HomeMunicipio";
+    }
+
+    // Direciona para pagina de redefinir taxa
+    @GetMapping("/RedefinirTaxa")
+    public String redefinirTaxa() {
+        return "Municipio/RedefinirTaxa";
+    }
+
+    // Direciona para pagina de exibicao de relatorios
+    @GetMapping("/RelatoriosMunicipio")
+    public String relatoriosMunicipio() {
+        return "Municipio/RelatoriosMunicipio";
+    }
+
 }
 
 
