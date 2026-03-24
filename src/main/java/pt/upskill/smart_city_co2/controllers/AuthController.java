@@ -58,13 +58,13 @@ public class AuthController {
         return "login";
     }
 
-
+    // Redireciona o user autenticado para a página de recuperar password
     @GetMapping(value = "/recuperarPassword")
     public String recuperarPasswordPage() {
         return "recuperarPassword";
     }
 
-
+    // Verifica se o utilizador existe e direciona para a alteracao de password
     @PostMapping("/verificarUtilizadorAction")
     public String verificarUtilizadorAction(@RequestParam String username,
                                             @RequestParam String email,
@@ -83,6 +83,7 @@ public class AuthController {
         }
     }
 
+    // Atualiza a password em caso de sucesso (as duas passwords correspondem) ou redireciona para o recuperar password em caso de erro.
     @PostMapping("/atualizarPasswordAction")
     public String atualizarPasswordAction(@RequestParam String username,
                                           @RequestParam String novaPassword,
@@ -105,5 +106,24 @@ public class AuthController {
         }
     }
 
+    // Direciona para pagina de dashboard do cidadão
+    @GetMapping("/DashboardCidadao")
+    public String dashboardCidadao() {
+        return "Cidadao/DashboardCidadao";
+    }
+
+    // Direciona para pagina de home do cidadão
+    @GetMapping("/HomeCidadao")
+    public String homeCidadao() {
+        return "Cidadao/HomeCidadao";
+    }
+
+    // Direciona para pagina de registar veículo
+    @GetMapping("/RegistoVeiculo")
+    public String registarVeiculo() {
+        return "Cidadao/RegistoVeiculo";
+    }
 
 }
+
+

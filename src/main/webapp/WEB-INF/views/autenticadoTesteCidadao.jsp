@@ -30,6 +30,9 @@
                 <p>Tipo: ${user.tipo}</p>
             </div>
         </div>
+        <div class="mt-3 text-center">
+            <a href="/auth/DashboardCidadao">Dashboard</a>
+        </div>
     </div>
 </div>
 </body>
