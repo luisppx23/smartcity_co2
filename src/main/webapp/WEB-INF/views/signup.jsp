@@ -28,7 +28,7 @@
             </div>
 
             <div class="text-center mb-4">
-                <h2 class="section-title">Registo de Utilizador</h2>
+                <h2 class="section-title">Registo de Cidadao</h2>
             </div>
 
             <form method="POST" action="/auth/signUpAction">
@@ -72,7 +72,6 @@
                     <label for="tipo" class="form-label">Tipo de Conta</label>
                     <select id="tipo" name="tipo" class="form-select custom-select">
                         <option value="cidadao">Cidadão</option>
-                        <option value="municipio">Município</option>
                     </select>
                 </div>
 
