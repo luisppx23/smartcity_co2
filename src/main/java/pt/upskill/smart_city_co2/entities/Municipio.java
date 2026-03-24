@@ -11,9 +11,13 @@ public class Municipio extends User {
     private String nome;
     private double objetivo_co2_mes_hab;
 
-    //Relação 1para1 Municipio-Utilizador
-    @OneToMany(mappedBy = "municipioR")
+    //Relação 1paraMUITOS Municipio-RelatorioMensal
+    @OneToMany
     private List<RelatorioMensal> relatoriosMensais;
+
+    //Relação 1paraMUITOS Municipio-Cidadao
+    @OneToMany
+    private List<Cidadao> listaDeCidadaos;
 
     public Municipio(String nome, double objetivo_co2_mes_hab, String username,
                      LocalDateTime data_registo, String email, String password,
@@ -35,4 +39,7 @@ public class Municipio extends User {
 
     public List<RelatorioMensal> getRelatoriosMensais() {return relatoriosMensais;}
     public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {this.relatoriosMensais = relatoriosMensais;}
+
+    public List<Cidadao> getListaDeCidadaos() {return listaDeCidadaos;}
+    public void setListaDeCidadaos(List<Cidadao> listaDeCidadaos) {this.listaDeCidadaos = listaDeCidadaos;}
 }

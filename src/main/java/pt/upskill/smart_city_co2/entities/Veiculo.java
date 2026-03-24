@@ -17,10 +17,6 @@ public class Veiculo {
     private TipoDeCombustivel tipoDeCombustivel;
     private double CO2_kg_km;
 
-    //Relação 1para1 Veiculo-Proprietario
-    @OneToOne(mappedBy = "veiculoP")
-    private Proprietario propriedade;
-
     //Relação 1paraMUITOS Veiculo-RegistoKms
     @OneToMany
     private List<RegistoKms> registos;
@@ -38,9 +34,6 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
-    public Proprietario getPropriedade() {return propriedade;}
-    public void setPropriedade(Proprietario propriedade) {this.propriedade = propriedade;}
-
     public String getMatricula() {
         return matricula;
     }

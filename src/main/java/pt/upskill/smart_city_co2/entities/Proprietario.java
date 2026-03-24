@@ -6,15 +6,11 @@ import java.util.Date;
 
 @Entity
 public class Proprietario {
+
+    //ATRIBUTOS
     @Id
     @GeneratedValue
     private Long id;
-
-    @ManyToOne
-    private Cidadao cidadaoP;
-
-    @OneToOne
-    private Veiculo veiculoP;
 
     private Date data_aquisicao;
 
@@ -25,16 +21,6 @@ public class Proprietario {
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
-    public Cidadao getCidadaoP() {return cidadaoP;}
-    public void setCidadaoP(Cidadao cidadaoP) {this.cidadaoP = cidadaoP;}
-
-    public Veiculo getVeiculoP() {return veiculoP;}
-    public void setVeiculoP(Veiculo veiculoP) {this.veiculoP = veiculoP;}
-
-    public Date getData_aquisicao() {
-        return data_aquisicao;
-    }
-    public void setData_aquisicao(Date data_aquisicao) {
-        this.data_aquisicao = data_aquisicao;
-    }
+    public Date getData_aquisicao() {return data_aquisicao;}
+    public void setData_aquisicao(Date data_aquisicao) {this.data_aquisicao = data_aquisicao;}
 }

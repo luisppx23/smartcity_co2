@@ -14,12 +14,11 @@ public class Cidadao extends User {
     private String morada;
 
     //Relação 1paraMUITOS Cidadão-Proprietario
-    @OneToMany(mappedBy = "cidadaoP")
-    private List<Proprietario> propriedades;
+    @OneToMany
+    private List<Proprietario> listaDeVeiculos;
 
     //CONSTRUTOR VAZIO
-    public Cidadao() {
-    }
+    public Cidadao() {}
 
     // CONSTRUTOR COM PARÂMETROS
     public Cidadao(String firstName, String lastName, String username,
@@ -37,8 +36,8 @@ public class Cidadao extends User {
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public List<Proprietario> getPropriedades() {return propriedades;}
-    public void setPropriedades(List<Proprietario> propriedades) {this.propriedades = propriedades;}
+    public List<Proprietario> getListaDeVeiculos() {return listaDeVeiculos;}
+    public void setListaDeVeiculos(List<Proprietario> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
 
     public String getContacto() {return contacto;}
     public void setContacto(String contacto) {this.contacto = contacto;}
