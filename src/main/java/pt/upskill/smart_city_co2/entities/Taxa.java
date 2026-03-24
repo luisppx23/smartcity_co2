@@ -19,10 +19,6 @@ public class Taxa {
     private double co2_total;
     private double kms_total;
 
-    //Relação 1para1 Taxa-RegistoKms
-    @OneToOne(mappedBy = "taxa")
-    private RegistoKms registoKms;
-
     //CONSTRUTOR VAZIO
     public Taxa(){}
 
@@ -38,7 +34,4 @@ public class Taxa {
 
     public double getKms_total() {return kms_total;}
     public void setKms_total(double kms_total) {this.kms_total = kms_total;}
-
-    public RegistoKms getRegistoKms() {return registoKms;}
-    public void setRegistoKms(RegistoKms registoKms) {this.registoKms = registoKms;}
 }

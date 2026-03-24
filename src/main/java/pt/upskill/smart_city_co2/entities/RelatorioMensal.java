@@ -17,23 +17,12 @@ public class RelatorioMensal {
     private double kms_total;
     private Date mes_ano;
 
-    //Relação MUITOSpara1 Relatório-Município
-    @ManyToOne()
-    private Municipio municipioR;
-
     //CONSTRUTOR VAZIO
     public RelatorioMensal() {}
 
     //GETTERS e SETTERS
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
-
-    public Municipio getMunicipio() {
-        return municipioR;
-    }
-    public void setMunicipio(Municipio municipioR) {
-        this.municipioR = municipioR;
-    }
 
     public double getAjuste() {
         return ajuste;
@@ -62,7 +51,4 @@ public class RelatorioMensal {
     public void setMes_ano(Date mes_ano) {
         this.mes_ano = mes_ano;
     }
-
-    public Municipio getMunicipioR() {return municipioR;}
-    public void setMunicipioR(Municipio municipioR) {this.municipioR = municipioR;}
 }

@@ -26,8 +26,6 @@ public class SecurityWebConfig {
 
             // Acesso público a rotas de autenticação e recursos estáticos
             auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/scripts","/images/**").permitAll();
-            //auth.requestMatchers("/login", "/logout").permitAll();
-            //auth.requestMatchers("/error").permitAll();
 
             // Acesso mediante Role do User - endpoints reais dos controllers
             auth.requestMatchers("/auth/autenticado").authenticated();
@@ -42,9 +40,6 @@ public class SecurityWebConfig {
 
 
             auth.requestMatchers("/**").denyAll();
-
-            // Bloqueia qualquer outra requisição não especificada
-            //auth.anyRequest().authenticated();
         });
 
         // Formulário de Login sob httpSecurity
