@@ -51,11 +51,26 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    //Processa o formulário registo de novo user
+    // Processa o formulário registo de novo user
     @PostMapping(value = "/signUpAction")
-    public String signUpAction(SignUpModel signUp) {
-        User user = authService.register(signUp);
-        return "login";
+    public String signUpAction(SignUpModel signUp, Model model) {
+
+        if (!signUp.getPassword().equals(signUp.getConfirmPassword())) {
+            model.addAttribute("erro", "As passwords não coincidem.");
+            model.addAttribute("signUpModel", signUp);
+            return "signup";
+        }
+
+
+        try {
+            authService.register(signUp);
+            model.addAttribute("message", "Conta criada com sucesso! Faça login.");
+            return "login";
+        } catch (RuntimeException e) {
+            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("signUpModel", signUp);
+            return "signup";
+        }
     }
 
     // Redireciona o user autenticado para a página de recuperar password
@@ -105,6 +120,7 @@ public class AuthController {
             return "recuperarPassword";
         }
     }
+
 }
 
 

@@ -31,6 +31,18 @@ public class AuthService {
     PasswordEncoder passwordEncoder;
 
     public User register(SignUpModel signUpModel) {
+
+        // VERIFICAR EMAIL
+        if (userRepository.findByEmail(signUpModel.getEmail()).isPresent()) {
+            throw new RuntimeException("Email já está em uso");
+        }
+
+        // verificar username
+        if (userRepository.findByUsername(signUpModel.getUsername()).isPresent()) {
+            throw new RuntimeException("Username já está em uso");
+        }
+
+
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
 
         if ("cidadao".equals(signUpModel.getTipo())) {
