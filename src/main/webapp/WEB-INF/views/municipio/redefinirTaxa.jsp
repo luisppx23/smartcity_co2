@@ -6,13 +6,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Relatorios Municipio</title>
+    <title>Redefinir Taxa</title>
 </head>
 <body>
 <div class="container">
     <div class="card mt-4">x
         <div class="mt-3 text-center">
-            <a href="/auth/DashboardMunicipio">Voltar ao Dashboard</a>
+            <a href="/municipio/dashboardMunicipio">Voltar ao Dashboard</a>
         </div>
     </div>
 </div>

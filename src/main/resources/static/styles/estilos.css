@@ -83,10 +83,11 @@ body {
 
 /* logo */
 .login-logo {
-    width: 74px;
+    width: 130px;
     height: auto;
     margin-bottom: 12px;
-    justify-content: center;
+    display: block;
+    margin: 0 auto 12px;
 }
 
 /* título */

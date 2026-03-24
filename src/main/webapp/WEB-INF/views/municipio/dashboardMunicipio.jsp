@@ -4,16 +4,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Dashboard Municipio</title>
 </head>
 <body>
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">
-            <a href="/auth/RegistoVeiculo">Registar Veiculo</a>
+            <a href="/municipio/redefinirTaxa">Redefinir Taxa</a>
         </div>
         <div class="mt-3 text-center">
-            <a href="/auth/HomeCidadao">Home</a>
+            <a href="/municipio/homeMunicipio">Home Municipio</a>
+        </div>
+        <div class="mt-3 text-center">
+            <a href="/municipio/relatoriosMunicipio">Relatorios Municipio</a>
         </div>
         <div class="mt-3 text-center">
             <form action="/logout" method="post">

@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="mt-3 text-center">
-            <a href="/auth/DashboardCidadao">Dashboard</a>
+            <a href="/cidadao/dashboardCidadao">Dashboard</a>
         </div>
     </div>
 </div>

@@ -12,7 +12,7 @@
 <div class="container">
     <div class="card mt-4">x
         <div class="mt-3 text-center">
-            <a href="/auth/DashboardCidadao">Voltar ao Dashboard</a>
+            <a href="/cidadao/dashboardCidadao">Voltar ao Dashboard</a>
         </div>
     </div>
 </div>

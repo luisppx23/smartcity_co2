@@ -6,13 +6,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registo de Veiculo</title>
+    <title>Relatorios Municipio</title>
 </head>
 <body>
 <div class="container">
     <div class="card mt-4">x
         <div class="mt-3 text-center">
-            <a href="/auth/DashboardCidadao">Voltar ao Dashboard</a>
+            <a href="/municipio/dashboardMunicipio">Voltar ao Dashboard</a>
         </div>
     </div>
 </div>

@@ -106,7 +106,7 @@ public class AuthController {
         }
     }
 
-    // Direciona para pagina de dashboard do cidadão
+   /* // Direciona para pagina de dashboard do cidadão
     @GetMapping("/DashboardCidadao")
     public String dashboardCidadao() {
         return "Cidadao/DashboardCidadao";
@@ -146,7 +146,7 @@ public class AuthController {
     @GetMapping("/RelatoriosMunicipio")
     public String relatoriosMunicipio() {
         return "Municipio/RelatoriosMunicipio";
-    }
+    }*/
 
 }
 

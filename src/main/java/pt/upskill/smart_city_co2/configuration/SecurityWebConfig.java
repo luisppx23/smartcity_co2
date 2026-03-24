@@ -29,10 +29,18 @@ public class SecurityWebConfig {
             //auth.requestMatchers("/login", "/logout").permitAll();
             //auth.requestMatchers("/error").permitAll();
 
-            // Acesso mediante Role do User
+            // Acesso mediante Role do User - endpoints reais dos controllers
             auth.requestMatchers("/auth/autenticado").authenticated();
             auth.requestMatchers("/auth/autenticadoCidadao").hasRole("CIDADAO");
             auth.requestMatchers("/auth/autenticadoMunicipio").hasRole("MUNICIPIO");
+
+            // Rotas do cidadão
+            auth.requestMatchers("/cidadao/**").hasRole("CIDADAO");
+
+            // Rotas do município
+            auth.requestMatchers("/municipio/**").hasRole("MUNICIPIO");
+
+
             auth.requestMatchers("/**").denyAll();
 
             // Bloqueia qualquer outra requisição não especificada

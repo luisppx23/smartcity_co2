@@ -1,53 +1,34 @@
 package pt.upskill.smart_city_co2.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/municipio")
 public class MunicipioController {
 
-    /*@GetMapping("/login")
-    public String login() {
-        return "Municipio/LoginMunicipio"; // This path must match the folder structure
+    // Direciona para pagina de dashboard do municipio
+    @GetMapping("/dashboardMunicipio")
+    public String dashboardMunicipio() {
+        return "municipio/dashboardMunicipio";
     }
 
-    @PostMapping("/login")
-    public String processarLogin(@RequestParam String codigo,
-                                 @RequestParam String email,
-                                 @RequestParam String password,
-                                 Model model) {
-        return "redirect:/municipio/home";
-    }*/
-
-    @GetMapping("/home")
-    public String home() {
-        return "Municipio/HomeMunicipio";
+    // Direciona para pagina de home do municipio
+    @GetMapping("/homeMunicipio")
+    public String homeMunicipio() {
+        return "municipio/homeMunicipio";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "Municipio/DashboardMunicipio";
+    // Direciona para pagina de redefinir taxa
+    @GetMapping("/redefinirTaxa")
+    public String redefinirTaxa() {
+        return "municipio/redefinirTaxa";
     }
 
-    @GetMapping("/taxa")
-    public String taxaForm() {
-        return "Municipio/RedefinirTaxa";
-    }
-
-    @PostMapping("/taxa")
-    public String processarTaxa(@RequestParam String valor,
-                                Model model) {
-        model.addAttribute("sucesso", true);
-        return "Municipio/RedefinirTaxa";
-    }
-
-    @GetMapping("/relatorios")
-    public String relatorios() {
-        return "Municipio/RelatoriosMunicipio";
+    // Direciona para pagina de exibicao de relatorios
+    @GetMapping("/relatoriosMunicipio")
+    public String relatoriosMunicipio() {
+        return "municipio/relatoriosMunicipio";
     }
 }

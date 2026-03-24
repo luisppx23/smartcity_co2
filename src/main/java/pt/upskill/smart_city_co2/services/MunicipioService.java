@@ -21,8 +21,8 @@ public class MunicipioService {
     public void init() {
         if (municipioRepository.count() > 0) return;
         {
-            municipioRepository.save(new Municipio("Lisboa", 50.0, "lisboa", LocalDateTime.now(), "co2@cm-vilaverde.pt", passwordEncoder.encode("lisboa123"), 111222333, "municipio", true));
-            municipioRepository.save(new Municipio("Vila Verde", 45.0, "vilaverde", LocalDateTime.now(), "co2@cm-vilaverde.pt", passwordEncoder.encode("vilaverde123"), 444555666, "municipio", true));
+            municipioRepository.save(new Municipio("Lisboa", 2.5, "lisboa", LocalDateTime.now(), "co2@cm-lisboa.pt", passwordEncoder.encode("lisboa123"), 111222333, "municipio", true));
+            municipioRepository.save(new Municipio("Vila Verde", 3.0, "vilaverde", LocalDateTime.now(), "co2@cm-vilaverde.pt", passwordEncoder.encode("vilaverde123"), 444555666, "municipio", true));
         }
     }
 

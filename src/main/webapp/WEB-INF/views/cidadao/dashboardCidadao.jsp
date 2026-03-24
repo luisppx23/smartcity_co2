@@ -4,25 +4,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Municipio</title>
+    <title>Dashboard</title>
 </head>
 <body>
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">
-            <a href="/auth/RedefinirTaxa">Redefinir Taxa</a>
+            <a href="/cidadao/registoVeiculo">Registar Veiculo</a>
         </div>
         <div class="mt-3 text-center">
-            <a href="/auth/HomeMunicipio">Home Municipio</a>
+            <a href="/cidadao/homeCidadao">Home</a>
         </div>
         <div class="mt-3 text-center">
-            <a href="/auth/RelatoriosMunicipio">Relatorios Municipio</a>
+            <a href="/cidadao/simularTaxa">Simular Taxa</a>
         </div>
         <div class="mt-3 text-center">
             <form action="/logout" method="post">
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>
         </div>
+
 
     </div>
 </div>
