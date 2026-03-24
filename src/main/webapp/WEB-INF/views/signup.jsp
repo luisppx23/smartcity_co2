@@ -110,7 +110,11 @@
                         REGISTAR
                     </button>
                 </div>
-                
+
+                <div class="text-center mb-2">
+                    <span>Já possui conta? <a href="/auth/login">Faça login</a>
+                </div>
+
             </form>
         </div>
     </section>
