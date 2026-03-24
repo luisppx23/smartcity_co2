@@ -34,7 +34,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             // Lista de roles de user - permissões
             List<GrantedAuthority> roleList = new ArrayList<>();
 
-            // Adiciona role específica baseada no tipo de usuário
+            // Adiciona role específico baseado no tipo de user
             if ("cidadao".equals(user.getTipo())) {
                 roleList.add(new SimpleGrantedAuthority("ROLE_CIDADAO"));
             } else if ("municipio".equals(user.getTipo())) {

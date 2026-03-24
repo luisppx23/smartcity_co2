@@ -24,20 +24,13 @@ public class Municipio extends User {
     }
 
     //CONSTRUTOR VAZIO
-    public Municipio(){
-    }
+    public Municipio(){}
 
     //GETTERS e SETTERS
-    public String getNome() {
-        return nome;
-    }
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getNome() {return nome;}
+    public void setNome(String nome) {this.nome = nome;}
 
-    public double getObjetivo_co2_mes_hab() {
-        return objetivo_co2_mes_hab;
-    }
+    public double getObjetivo_co2_mes_hab() {return objetivo_co2_mes_hab;}
     public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) {this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;}
 
     public List<RelatorioMensal> getRelatoriosMensais() {return relatoriosMensais;}

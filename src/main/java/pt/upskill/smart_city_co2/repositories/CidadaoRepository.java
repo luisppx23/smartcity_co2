@@ -14,9 +14,8 @@ import java.util.Optional;
 @Repository
 public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
 
-    // Query nativa para obter todos os cidadãos
     @Query(value = "SELECT * FROM Cidadao", nativeQuery = true)
     List<Cidadao> customQuery(@Param("email") String email);
 
-    Optional<Cidadao> findByUsername(String username);
+    //Optional<Cidadao> findByUsername(String username);
 }

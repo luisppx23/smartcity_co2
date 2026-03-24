@@ -22,8 +22,7 @@ public class RelatorioMensal {
     private Municipio municipioR;
 
     //CONSTRUTOR VAZIO
-    public RelatorioMensal() {
-    }
+    public RelatorioMensal() {}
 
     //GETTERS e SETTERS
     public Long getId() {return id;}

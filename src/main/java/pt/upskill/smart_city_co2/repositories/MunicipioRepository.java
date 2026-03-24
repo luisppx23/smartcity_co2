@@ -15,6 +15,5 @@ public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
     @Query(value = "SELECT * FROM Municipio", nativeQuery = true)
     List<Municipio> customQuery(@Param("email") String email);
 
-    Optional<Cidadao> findByUsername(String username);
-
+    //Optional<Cidadao> findByUsername(String username);
 }

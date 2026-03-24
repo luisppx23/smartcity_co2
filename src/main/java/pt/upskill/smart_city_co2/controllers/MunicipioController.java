@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/municipio")
 public class MunicipioController {
 
-    @GetMapping("/login")
+    /*@GetMapping("/login")
     public String login() {
         return "Municipio/LoginMunicipio"; // This path must match the folder structure
     }
@@ -22,7 +22,7 @@ public class MunicipioController {
                                  @RequestParam String password,
                                  Model model) {
         return "redirect:/municipio/home";
-    }
+    }*/
 
     @GetMapping("/home")
     public String home() {

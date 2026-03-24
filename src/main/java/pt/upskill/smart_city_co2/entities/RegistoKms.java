@@ -40,9 +40,7 @@ public class RegistoKms {
     public double getKms_mes() {
         return kms_mes;
     }
-    public void setKms_mes(double kms_mes) {
-        this.kms_mes = kms_mes;
-    }
+    public void setKms_mes(double kms_mes) {this.kms_mes = kms_mes;}
 
     public Taxa getTaxa() {return taxa;}
     public void setTaxa(Taxa taxa) {this.taxa = taxa;}

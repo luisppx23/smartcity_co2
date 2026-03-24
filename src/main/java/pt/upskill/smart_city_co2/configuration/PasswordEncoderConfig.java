@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 //Bean de codificação de senhas usando BCrypt (fator 12)
 //utilizado pelo Spring Security para hash e validação de passwords
-
 @Configuration
 public class PasswordEncoderConfig {
     @Bean
