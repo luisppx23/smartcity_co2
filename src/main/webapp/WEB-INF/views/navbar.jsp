@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <nav style="box-shadow: 0 4px 12px -4px rgba(0,0,0,0.15), 0 2px 4px -2px rgba(0,0,0,0.05);">
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; ">
 
@@ -11,7 +12,20 @@
         </div>
 
         <div>
-            <span>${user.firstName} ${user.lastName}</span>
+            <%
+                Object user = request.getAttribute("user");
+                if (user instanceof pt.upskill.smart_city_co2.entities.Cidadao) {
+                    pt.upskill.smart_city_co2.entities.Cidadao cidadao = (pt.upskill.smart_city_co2.entities.Cidadao) user;
+                    out.print("<span>" + cidadao.getFirstName() + " " + cidadao.getLastName() + "</span>");
+                } else if (user instanceof pt.upskill.smart_city_co2.entities.Municipio) {
+                    pt.upskill.smart_city_co2.entities.Municipio municipio = (pt.upskill.smart_city_co2.entities.Municipio) user;
+                    out.print("<span>" + municipio.getNome() + "</span>");
+                } else if (user instanceof pt.upskill.smart_city_co2.entities.User) {
+                    out.print("<span>" + ((pt.upskill.smart_city_co2.entities.User) user).getUsername() + "</span>");
+                } else {
+                    out.print("<span>Utilizador</span>");
+                }
+            %>
             <a href="/logout" class="btn btn-danger">Logout</a>
         </div>
     </div>

@@ -1,6 +1,8 @@
 package pt.upskill.smart_city_co2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,20 +33,22 @@ public class AuthController {
 
     // Redireciona o user autenticado para a página correspondente ao seu tipo (município ou cidadão)
     @GetMapping("/autenticado")
-    public String direcionarUtilizador(Model model) {
-        User user = authService.getAuthenticatedUser();
+    public String autenticado(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (user == null) {
-            return "redirect:/auth/login";
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User user = (User) authentication.getPrincipal();
+            model.addAttribute("user", user);
+
+            // Redirect based on user type
+            if ("cidadao".equals(user.getTipo())) {
+                return "autenticadoTesteCidadao";
+            } else if ("municipio".equals(user.getTipo())) {
+                return "autenticadoTesteMunicipio";
+            }
         }
 
-        model.addAttribute("user", user);
-
-        if ("municipio".equalsIgnoreCase(user.getTipo())) {
-            return "autenticadoTesteMunicipio";
-        } else {
-            return "autenticadoTesteCidadao";
-        }
+        return "redirect:/auth/login";
     }
 
     //Processa o formulário registo de novo user

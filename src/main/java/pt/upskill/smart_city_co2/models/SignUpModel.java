@@ -9,9 +9,9 @@ public class SignUpModel {
     private String email;
     private String tipo;
     private Date data_registo;
-
     private String username;
     private String password;
+    private int nif;
 
     public String getUsername() {
         return username;
@@ -67,5 +67,13 @@ public class SignUpModel {
 
     public void setData_registo(Date data_registo) {
         this.data_registo = data_registo;
+    }
+
+    public int getNif() {
+        return nif;
+    }
+
+    public void setNif(int nif) {
+        this.nif = nif;
     }
 }

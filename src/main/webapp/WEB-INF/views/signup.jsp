@@ -77,6 +77,11 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="nif" class="form-label">NIF</label>
+                    <input type="number" class="form-control" id="nif" name="nif" placeholder="O seu NIF">
+                </div>
+
+                <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input
                             type="text"

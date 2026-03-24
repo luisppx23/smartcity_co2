@@ -27,9 +27,16 @@ public class SecurityWebConfig {
             // Acesso público a rotas de autenticação e recursos estáticos
             auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/images/**").permitAll();
             auth.requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll();
+            auth.requestMatchers("/login", "/logout").permitAll();
+            auth.requestMatchers("/error").permitAll();
+
+            // Acesso mediante Role do User
+            auth.requestMatchers("/auth/autenticado").authenticated();
+            auth.requestMatchers("/auth/autenticadoCidadao").hasRole("CIDADAO");
+            auth.requestMatchers("/auth/autenticadoMunicipio").hasRole("MUNICIPIO");
 
             // Bloqueia qualquer outra requisição não especificada
-            auth.anyRequest().denyAll();
+            auth.anyRequest().authenticated();
         });
 
         // Formulário de Login sob httpSecurity
@@ -38,6 +45,13 @@ public class SecurityWebConfig {
             login.loginProcessingUrl("/login");       // Endpoint que processa o login
             login.defaultSuccessUrl("/auth/autenticado", true); // Redireciona para autenticado após login bem-sucedido
             login.permitAll();                        // acesso geral à página de login
+        });
+
+        // Configuração de logout
+        httpSecurity.logout(logout -> {
+            logout.logoutUrl("/logout");
+            logout.logoutSuccessUrl("/auth/login");
+            logout.permitAll();
         });
 
         // Define o provedor de autenticação

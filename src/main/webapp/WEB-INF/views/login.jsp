@@ -26,13 +26,13 @@
 
             <form method="POST" action="/login">
                 <div class="mb-4">
-                    <label for="username" class="form-label">Email ou Username</label>
+                    <label for="username" class="form-label">Username</label>
                     <input
                             type="text"
                             class="form-control custom-input"
                             id="username"
                             name="username"
-                            placeholder="Introduza o seu email ou username"
+                            placeholder="Introduza o seu username"
                             required
                     >
                 </div>

@@ -11,38 +11,31 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String firstName;
-    private String lastName;
     private String username;
     private LocalDateTime data_registo;
     private String email;
     private String password;
+    private int nif;
     private String tipo;
     private boolean ativo;
-
-    //Construtor para UserService
-    public User(String firstName,String lastName, String username, LocalDateTime data_registo, String email, String password,String tipo,boolean ativo){
-        this.firstName=firstName;
-        this.lastName=lastName;
-        this.username=username;
-        this.data_registo=data_registo;
-        this.email=email;
-        this.password=password;
-        this.tipo=tipo;
-        this.ativo=ativo;
-    }
 
     //CONSTRUTOR VAZIO
     public User(){}
 
-    //GETTERS E SETTERS
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
+    //Construtor para UserService
+    public User(String username, LocalDateTime dataRegisto, String email, String password, int nif, String tipo, boolean ativo) {
         this.username = username;
+        this.data_registo = dataRegisto;
+        this.email = email;
+        this.password = password;
+        this.nif = nif;
+        this.tipo = tipo;
+        this.ativo = ativo;
     }
+
+    //GETTERS E SETTERS
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
 
     public LocalDateTime getData_registo() {
         return data_registo;
@@ -86,20 +79,9 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public boolean isAtivo() {return ativo;}
     public void setAtivo(boolean ativo) {this.ativo = ativo;}
+
+    public int getNif() {return nif;}
+    public void setNif(int nif) {this.nif = nif;}
 }

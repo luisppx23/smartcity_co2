@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
 
     // Query nativa para obter todos os cidadãos
     @Query(value = "SELECT * FROM Cidadao", nativeQuery = true)
-    List<Cidadao> customQuery(@Param("nome") String nome);
+    List<Cidadao> customQuery(@Param("email") String email);
 
-    List<Cidadao>findCidadaoByNome(String nome);
+    Optional<Cidadao> findByUsername(String username);
 }

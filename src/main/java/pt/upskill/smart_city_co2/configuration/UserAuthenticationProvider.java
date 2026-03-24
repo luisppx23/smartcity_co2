@@ -31,22 +31,21 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         User user = authService.validateLogin(username, password);
 
         if (user != null) {
-            // Cria lista de permissões (roles) do user
+            // Lista de roles de user - permissões
             List<GrantedAuthority> roleList = new ArrayList<>();
 
-            //FALTA EXPLORAR ISTO - LISTA DE ROLES MEDIANTE A ESPECIFICAÇÃO DA NOSSA BASE DE DADOS
-
-            /*if(utilizador.isAdmin()) {
-                roleList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            }*/
-
-            //roleList.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+            // Adiciona role específica baseada no tipo de usuário
+            if ("cidadao".equals(user.getTipo())) {
+                roleList.add(new SimpleGrantedAuthority("ROLE_CIDADAO"));
+            } else if ("municipio".equals(user.getTipo())) {
+                roleList.add(new SimpleGrantedAuthority("ROLE_MUNICIPIO"));
+            }
 
             // Por enquanto, atribui role USER para todos os users autenticados
             roleList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-            // Retorna token de autenticação com username, password e roles
-            return new UsernamePasswordAuthenticationToken(username, password, roleList);
+            // Retorna token de autenticação com user, password e roles
+            return new UsernamePasswordAuthenticationToken(user, password, roleList);
         }
 
         // Retorna null se autenticação falhar

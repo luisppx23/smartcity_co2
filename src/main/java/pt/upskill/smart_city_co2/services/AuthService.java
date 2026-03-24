@@ -5,8 +5,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pt.upskill.smart_city_co2.entities.Cidadao;
+import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.User;
 import pt.upskill.smart_city_co2.models.SignUpModel;
+import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
+import pt.upskill.smart_city_co2.repositories.MunicipioRepository;
 import pt.upskill.smart_city_co2.repositories.UserRepository;
 
 import java.time.LocalDateTime;
@@ -18,24 +22,46 @@ public class AuthService {
     UserRepository userRepository;
 
     @Autowired
+    CidadaoRepository cidadaoRepository;
+
+    @Autowired
+    MunicipioRepository municipioRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     public User register(SignUpModel signUpModel) {
-        User user = new User();
-        user.setUsername(signUpModel.getUsername());
-        user.setFirstName(signUpModel.getFirstName());
-        user.setLastName(signUpModel.getLastName());
-        user.setEmail(signUpModel.getEmail());
-        user.setTipo(signUpModel.getTipo());
-
-
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
-        user.setPassword(encodedPassword);
 
-        user.setAtivo(true);
-        user.setData_registo(LocalDateTime.now());
+        if ("cidadao".equals(signUpModel.getTipo())) {
+            Cidadao cidadao = new Cidadao(
+                    signUpModel.getFirstName(),
+                    signUpModel.getLastName(),
+                    signUpModel.getUsername(),
+                    LocalDateTime.now(),
+                    signUpModel.getEmail(),
+                    encodedPassword,
+                    signUpModel.getNif(),
+                    signUpModel.getTipo(),
+                    true
+            );
+            return cidadaoRepository.save(cidadao);
+        } else if ("municipio".equals(signUpModel.getTipo())) {
+            Municipio municipio = new Municipio(
+                    null, // nome do municipio - definido posteriormente
+                    0.0, // objetivo_co2_mes_hab - definido posteriormente
+                    signUpModel.getUsername(),
+                    LocalDateTime.now(),
+                    signUpModel.getEmail(),
+                    encodedPassword,
+                    signUpModel.getNif(),
+                    signUpModel.getTipo(),
+                    true
+            );
+            return municipioRepository.save(municipio);
+        }
 
-        return userRepository.save(user);
+        return null;
     }
 
     public User getUser(String username) {
@@ -75,6 +101,4 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(novaPassword));
         userRepository.save(user);
     }
-
-
 }
