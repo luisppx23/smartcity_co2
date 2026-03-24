@@ -22,21 +22,21 @@ public class SecurityWebConfig {
         // Configuração de regras de autorização
         httpSecurity.authorizeHttpRequests(auth -> {
             // Requisições de forward (redirecionamentos internos)
-            auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
+            auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
 
             // Acesso público a rotas de autenticação e recursos estáticos
-            auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/images/**").permitAll();
-            auth.requestMatchers("/styles/**", "/scripts/**", "/images/**").permitAll();
-            auth.requestMatchers("/login", "/logout").permitAll();
-            auth.requestMatchers("/error").permitAll();
+            auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/scripts","/images/**").permitAll();
+            //auth.requestMatchers("/login", "/logout").permitAll();
+            //auth.requestMatchers("/error").permitAll();
 
             // Acesso mediante Role do User
             auth.requestMatchers("/auth/autenticado").authenticated();
             auth.requestMatchers("/auth/autenticadoCidadao").hasRole("CIDADAO");
             auth.requestMatchers("/auth/autenticadoMunicipio").hasRole("MUNICIPIO");
+            auth.requestMatchers("/**").denyAll();
 
             // Bloqueia qualquer outra requisição não especificada
-            auth.anyRequest().authenticated();
+            //auth.anyRequest().authenticated();
         });
 
         // Formulário de Login sob httpSecurity
@@ -56,7 +56,6 @@ public class SecurityWebConfig {
 
         // Define o provedor de autenticação
         httpSecurity.authenticationProvider(userAuthenticationProvider);
-
         return httpSecurity.build();
     }
 }
