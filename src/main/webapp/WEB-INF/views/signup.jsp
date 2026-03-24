@@ -31,6 +31,12 @@
                 <h2 class="section-title">Registo de Cidadao</h2>
             </div>
 
+            <% if (request.getAttribute("erro") != null) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= request.getAttribute("erro") %>
+            </div>
+            <% } %>
+
             <form method="POST" action="/auth/signUpAction">
                 <div class="mb-3">
                     <label for="firstName" class="form-label">Primeiro Nome</label>
@@ -100,6 +106,18 @@
                             id="password"
                             name="password"
                             placeholder="Introduza a sua password"
+                            required
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label for="confirmPassword" class="form-label">Confirmar Password</label>
+                    <input
+                            type="password"
+                            class="form-control custom-input"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Confirme a sua password"
                             required
                     >
                 </div>

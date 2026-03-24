@@ -11,6 +11,7 @@ public class SignUpModel {
     private Date data_registo;
     private String username;
     private String password;
+    private String confirmPassword;
     private int nif;
 
     public String getUsername() {return username;}
@@ -18,6 +19,9 @@ public class SignUpModel {
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
+
+    public String getConfirmPassword() { return confirmPassword; }
+    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
     public String getFirstName() {return firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}

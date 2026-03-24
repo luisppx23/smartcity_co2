@@ -51,11 +51,26 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    //Processa o formulário registo de novo user
+    // Processa o formulário registo de novo user
     @PostMapping(value = "/signUpAction")
-    public String signUpAction(SignUpModel signUp) {
-        User user = authService.register(signUp);
-        return "login";
+    public String signUpAction(SignUpModel signUp, Model model) {
+
+        if (!signUp.getPassword().equals(signUp.getConfirmPassword())) {
+            model.addAttribute("erro", "As passwords não coincidem.");
+            model.addAttribute("signUpModel", signUp);
+            return "signup";
+        }
+
+
+        try {
+            authService.register(signUp);
+            model.addAttribute("message", "Conta criada com sucesso! Faça login.");
+            return "login";
+        } catch (RuntimeException e) {
+            model.addAttribute("erro", e.getMessage());
+            model.addAttribute("signUpModel", signUp);
+            return "signup";
+        }
     }
 
     // Redireciona o user autenticado para a página de recuperar password
@@ -105,48 +120,6 @@ public class AuthController {
             return "recuperarPassword";
         }
     }
-
-   /* // Direciona para pagina de dashboard do cidadão
-    @GetMapping("/DashboardCidadao")
-    public String dashboardCidadao() {
-        return "Cidadao/DashboardCidadao";
-    }
-
-    // Direciona para pagina de home do cidadão
-    @GetMapping("/HomeCidadao")
-    public String homeCidadao() {
-        return "Cidadao/HomeCidadao";
-    }
-
-    // Direciona para pagina de registar veículo
-    @GetMapping("/RegistoVeiculo")
-    public String registarVeiculo() {
-        return "Cidadao/RegistoVeiculo";
-    }
-
-    // Direciona para pagina de dashboard do municipio
-    @GetMapping("/DashboardMunicipio")
-    public String dashboardMunicipio() {
-        return "Municipio/DashboardMunicipio";
-    }
-
-    // Direciona para pagina de home do municipio
-    @GetMapping("/HomeMunicipio")
-    public String homeMunicipio() {
-        return "Municipio/HomeMunicipio";
-    }
-
-    // Direciona para pagina de redefinir taxa
-    @GetMapping("/RedefinirTaxa")
-    public String redefinirTaxa() {
-        return "Municipio/RedefinirTaxa";
-    }
-
-    // Direciona para pagina de exibicao de relatorios
-    @GetMapping("/RelatoriosMunicipio")
-    public String relatoriosMunicipio() {
-        return "Municipio/RelatoriosMunicipio";
-    }*/
 
 }
 
