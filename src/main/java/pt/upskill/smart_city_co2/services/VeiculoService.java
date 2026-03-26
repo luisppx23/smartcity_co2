@@ -187,7 +187,7 @@ public class VeiculoService {
     }
 
     public Veiculo getVeiculoByMatricula(String matricula) {
-        return veiculoRepository.findById(matricula).orElse(null);
+        return veiculoRepository.findByMatricula(matricula);
     }
 
     public Veiculo getVeiculoByMarcaEModelo(String marca, String modelo) {

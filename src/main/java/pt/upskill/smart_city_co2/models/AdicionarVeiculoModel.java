@@ -1,10 +1,15 @@
 package pt.upskill.smart_city_co2.models;
 
+import pt.upskill.smart_city_co2.TipoDeCombustivel;
+
 public class AdicionarVeiculoModel {
     private String matricula;
     private String marca;
     private String modelo;
     private Integer anoRegisto;
+    private Enum<TipoDeCombustivel> tipoDeCombustivel;
+    private double consumo;
+
     private String modeloReferencia;
 
     public String getMatricula() {
@@ -45,5 +50,21 @@ public class AdicionarVeiculoModel {
 
     public void setModeloReferencia(String modeloReferencia) {
         this.modeloReferencia = modeloReferencia;
+    }
+
+    public Enum<TipoDeCombustivel> getTipoDeCombustivel() {
+        return tipoDeCombustivel;
+    }
+
+    public void setTipoDeCombustivel(Enum<TipoDeCombustivel> tipoDeCombustivel) {
+        this.tipoDeCombustivel = tipoDeCombustivel;
+    }
+
+    public double getConsumo() {
+        return consumo;
+    }
+
+    public void setConsumo(double consumo) {
+        this.consumo = consumo;
     }
 }
