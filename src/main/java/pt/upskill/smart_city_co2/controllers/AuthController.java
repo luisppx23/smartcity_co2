@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.User;
 import pt.upskill.smart_city_co2.models.SignUpModel;
 import pt.upskill.smart_city_co2.services.AuthService;
+import pt.upskill.smart_city_co2.services.MunicipioService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/auth")
@@ -19,9 +23,16 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    MunicipioService municipioService;
+
+    // Exibe a página de registo de novo user
     // Exibe a página de registo de novo user
     @GetMapping(value = "/signup")
-    public String signUpPage() {
+    public String signUpPage(Model model) {  // ← ADICIONAR Model COMO PARÂMETRO
+        // Buscar todos os municípios
+        List<Municipio> municipios = municipioService.getNomes(); // ou municipioService.getNome()
+        model.addAttribute("municipios", municipios);  // ← ADICIONAR AO MODEL
         return "signup";
     }
 

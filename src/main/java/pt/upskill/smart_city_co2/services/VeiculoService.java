@@ -20,9 +20,9 @@ public class VeiculoService {
         if (veiculoRepository.count() > 0) return;
 
         // ELÉTRICOS
-        veiculoRepository.save(new Veiculo("AA-00-EV", "Tesla", "Model 3", TipoDeCombustivel.ELECTRICO,
+        veiculoRepository.save(new Veiculo("AA-00-EV", "Tesla", "Model 3", TipoDeCombustivel.ELETRICO,
                 0.0, 0.0, 0.0, 0.0, 2025));
-        veiculoRepository.save(new Veiculo("BB-11-EV", "Nissan", "Leaf", TipoDeCombustivel.ELECTRICO,
+        veiculoRepository.save(new Veiculo("BB-11-EV", "Nissan", "Leaf", TipoDeCombustivel.ELETRICO,
                 0.0, 0.0, 0.0, 0.0, 2026));
 
         // HÍBRIDOS

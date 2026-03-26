@@ -14,6 +14,12 @@ public class SignUpModel {
     private String confirmPassword;
     private int nif;
 
+    // NOVOS CAMPOS
+    private String morada;
+    private String contacto;
+    private Long municipioId; // ID do município ao qual o cidadão pertence
+
+    // Getters e Setters existentes...
     public String getUsername() {return username;}
     public void setUsername(String username) {this.username = username;}
 
@@ -40,4 +46,14 @@ public class SignUpModel {
 
     public int getNif() {return nif;}
     public void setNif(int nif) {this.nif = nif;}
+
+    // NOVOS GETTERS E SETTERS
+    public String getMorada() {return morada;}
+    public void setMorada(String morada) {this.morada = morada;}
+
+    public String getContacto() {return contacto;}
+    public void setContacto(String contacto) {this.contacto = contacto;}
+
+    public Long getMunicipioId() {return municipioId;}
+    public void setMunicipioId(Long municipioId) {this.municipioId = municipioId;}
 }

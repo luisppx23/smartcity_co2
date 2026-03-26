@@ -25,6 +25,8 @@
                 <p>Bem vindo, ${user.firstName} ${user.lastName}</p>
                 <p>Username: ${user.username}</p>
                 <p>Email: ${user.email}</p>
+                <p>Contacto: ${user.contacto}</p>
+                <p>Morada: ${user.morada}</p>
                 <p>Data de Criação de conta: ${user.data_registo}</p>
                 <p>Ativo: ${user.ativo}</p>
                 <p>Tipo: ${user.tipo}</p>

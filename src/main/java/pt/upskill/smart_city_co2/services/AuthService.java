@@ -32,12 +32,12 @@ public class AuthService {
 
     public User register(SignUpModel signUpModel) {
 
-        // VERIFICAR EMAIL
+        // Verificar email
         if (userRepository.findByEmail(signUpModel.getEmail()).isPresent()) {
             throw new RuntimeException("Email já está em uso");
         }
 
-        // verificar username
+        // Verificar username
         if (userRepository.findByUsername(signUpModel.getUsername()).isPresent()) {
             throw new RuntimeException("Username já está em uso");
         }
@@ -46,6 +46,13 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
 
         if ("cidadao".equals(signUpModel.getTipo())) {
+
+            Municipio municipio = null;
+            if (signUpModel.getMunicipioId() != null) {
+                municipio = municipioRepository.findById(signUpModel.getMunicipioId())
+                        .orElseThrow(() -> new RuntimeException("Município não encontrado"));
+            }
+
             Cidadao cidadao = new Cidadao(
                     signUpModel.getFirstName(),
                     signUpModel.getLastName(),
@@ -55,10 +62,29 @@ public class AuthService {
                     encodedPassword,
                     signUpModel.getNif(),
                     signUpModel.getTipo(),
-                    true
+                    true,
+                    signUpModel.getContacto(),
+                    signUpModel.getMorada()
             );
-            return cidadaoRepository.save(cidadao);
-        } else if ("municipio".equals(signUpModel.getTipo())) {
+
+            // Primeiro salva o cidadão para gerar o ID
+            Cidadao savedCidadao = cidadaoRepository.save(cidadao);
+
+            // Depois adiciona à lista do município (se existir)
+            if (municipio != null) {
+                if (municipio.getListaDeCidadaos() == null) {
+                    municipio.setListaDeCidadaos(new java.util.ArrayList<>());
+                }
+                municipio.getListaDeCidadaos().add(savedCidadao);
+                municipioRepository.save(municipio);
+            }
+
+            return savedCidadao;
+        }
+
+
+        //Só será necessário qd for o admin a adicionar contas de Município
+        /*else if ("municipio".equals(signUpModel.getTipo())) {
             Municipio municipio = new Municipio(
                     null, // nome do municipio - definido posteriormente
                     0.0, // objetivo_co2_mes_hab - definido posteriormente
@@ -71,7 +97,7 @@ public class AuthService {
                     true
             );
             return municipioRepository.save(municipio);
-        }
+        }*/
 
         return null;
     }
