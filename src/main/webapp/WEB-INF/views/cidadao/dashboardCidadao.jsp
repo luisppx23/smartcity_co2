@@ -13,7 +13,7 @@
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">
-            <a href="/cidadao/registoVeiculo">Registar Veiculo</a>
+            <a href="/auth/cidadao/registoVeiculo">Registar Veiculo</a>
         </div>
         <div class="mt-3 text-center">
             <a href="/cidadao/homeCidadao">Home</a>

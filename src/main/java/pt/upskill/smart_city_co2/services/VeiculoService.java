@@ -1,6 +1,7 @@
 package pt.upskill.smart_city_co2.services;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
@@ -17,8 +18,8 @@ public class VeiculoService {
     VeiculoRepository veiculoRepository;
 
     @PostConstruct
+    @Transactional
     public void init() {
-        if (veiculoRepository.count() > 0) return;
 
         // ELÉTRICOS (0.0 L/km)
         veiculoRepository.save(new Veiculo("Tesla", "Model 3", TipoDeCombustivel.ELETRICO, 0.0));
@@ -168,6 +169,7 @@ public class VeiculoService {
         veiculoRepository.save(new Veiculo("Skoda", "Octavia GPL", TipoDeCombustivel.GPL, 0.076));
         veiculoRepository.save(new Veiculo("Citroen", "C3 GPL", TipoDeCombustivel.GPL, 0.072));
         veiculoRepository.save(new Veiculo("Citroen", "C4 GPL", TipoDeCombustivel.GPL, 0.077));
+
     }
 
     public Veiculo adicionarVeiculo(AdicionarVeiculoModel model) {
@@ -183,11 +185,9 @@ public class VeiculoService {
     }
 
     public List<Veiculo> getAllVeiculos() {
-        return veiculoRepository.findAll();
-    }
-
-    public Veiculo getVeiculoByMatricula(String matricula) {
-        return veiculoRepository.findByMatricula(matricula);
+        return veiculoRepository.findAll().stream()
+                .filter(v -> v.getMatricula() == null || v.getMatricula().isEmpty())
+                .toList();
     }
 
     public Veiculo getVeiculoByMarcaEModelo(String marca, String modelo) {

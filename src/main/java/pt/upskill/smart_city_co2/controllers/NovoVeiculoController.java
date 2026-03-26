@@ -16,6 +16,9 @@ import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
 import pt.upskill.smart_city_co2.services.AuthService;
 import pt.upskill.smart_city_co2.services.VeiculoService;
 
+import java.security.Principal;
+import java.util.List;
+
 @Controller
 @RequestMapping("/auth/cidadao")
 public class NovoVeiculoController {
@@ -31,44 +34,56 @@ public class NovoVeiculoController {
 
     @GetMapping("/registoVeiculo")
     public String mostrarFormulario(Model model) {
-        // Envia todos os modelos base para o dropdown do JSP
-        model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
+        List<Veiculo> lista = veiculoRepository.findAll();
+        System.out.println("DEBUG CONTROLLER: Lista tem " + lista.size() + " itens.");
+
+        model.addAttribute("veiculosBase", lista);
         return "cidadao/registoVeiculo";
     }
 
     @PostMapping("/adicionarVeiculoAction")
-    public String adicionarVeiculo(@ModelAttribute AdicionarVeiculoModel form) {
-        User utilizador = authService.getAuthenticatedUser();
-        if (utilizador == null) return "redirect:/auth/login";
+    public String adicionarVeiculo(@ModelAttribute AdicionarVeiculoModel form,
+                                   Model model,
+                                   Principal principal) { // <--- Adicionamos o Principal aqui
 
-        // Separar a Marca e o Modelo que vieram do Select (ex: "Tesla:Model 3")
+        // 1. Verificar se o principal existe (segurança extra)
+        if (principal == null) {
+            return "redirect:/auth/login";
+        }
+
+        // 2. Buscar o utilizador pelo username que está no Principal
+        String username = principal.getName();
+        User utilizador = userRepository.findByUsername(username).orElse(null);
+
+        if (utilizador == null) {
+            model.addAttribute("error", "Utilizador não encontrado.");
+            return "cidadao/registoVeiculo";
+        }
+
+        // --- O resto do teu código continua igual ---
         String[] partes = form.getModeloReferencia().split(":");
         if (partes.length < 2) return "redirect:/auth/cidadao/registoVeiculo";
 
-        String marcaBase = partes[0];
-        String modeloBase = partes[1];
+        Veiculo veiculoBase = veiculoService.getVeiculoByMarcaEModelo(partes[0], partes[1]);
 
-        // Buscar os dados técnicos na "base de dados" do Service
-        Veiculo veiculoBase = veiculoService.getVeiculoByMarcaEModelo(marcaBase, modeloBase);
-
-        if (veiculoBase != null) {
-            Veiculo novoVeiculo = new Veiculo();
-            novoVeiculo.setMatricula(form.getMatricula().toUpperCase());
-            novoVeiculo.setAnoRegisto(form.getAnoRegisto());
-
-            // Copiar dados técnicos do veículo base
-            novoVeiculo.setMarca(veiculoBase.getMarca());
-            novoVeiculo.setModelo(veiculoBase.getModelo());
-            novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
-            novoVeiculo.setConsumo(veiculoBase.getConsumo());
-
-            // Salvar primeiro o veículo (caso a matrícula ainda não exista na BD global)
-            veiculoRepository.save(novoVeiculo);
-
-            // Associar ao utilizador
-            utilizador.getMeusVeiculos().add(novoVeiculo);
-            userRepository.save(utilizador);
+        if (veiculoBase == null) {
+            model.addAttribute("error", "Modelo de veículo inválido.");
+            return "cidadao/registoVeiculo";
         }
+
+        Veiculo novoVeiculo = new Veiculo();
+        novoVeiculo.setMatricula(form.getMatricula().toUpperCase());
+        novoVeiculo.setAnoRegisto(form.getAnoRegisto());
+        novoVeiculo.setMarca(veiculoBase.getMarca());
+        novoVeiculo.setModelo(veiculoBase.getModelo());
+        novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
+        novoVeiculo.setConsumo(veiculoBase.getConsumo());
+
+        veiculoRepository.save(novoVeiculo);
+
+        // Agora o utilizador já não é nulo!
+        utilizador.getMeusVeiculos().add(novoVeiculo);
+        userRepository.save(utilizador);
 
         return "redirect:/auth/autenticado";
     }

@@ -10,6 +10,8 @@
     <title>Registo de Veiculo</title>
 </head>
 <body>
+<p>Teste JSTL (deve aparecer 4): ${2 + 2}</p>
+<p>Quantidade de veículos vindos do Java: ${veiculosBase.size()}</p>
 <div class="container">
     <div class="card mt-4">
         <form action="/auth/cidadao/adicionarVeiculoAction" method="POST">
@@ -29,7 +31,7 @@
                         <option value="">-- Escolha o seu veículo --</option>
                         <c:forEach var="v" items="${veiculosBase}">
                             <option value="${v.marca}:${v.modelo}">
-                                    ${v.marca} ${v.modelo} - ${v.tipoDeCombustivel}
+                                    ${v.marca} - ${v.modelo}
                             </option>
                         </c:forEach>
                     </select>
