@@ -15,12 +15,11 @@ public class Veiculo {
     private Long id;
 
     private String matricula;
-
     private String marca;
     private String modelo;
     private TipoDeCombustivel tipoDeCombustivel;
     private double consumo;
-    private LocalDate anoRegisto;
+    private Integer anoRegisto;
 
     //Relação 1paraMUITOS Veiculo-RegistoKms
     @OneToMany
@@ -30,7 +29,7 @@ public class Veiculo {
     public Veiculo(){}
 
     //CONSTRUTOR PARA SERVICE
-    public Veiculo( String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo ){
+    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo ){
         this.marca=marca;
         this.modelo=modelo;
         this.tipoDeCombustivel=tipoDeCombustivel;
@@ -64,13 +63,22 @@ public class Veiculo {
     }
     public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
 
-    public double getCO2_kg_km() {
-        return CO2_kg_km;
-    }
-    public void setCO2_kg_km(double CO2_kg_km) {
-        this.CO2_kg_km = CO2_kg_km;
-    }
-
     public List<RegistoKms> getRegistos() {return registos;}
     public void setRegistos(List<RegistoKms> registos) {this.registos = registos;}
+
+    public double getConsumo() {
+        return consumo;
+    }
+
+    public void setConsumo(double consumo) {
+        this.consumo = consumo;
+    }
+
+    public Integer getAnoRegisto() {
+        return anoRegisto;
+    }
+
+    public void setAnoRegisto(Integer anoRegisto) {
+        this.anoRegisto = anoRegisto;
+    }
 }

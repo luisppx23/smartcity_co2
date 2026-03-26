@@ -21,6 +21,14 @@
         <div class="mt-3 text-center">
             <a href="/cidadao/simularTaxa">Simular Taxa</a>
         </div>
+        <div>
+            <h4>Meus Veículos Registados:</h4>
+            <ul>
+                <c:forEach items="${user.meusVeiculos}" var="v">
+                    <li>${v.marca} ${v.modelo} - <strong>${v.matricula}</strong></li>
+                </c:forEach>
+            </ul>
+        </div>
         <div class="mt-3 text-center">
             <a href="/cidadao/listaVeiculos">Lista de Veículos Associados ao Cidadão</a>
         </div>
