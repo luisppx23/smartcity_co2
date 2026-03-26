@@ -4,7 +4,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; ">
 
         <div>
-            <img src="${pageContext.request.contextPath}/images/logo.jpeg" alt="Logo" style="height: 40px;">
+            <img src="${pageContext.request.contextPath}/images/logo.jpeg" alt="Logo" style="height: 90px;">
         </div>
 
         <div>
@@ -28,5 +28,12 @@
             %>
             <a href="/logout" class="btn btn-danger">Logout</a>
         </div>
+        <div class="theme-strip">
+            <div class="theme-strip-inner">
+                <h2>Transformando quilómetros em consciência.</h2>
+                <p>Mobilidade inteligente com foco num futuro mais sustentável.</p>
+            </div>
+
+    </div>
     </div>
 </nav>
