@@ -1,7 +1,6 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,13 +19,15 @@ public class Cidadao extends User {
     //CONSTRUTOR VAZIO
     public Cidadao() {}
 
-    // CONSTRUTOR COM PARÂMETROS
+    // CONSTRUTOR COM PARÂMETROS - ATUALIZADO
     public Cidadao(String firstName, String lastName, String username,
                    LocalDateTime data_registo, String email, String password,
-                   int nif, String tipo, boolean ativo) {
+                   int nif, String tipo, boolean ativo, String contacto, String morada) {
         super(username, data_registo, email, password, nif, tipo, ativo);
         this.firstName = firstName;
         this.lastName = lastName;
+        this.contacto = contacto;
+        this.morada = morada;
     }
 
     //GETTERS e SETTERS

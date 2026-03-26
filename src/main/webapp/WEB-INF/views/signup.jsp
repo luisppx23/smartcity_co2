@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - Smart City CO2</title>
 
     <link rel="stylesheet" href="/styles/reset.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -28,7 +29,7 @@
             </div>
 
             <div class="text-center mb-4">
-                <h2 class="section-title">Registo de Cidadao</h2>
+                <h2 class="section-title">Registo de Cidadão</h2>
             </div>
 
             <% if (request.getAttribute("erro") != null) { %>
@@ -38,6 +39,8 @@
             <% } %>
 
             <form method="POST" action="/auth/signUpAction">
+                <input type="hidden" name="tipo" value="cidadao">
+
                 <div class="mb-3">
                     <label for="firstName" class="form-label">Primeiro Nome</label>
                     <input
@@ -75,15 +78,50 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="tipo" class="form-label">Tipo de Conta</label>
-                    <select id="tipo" name="tipo" class="form-select custom-select">
-                        <option value="cidadao">Cidadão</option>
+                    <label for="morada" class="form-label">Morada</label>
+                    <input
+                            type="text"
+                            class="form-control custom-input"
+                            id="morada"
+                            name="morada"
+                            placeholder="Rua, número, andar, localidade"
+                            required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="contacto" class="form-label">Contacto Telefónico</label>
+                    <input
+                            type="tel"
+                            class="form-control custom-input"
+                            id="contacto"
+                            name="contacto"
+                            placeholder="912345678"
+                            required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="municipioId" class="form-label">Município</label>
+                    <select id="municipioId" name="municipioId" class="form-select custom-select" required>
+                        <option value="">Selecione um município</option>
+                        <c:forEach var="municipio" items="${municipios}">
+                            <option value="${municipio.id}">${municipio.username} - ${municipio.nome}</option>
+                        </c:forEach>
                     </select>
+                    <small class="text-muted">Selecione o município onde reside</small>
                 </div>
 
                 <div class="mb-3">
                     <label for="nif" class="form-label">NIF</label>
-                    <input type="number" class="form-control" id="nif" name="nif" placeholder="O seu NIF">
+                    <input
+                            type="number"
+                            class="form-control custom-input"
+                            id="nif"
+                            name="nif"
+                            placeholder="123456789"
+                            required
+                    >
                 </div>
 
                 <div class="mb-3">
@@ -129,7 +167,7 @@
                 </div>
 
                 <div class="text-center mb-2">
-                    <span>Já possui conta? <a href="/auth/login">Faça login</a>
+                    <span>Já possui conta? <a href="/auth/login">Faça login</a></span>
                 </div>
 
             </form>

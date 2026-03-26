@@ -8,11 +8,11 @@ import pt.upskill.smart_city_co2.entities.Veiculo;
 
 import java.util.List;
 
-public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
+public interface VeiculoRepository extends JpaRepository<Veiculo, String> {
 
     @Query(value = "SELECT * FROM Veiculo", nativeQuery = true)
     List<Veiculo> customQuery(@Param("matricula") String matricula);
 
-    List<Veiculo> findVeiculoByMatricula(String matricula);
+    Veiculo findByMatricula(String matricula);
 
 }

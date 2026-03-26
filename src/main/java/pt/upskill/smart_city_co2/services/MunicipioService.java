@@ -26,7 +26,7 @@ public class MunicipioService {
         }
     }
 
-    public List<Municipio> getNome() {
+    public List<Municipio> getNomes() {
         return municipioRepository.findAll();
     }
 
