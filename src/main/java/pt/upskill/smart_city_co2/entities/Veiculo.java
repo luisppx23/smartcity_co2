@@ -38,39 +38,42 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
-    public String getMatricula() {
-        return matricula;
-    }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
+    public String getMatricula() {return matricula;}
+    public void setMatricula(String matricula) {this.matricula = matricula;}
 
-    public String getMarca() {
-        return marca;
-    }
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
+    public String getMarca() {return marca;}
+    public void setMarca(String marca) {this.marca = marca;}
 
-    public String getModelo() {
-        return modelo;
-    }
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
+    public String getModelo() {return modelo;}
+    public void setModelo(String modelo) {this.modelo = modelo;}
 
-    public TipoDeCombustivel getTipoDeCombustivel() {
-        return tipoDeCombustivel;
-    }
+    public TipoDeCombustivel getTipoDeCombustivel() {return tipoDeCombustivel;}
     public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
-
-    public double getCO2_kg_km() {
-        return CO2_kg_km;
-    }
-    public void setCO2_kg_km(double CO2_kg_km) {
-        this.CO2_kg_km = CO2_kg_km;
-    }
 
     public List<RegistoKms> getRegistos() {return registos;}
     public void setRegistos(List<RegistoKms> registos) {this.registos = registos;}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getConsumo() {
+        return consumo;
+    }
+
+    public void setConsumo(double consumo) {
+        this.consumo = consumo;
+    }
+
+    public LocalDate getAnoRegisto() {
+        return anoRegisto;
+    }
+
+    public void setAnoRegisto(LocalDate anoRegisto) {
+        this.anoRegisto = anoRegisto;
+    }
 }
