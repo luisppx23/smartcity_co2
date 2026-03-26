@@ -15,9 +15,9 @@ public class VeiculoController {
 
     @Autowired
     private VeiculoService veiculoService;
-
+    /*
     @PostMapping(value = "/registoVeiculo")
     public Veiculo adicionarVeiculo(@RequestBody AdicionarVeiculoModel model) {
         return veiculoService.adicionarVeiculo(model);
-    }
+    }*/
 }

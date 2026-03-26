@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.User;
 import pt.upskill.smart_city_co2.services.MunicipioService;
@@ -71,5 +72,19 @@ public class MunicipioController {
         model.addAttribute("municipio", municipio);
 
         return "municipio/listaCidadaos";
+    }
+
+    // Direciona para pagina de lista de veiculos dos cidadãos do município
+    @GetMapping("/listaVeiculos")
+    public String listaDeVeiculos(Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        // Carrega o municipio completo com a lista de cidadãos
+        // Os veículos serão acessados através de cidadao.listaDeVeiculos
+        Municipio municipio = municipioService.getUserM(user.getId());
+        model.addAttribute("municipio", municipio);
+
+        return "municipio/listaVeiculos";  // Retorna a página correta de veículos
     }
 }

@@ -10,6 +10,9 @@ public class Veiculo {
 
     //ATRIBUTOS
     @Id
+    @GeneratedValue
+    private Long id;
+
     private String matricula;
 
     private String marca;

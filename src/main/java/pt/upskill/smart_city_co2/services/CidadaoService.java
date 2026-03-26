@@ -33,7 +33,7 @@ public class CidadaoService {
         return cidadaoRepository.findAll();
     }
 
-    public Cidadao getUserM(Long id) {
+    public Cidadao getUserC(Long id) {
         return cidadaoRepository.getReferenceById(id);
     }
 }

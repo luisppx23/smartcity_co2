@@ -24,6 +24,9 @@
         <div class="mt-3 text-center">
             <a href="/municipio/listaCidadaos">Lista de Cidadãos</a>
         </div>
+        <div class="mt-3 text-center">
+            <a href="/municipio/listaVeiculos">Lista de Veículos Associados aos Cidadãos do Município</a>
+        </div>
     </div>
 </div>
 </body>

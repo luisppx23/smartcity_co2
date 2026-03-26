@@ -14,7 +14,7 @@ public class Cidadao extends User {
 
     //Relação 1paraMUITOS Cidadão-Proprietario
     @OneToMany
-    private List<Proprietario> listaDeVeiculos;
+    private List<Veiculo> listaDeVeiculos;
 
     //CONSTRUTOR VAZIO
     public Cidadao() {}
@@ -37,8 +37,8 @@ public class Cidadao extends User {
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public List<Proprietario> getListaDeVeiculos() {return listaDeVeiculos;}
-    public void setListaDeVeiculos(List<Proprietario> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
+    public List<Veiculo> getListaDeVeiculos() {return listaDeVeiculos;}
+    public void setListaDeVeiculos(List<Veiculo> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
 
     public String getContacto() {return contacto;}
     public void setContacto(String contacto) {this.contacto = contacto;}
