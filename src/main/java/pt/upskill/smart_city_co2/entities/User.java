@@ -2,6 +2,8 @@ package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -19,6 +21,9 @@ public class User {
     private int nif;
     private String tipo;
     private boolean ativo;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Veiculo> meusVeiculos = new ArrayList<>();
 
     //CONSTRUTOR VAZIO
     public User(){}
@@ -58,4 +63,12 @@ public class User {
 
     public int getNif() {return nif;}
     public void setNif(int nif) {this.nif = nif;}
+
+    public List<Veiculo> getMeusVeiculos() {
+        return meusVeiculos;
+    }
+
+    public void setMeusVeiculos(List<Veiculo> meusVeiculos) {
+        this.meusVeiculos = meusVeiculos;
+    }
 }

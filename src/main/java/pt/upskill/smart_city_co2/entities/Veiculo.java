@@ -15,12 +15,11 @@ public class Veiculo {
     private Long id;
 
     private String matricula;
-
     private String marca;
     private String modelo;
     private TipoDeCombustivel tipoDeCombustivel;
     private double consumo;
-    private LocalDate anoRegisto;
+    private Integer anoRegisto;
 
     //Relação 1paraMUITOS Veiculo-RegistoKms
     @OneToMany
@@ -30,7 +29,7 @@ public class Veiculo {
     public Veiculo(){}
 
     //CONSTRUTOR PARA SERVICE
-    public Veiculo( String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo ){
+    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo ){
         this.marca=marca;
         this.modelo=modelo;
         this.tipoDeCombustivel=tipoDeCombustivel;
@@ -38,28 +37,34 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
-    public String getMatricula() {return matricula;}
-    public void setMatricula(String matricula) {this.matricula = matricula;}
+    public String getMatricula() {
+        return matricula;
+    }
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
 
-    public String getMarca() {return marca;}
-    public void setMarca(String marca) {this.marca = marca;}
+    public String getMarca() {
+        return marca;
+    }
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
 
-    public String getModelo() {return modelo;}
-    public void setModelo(String modelo) {this.modelo = modelo;}
+    public String getModelo() {
+        return modelo;
+    }
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
 
-    public TipoDeCombustivel getTipoDeCombustivel() {return tipoDeCombustivel;}
+    public TipoDeCombustivel getTipoDeCombustivel() {
+        return tipoDeCombustivel;
+    }
     public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
 
     public List<RegistoKms> getRegistos() {return registos;}
     public void setRegistos(List<RegistoKms> registos) {this.registos = registos;}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public double getConsumo() {
         return consumo;
@@ -69,11 +74,11 @@ public class Veiculo {
         this.consumo = consumo;
     }
 
-    public LocalDate getAnoRegisto() {
+    public Integer getAnoRegisto() {
         return anoRegisto;
     }
 
-    public void setAnoRegisto(LocalDate anoRegisto) {
+    public void setAnoRegisto(Integer anoRegisto) {
         this.anoRegisto = anoRegisto;
     }
 }
