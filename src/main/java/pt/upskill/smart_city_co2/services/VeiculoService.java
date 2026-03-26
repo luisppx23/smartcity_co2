@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.entities.Veiculo;
+import pt.upskill.smart_city_co2.models.AdicionarVeiculoModel;
 import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
 
 import java.util.List;
@@ -171,6 +172,18 @@ public class VeiculoService {
         veiculoRepository.save(new Veiculo("GP-23-EE", "Skoda", "Octavia GPL", TipoDeCombustivel.GPL, 0.16,7.6,1.51,1.0,2020));
         veiculoRepository.save(new Veiculo("GP-24-EE", "Citroen", "C3 GPL", TipoDeCombustivel.GPL, 0.15,7.2,1.51,1.0,2021));
         veiculoRepository.save(new Veiculo("GP-25-EE", "Citroen", "C4 GPL", TipoDeCombustivel.GPL, 0.16,7.7,1.51,1.0,2022));
+    }
+
+    public Veiculo adicionarVeiculo(AdicionarVeiculoModel model) {
+        Veiculo veiculo = new Veiculo();
+
+        veiculo.setMatricula(model.getMatricula());
+        veiculo.setMarca(model.getMarca());
+        veiculo.setModelo(model.getModelo());
+        veiculo.setTipoDeCombustivel(model.getTipoDeCombustivel());
+        veiculo.setCO2_kg_km(model.getCO2_kg_km());
+
+        return veiculoRepository.save(veiculo);
     }
 
     public List<Veiculo> getAllVeiculos() {
