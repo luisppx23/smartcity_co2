@@ -11,7 +11,7 @@ import java.util.List;
 public interface TaxaRepository extends JpaRepository<Taxa, Long> {
 
     @Query(value = "SELECT * FROM Taxa", nativeQuery = true)
-    List<Taxa> customQuery(@Param("taxa") double taxa);
+    List<Taxa> customQuery(@Param("valor") double valor);
 
     List<Taxa> findTaxaById(Long id);
 }

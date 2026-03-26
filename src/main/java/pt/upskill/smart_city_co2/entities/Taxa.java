@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -15,9 +16,13 @@ public class Taxa {
     @GeneratedValue
     private Long id;
 
-    private Date mes_ano;
-    private double co2_total;
-    private double kms_total;
+    private LocalDate mes_ano;
+    private double valor;
+
+    public Taxa(LocalDate mes_ano, double valor){
+        this.mes_ano=mes_ano;
+        this.valor=valor;
+    }
 
     //CONSTRUTOR VAZIO
     public Taxa(){}
@@ -26,12 +31,15 @@ public class Taxa {
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
-    public Date getMes_ano() {return mes_ano;}
-    public void setMes_ano(Date mes_ano) {this.mes_ano = mes_ano;}
+    public LocalDate getMes_ano() {return mes_ano;}
+    public void setMes_ano(LocalDate mes_ano) {this.mes_ano = mes_ano;}
 
-    public double getCo2_total() {return co2_total;}
-    public void setCo2_total(double co2_total) {this.co2_total = co2_total;}
 
-    public double getKms_total() {return kms_total;}
-    public void setKms_total(double kms_total) {this.kms_total = kms_total;}
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
 }
