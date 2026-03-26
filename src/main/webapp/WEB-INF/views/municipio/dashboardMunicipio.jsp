@@ -22,11 +22,8 @@
             <a href="/municipio/relatoriosMunicipio">Relatorios Municipio</a>
         </div>
         <div class="mt-3 text-center">
-            <form action="/logout" method="post">
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
+            <a href="/municipio/listaCidadaos">Lista de Cidadãos</a>
         </div>
-
     </div>
 </div>
 </body>

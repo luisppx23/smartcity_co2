@@ -1,16 +1,24 @@
 package pt.upskill.smart_city_co2.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.User;
+import pt.upskill.smart_city_co2.services.MunicipioService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/municipio")
 public class MunicipioController {
+
+    @Autowired
+    private MunicipioService municipioService;
 
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,5 +58,18 @@ public class MunicipioController {
 
         model.addAttribute("user", getAuthenticatedUser());
         return "municipio/relatoriosMunicipio";
+    }
+
+    // Direciona para pagina de lista de cidadãos do município
+    @GetMapping("/listaCidadaos")
+    public String listaDeCidadaos(Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        // Carrega o municipio completo com a lista de cidadãos
+        Municipio municipio = municipioService.getUserM(user.getId());
+        model.addAttribute("municipio", municipio);
+
+        return "municipio/listaCidadaos";
     }
 }

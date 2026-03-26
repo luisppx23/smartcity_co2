@@ -4,7 +4,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
+import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
 import pt.upskill.smart_city_co2.repositories.MunicipioRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.List;
 public class MunicipioService {
     @Autowired
     MunicipioRepository municipioRepository;
+
+    @Autowired
+    CidadaoRepository cidadaoRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
