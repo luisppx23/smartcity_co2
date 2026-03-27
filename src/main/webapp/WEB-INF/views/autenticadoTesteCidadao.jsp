@@ -15,6 +15,7 @@
             padding: 20px 0;
         }
     </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
 </head>
 <body>
 <div class="content-wrapper">

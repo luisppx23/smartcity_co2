@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Simular Taxa</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
 </head>
 <body>
 <div class="container">

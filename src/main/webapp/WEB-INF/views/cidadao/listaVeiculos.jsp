@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Veículos - Cidadão </title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
 </head>
 <body>
 

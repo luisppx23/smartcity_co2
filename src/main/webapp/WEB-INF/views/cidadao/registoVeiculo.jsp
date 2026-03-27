@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registo de Veiculo</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
 </head>
 <body>
 <p>Teste JSTL (deve aparecer 4): ${2 + 2}</p>
