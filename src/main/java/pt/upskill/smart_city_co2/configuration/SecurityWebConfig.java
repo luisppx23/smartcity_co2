@@ -29,8 +29,8 @@ public class SecurityWebConfig {
 
             // Acesso mediante Role do User - endpoints reais dos controllers
             auth.requestMatchers("/auth/autenticado").authenticated();
-            auth.requestMatchers("/auth/autenticadoCidadao").hasRole("CIDADAO");
-            auth.requestMatchers("/auth/autenticadoMunicipio").hasRole("MUNICIPIO");
+            auth.requestMatchers("/auth/homeCidadao").hasRole("CIDADAO");
+            auth.requestMatchers("/auth/homeMunicipio").hasRole("MUNICIPIO");
 
             // Rotas do cidadão
             auth.requestMatchers("/cidadao/**").hasRole("CIDADAO");
