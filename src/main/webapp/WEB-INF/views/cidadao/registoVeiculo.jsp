@@ -32,6 +32,7 @@
                         <option value="">-- Escolha o seu veículo --</option>
                         <c:forEach var="v" items="${veiculosBase}">
                             <option value="${v.marca}:${v.modelo}">
+                                    ${v.marca} ${v.modelo} - ${v.tipoDeCombustivel}
                                     ${v.marca} - ${v.modelo}
                             </option>
                         </c:forEach>
