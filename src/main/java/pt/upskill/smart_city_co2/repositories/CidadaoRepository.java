@@ -18,4 +18,8 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
     List<Cidadao> customQuery(@Param("email") String email);
 
     //Optional<Cidadao> findByUsername(String username);
+
+    Optional<Cidadao> findByUsername(String username);
+
+    Optional<Cidadao> findByEmail(String email);
 }

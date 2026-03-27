@@ -2,6 +2,7 @@ package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,10 @@ public class Cidadao extends User {
     //Relação 1paraMUITOS Cidadão-Proprietario
     @OneToMany
     private List<Veiculo> listaDeVeiculos;
+
+    //Relação 1paraMUITOS Cidadão-RegistoKms
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<RegistoKms> listaDeRegistosKms = new ArrayList<>();
 
     //CONSTRUTOR VAZIO
     public Cidadao() {}
@@ -45,4 +50,12 @@ public class Cidadao extends User {
 
     public String getMorada() {return morada;}
     public void setMorada(String morada) {this.morada = morada;}
+
+    public List<RegistoKms> getListaDeRegistosKms() {
+        return listaDeRegistosKms;
+    }
+
+    public void setListaDeRegistosKms(List<RegistoKms> listaDeRegistosKms) {
+        this.listaDeRegistosKms = listaDeRegistosKms;
+    }
 }

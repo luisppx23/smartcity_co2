@@ -9,7 +9,7 @@ public class RegistoKms {
 
     //ATRIBUTOS
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Importante para H2/MySQL
     private Long id;
 
     private Date mes_ano;

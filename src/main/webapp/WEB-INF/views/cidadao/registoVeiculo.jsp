@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
 </head>
 <body>
-<p>Teste JSTL (deve aparecer 4): ${2 + 2}</p>
-<p>Quantidade de veículos vindos do Java: ${veiculosBase.size()}</p>
 <div class="container">
     <div class="card mt-4">
         <form action="/auth/cidadao/adicionarVeiculoAction" method="POST">
