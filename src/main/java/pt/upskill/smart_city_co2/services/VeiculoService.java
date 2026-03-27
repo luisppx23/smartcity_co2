@@ -9,6 +9,7 @@ import pt.upskill.smart_city_co2.entities.Veiculo;
 import pt.upskill.smart_city_co2.models.AdicionarVeiculoModel;
 import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -189,6 +190,9 @@ public class VeiculoService {
     public List<Veiculo> getAllVeiculos() {
         return veiculoRepository.findAll().stream()
                 .filter(v -> v.getMatricula() == null || v.getMatricula().isEmpty())
+                // Adiciona esta linha para ordenar:
+                .sorted(Comparator.comparing(Veiculo::getMarca)
+                        .thenComparing(Veiculo::getModelo))
                 .toList();
     }
 

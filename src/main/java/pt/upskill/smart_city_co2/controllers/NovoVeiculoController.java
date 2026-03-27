@@ -45,7 +45,7 @@ public class NovoVeiculoController {
     public String mostrarFormulario(Model model) {
         model.addAttribute("user", getAuthenticatedCidadao());
 
-        List<Veiculo> lista = veiculoRepository.findAll();
+        List<Veiculo> lista = veiculoService.getAllVeiculos();
         System.out.println("DEBUG CONTROLLER: Lista tem " + lista.size() + " itens.");
 
         model.addAttribute("veiculosBase", lista);
