@@ -37,6 +37,16 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getMatricula() {
         return matricula;
     }
