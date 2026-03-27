@@ -1,42 +1,70 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="navbar.jsp"/>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Teste</title>
-    <style>
-        .content-wrapper {
-            background-color: lemonchiffon;
-            min-height: calc(100vh - 60px);
-            padding: 20px 0;
-        }
-    </style>
+    <title>Área do Cidadão</title>
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/auth.css">
 </head>
 <body>
-<div class="content-wrapper">
-    <div class="container">
-        <div class="card mt-4">
-            <div class="card-header">
-                <h2>Autenticado Cidadao</h2>
-                <p>Bem vindo, ${user.firstName} ${user.lastName}</p>
-                <p>Username: ${user.username}</p>
-                <p>Email: ${user.email}</p>
-                <p>Contacto: ${user.contacto}</p>
-                <p>Morada: ${user.morada}</p>
-                <p>Data de Criação de conta: ${user.data_registo}</p>
-                <p>Ativo: ${user.ativo}</p>
-                <p>Tipo: ${user.tipo}</p>
+
+<jsp:include page="navbar.jsp"/>
+
+<div class="auth-page">
+    <div class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Área do Cidadão</h1>
+                <p>Bem-vindo, <strong>${user.firstName} ${user.lastName}</strong></p>
             </div>
-        </div>
-        <div class="mt-3 text-center">
-            <a href="/cidadao/dashboardCidadao">Dashboard</a>
+
+            <div class="table-wrapper">
+                <table class="user-table">
+                    <tbody>
+                    <tr>
+                        <th>Username</th>
+                        <td>${user.username}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>${user.email}</td>
+                    </tr>
+                    <tr>
+                        <th>Contacto</th>
+                        <td>${user.contacto}</td>
+                    </tr>
+                    <tr>
+                        <th>Morada</th>
+                        <td>${user.morada}</td>
+                    </tr>
+                    <tr>
+                        <th>Data de Registo</th>
+                        <td>${user.data_registo}</td>
+                    </tr>
+                    <tr>
+                        <th>Ativo</th>
+                        <td>${user.ativo}</td>
+                    </tr>
+                    <tr>
+                        <th>Tipo</th>
+                        <td>${user.tipo}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="auth-actions">
+                <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="dashboard-btn">
+                    Ir para o Dashboard
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>

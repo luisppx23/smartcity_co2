@@ -69,7 +69,7 @@ public class AuthController {
         if (!signUp.getPassword().equals(signUp.getConfirmPassword())) {
             model.addAttribute("erro", "As passwords não coincidem.");
             model.addAttribute("signUpModel", signUp);
-            return "signup";
+            return "redirect:/auth/signup";
         }
 
 
@@ -80,7 +80,7 @@ public class AuthController {
         } catch (RuntimeException e) {
             model.addAttribute("erro", e.getMessage());
             model.addAttribute("signUpModel", signUp);
-            return "signup";
+            return "redirect:/auth/signup";
         }
     }
 

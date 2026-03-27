@@ -1,0 +1,137 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #1f1f1f;
+    background-color: #f4f4f4;
+}
+
+/* Página inteira abaixo da navbar */
+.auth-page {
+    min-height: calc(100vh - 80px);
+    background: url("../images/login-bg.jpg") no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* Camada suave por cima do fundo */
+.auth-overlay {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card principal igual ao estilo do login */
+.auth-card {
+    width: 100%;
+    max-width: 760px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 20px;
+    padding: 35px 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(3px);
+}
+
+/* Cabeçalho */
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-header h1 {
+    font-size: 2rem;
+    color: #1f1f1f;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    font-size: 1rem;
+    color: #444;
+}
+
+/* Tabela */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.user-table tr {
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.user-table tr:last-child {
+    border-bottom: none;
+}
+
+.user-table th,
+.user-table td {
+    padding: 16px 18px;
+    text-align: left;
+}
+
+.user-table th {
+    width: 35%;
+    background-color: #f7f7f7;
+    color: #1f1f1f;
+    font-weight: bold;
+}
+
+.user-table td {
+    color: #333;
+}
+
+/* Botão */
+.auth-actions {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.dashboard-btn {
+    display: inline-block;
+    background-color: #1f6b43;
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.dashboard-btn:hover {
+    background-color: #174f32;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 25px 18px;
+    }
+
+    .auth-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .user-table th,
+    .user-table td {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+
+    .user-table th {
+        width: 40%;
+    }
+}
