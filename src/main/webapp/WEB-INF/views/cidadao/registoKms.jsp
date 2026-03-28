@@ -28,10 +28,20 @@
             </p>
         </div>
 
-        <form action="${pageContext.request.contextPath}/auth/cidadao/registoKmsAction" method="POST" class="smart-form">
+        <form action="${pageContext.request.contextPath}/cidadao/registoKmsAction" method="POST" class="smart-form">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
             <div class="smart-form-group">
+                <label for="veiculoId">Veículo</label>
+                <select id="veiculoId" name="veiculoId" class="smart-input" required>
+                    <option value="">Selecione um veículo</option>
+                    <c:forEach var="veiculo" items="${listaVeiculos}">
+                        <option value="${veiculo.id}">
+                                ${veiculo.matricula}
+                        </option>
+                    </c:forEach>
+                </select>
+
                 <label for="kms">Quilómetros (km)</label>
                 <input
                         type="number"
@@ -42,6 +52,7 @@
                         placeholder="Ex: 150.5"
                         required>
             </div>
+
 
             <div class="smart-form-actions">
                 <button type="submit" class="smart-btn smart-btn-primary">

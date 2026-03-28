@@ -17,9 +17,11 @@ public class Veiculo {
     private String matricula;
     private String marca;
     private String modelo;
-    private TipoDeCombustivel tipoDeCombustivel;
     private double consumo;
     private Integer anoRegisto;
+
+    @Enumerated(EnumType.STRING)
+    private TipoDeCombustivel tipoDeCombustivel;
 
     //Relação 1paraMUITOS Veiculo-RegistoKms
     @OneToMany
@@ -37,7 +39,6 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
-
 
     public Long getId() {
         return id;

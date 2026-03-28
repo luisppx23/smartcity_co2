@@ -15,8 +15,14 @@ public class RegistoKms {
     private Date mes_ano;
     private double kms_mes;
 
+    private double emissaoGPorKm;
+    private double emissaoEfetivaKg;
+
     @OneToOne
     private Taxa taxa;
+
+    @ManyToOne
+    private Veiculo veiculo;
 
     //CONSTRUTOR VAZIO
     public RegistoKms(){}
@@ -30,6 +36,15 @@ public class RegistoKms {
 
     public double getKms_mes() {return kms_mes;}
     public void setKms_mes(double kms_mes) {this.kms_mes = kms_mes;}
+
+    public double getEmissaoGPorKm() { return emissaoGPorKm; }
+    public void setEmissaoGPorKm(double emissaoGPorKm) { this.emissaoGPorKm = emissaoGPorKm; }
+
+    public double getEmissaoEfetivaKg() { return emissaoEfetivaKg; }
+    public void setEmissaoEfetivaKg(double emissaoEfetivaKg) { this.emissaoEfetivaKg = emissaoEfetivaKg; }
+
+    public Veiculo getVeiculo() { return veiculo; }
+    public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }
 
     public Taxa getTaxa() {return taxa;}
     public void setTaxa(Taxa taxa) {this.taxa = taxa;}

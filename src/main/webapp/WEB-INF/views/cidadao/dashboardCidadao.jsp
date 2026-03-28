@@ -44,7 +44,7 @@
         <div class="dashboard-card">
             <h3>Registar KMs</h3>
             <p>Introduza novos registos de quilometragem do seu veículo.</p>
-            <a href="${pageContext.request.contextPath}/auth/cidadao/registoKms" class="dashboard-button">
+            <a href="${pageContext.request.contextPath}/cidadao/registoKms" class="dashboard-button">
                 Registar KMs
             </a>
         </div>
@@ -52,7 +52,7 @@
         <div class="dashboard-card">
             <h3>Ver Registos de KMs</h3>
             <p>Consulte o histórico dos seus registos de quilometragem.</p>
-            <a href="${pageContext.request.contextPath}/auth/cidadao/verRegistosKms" class="dashboard-button">
+            <a href="${pageContext.request.contextPath}/cidadao/verRegistosKms" class="dashboard-button">
                 Ver Registos de KMs
             </a>
         </div>
