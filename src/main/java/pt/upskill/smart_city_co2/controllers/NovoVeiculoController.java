@@ -141,6 +141,6 @@ public class NovoVeiculoController {
 
         System.out.println("Veículo associado ao cidadão. Total de veículos: " + veiculosAtuais.size());
 
-        return "redirect:/auth/autenticado";
+        return "redirect:/cidadao/dashboardCidadao";
     }
 }

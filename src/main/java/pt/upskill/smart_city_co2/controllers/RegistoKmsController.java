@@ -58,7 +58,7 @@ public class RegistoKmsController {
             System.out.println("====== ERRO: Não foi possível identificar o cidadão ou KMS inválidos ======");
         }
 
-        return "redirect:/auth/autenticado";
+        return "redirect:/cidadao/dashboardCidadao";
     }
 
     @GetMapping("/verRegistosKms")

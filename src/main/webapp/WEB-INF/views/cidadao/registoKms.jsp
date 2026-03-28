@@ -4,34 +4,56 @@
 <jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>Registo Kms</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/form-pages.css">
 </head>
-<body>
-<div class="container">
-    <div class="card mt-4">
-        <form action="/auth/cidadao/registoKmsAction" method="POST">
+<body class="form-page-body">
+
+<div class="form-page-wrapper">
+    <div class="form-page-background-shape"></div>
+
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-logo">
+                <span>🚗</span>
+            </div>
+            <h1 class="form-card-title">Portal Smart City</h1>
+            <h2 class="form-card-subtitle">Registo de Quilómetros</h2>
+            <p class="form-card-description">
+                Insira o total de quilómetros percorridos este mês.
+            </p>
+        </div>
+
+        <form action="${pageContext.request.contextPath}/auth/cidadao/registoKmsAction" method="POST" class="smart-form">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
+            <div class="smart-form-group">
+                <label for="kms">Quilómetros (km)</label>
+                <input
+                        type="number"
+                        step="0.1"
+                        id="kms"
+                        name="kms"
+                        class="smart-input"
+                        placeholder="Ex: 150.5"
+                        required>
+            </div>
 
-            <div class="card p-4 shadow">
-                <h3>Registar Quilómetros Percorridos</h3>
-                <p class="text-muted">Insira o total de kms percorridos este mês.</p>
-
-                <div class="mb-3">
-                    <label class="form-label">Quilómetros (km)</label>
-                    <input type="number" step="0.1" name="kms" class="form-control" placeholder="Ex: 150.5" required>
-                </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">Salvar Registo</button>
-                    <a href="/auth/autenticado" class="btn btn-secondary">Voltar</a>
-                </div>
+            <div class="smart-form-actions">
+                <button type="submit" class="smart-btn smart-btn-primary">
+                    Salvar Registo
+                </button>
+                <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-secondary">
+                    Voltar
+                </a>
             </div>
         </form>
     </div>
 </div>
+
 </body>
 </html>
