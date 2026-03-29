@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pt.upskill.smart_city_co2.entities.Cidadao;
-import pt.upskill.smart_city_co2.entities.Veiculo;
-import pt.upskill.smart_city_co2.models.AdicionarVeiculoModel;
+import pt.upskill.smart_city_co2.entities.Ownership;
+import pt.upskill.smart_city_co2.models.AdicionarOwnershipModel;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
-import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
+import pt.upskill.smart_city_co2.repositories.OwnershipRepository;
+import pt.upskill.smart_city_co2.services.OwnershipService;
 import pt.upskill.smart_city_co2.services.VeiculoService;
 
 import java.util.ArrayList;
@@ -22,7 +23,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/auth/cidadao")
-public class NovoVeiculoController {
+public class NewOwnershipController {
+
+    @Autowired
+    private OwnershipService ownershipService;
 
     @Autowired
     private VeiculoService veiculoService;
@@ -31,7 +35,7 @@ public class NovoVeiculoController {
     private CidadaoRepository cidadaoRepository;
 
     @Autowired
-    private VeiculoRepository veiculoRepository;
+    private OwnershipRepository ownershipRepository;
 
     private Cidadao getAuthenticatedCidadao() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,102 +48,82 @@ public class NovoVeiculoController {
     @GetMapping("/registoVeiculo")
     public String mostrarFormulario(Model model) {
         model.addAttribute("user", getAuthenticatedCidadao());
-
-        List<Veiculo> lista = veiculoService.getAllVeiculos();
-
-        model.addAttribute("veiculosBase", lista);
+        model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
         return "cidadao/registoVeiculo";
     }
 
     @PostMapping("/adicionarVeiculoAction")
     @Transactional
-    public String adicionarVeiculo(@ModelAttribute AdicionarVeiculoModel form,
+    public String adicionarVeiculo(@ModelAttribute AdicionarOwnershipModel form,
                                    Model model) {
-
-        System.out.println("=== ADICIONANDO VEÍCULO ===");
 
         // 1. Obter o cidadão autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !(authentication.getPrincipal() instanceof Cidadao)) {
-            System.out.println("ERRO: Usuário não autenticado como cidadão");
+
             return "redirect:/auth/login";
         }
 
         Cidadao cidadaoAutenticado = (Cidadao) authentication.getPrincipal();
-        System.out.println("Cidadão autenticado ID: " + cidadaoAutenticado.getId());
 
-        // 2. Buscar o cidadão do banco (como no RelacoesService)
+        // 2. Buscar o cidadão do banco
         Cidadao cidadao = cidadaoRepository.findById(cidadaoAutenticado.getId()).orElse(null);
 
         if (cidadao == null) {
-            System.out.println("ERRO: Cidadão não encontrado");
+
             model.addAttribute("error", "Cidadão não encontrado.");
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
             return "cidadao/registoVeiculo";
         }
 
         // 3. Validar dados
         if (form.getMatricula() == null || form.getMatricula().trim().isEmpty()) {
             model.addAttribute("error", "Matrícula é obrigatória.");
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
             return "cidadao/registoVeiculo";
         }
 
         if (form.getModeloReferencia() == null || form.getModeloReferencia().trim().isEmpty()) {
             model.addAttribute("error", "Modelo do veículo é obrigatório.");
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
             return "cidadao/registoVeiculo";
         }
 
         if (form.getAnoRegisto() == null || form.getAnoRegisto() < 1900 || form.getAnoRegisto() > 2026) {
             model.addAttribute("error", "Ano de registo inválido.");
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
             return "cidadao/registoVeiculo";
         }
 
-        // 4. Processar modelo de referência
-        String[] partes = form.getModeloReferencia().split(":");
-        if (partes.length < 2) {
-            model.addAttribute("error", "Formato de veículo inválido.");
+        try {
+            // 4. Criar a ownership usando o service (que já cria o Veiculo associado)
+            Ownership novaOwnership = ownershipService.criarOwnership(form);
+
+            // 5. Adicionar à lista de veículos do cidadão
+            List<Ownership> ownershipsAtuais = cidadao.getListaDeVeiculos();
+
+            if (ownershipsAtuais == null) {
+                ownershipsAtuais = new ArrayList<>();
+            }
+
+            ownershipsAtuais.add(novaOwnership);
+            cidadao.setListaDeVeiculos(ownershipsAtuais);
+
+            // 6. Salvar o cidadão atualizado
+            cidadaoRepository.save(cidadao);
+
+        } catch (IllegalArgumentException e) {
+
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
+            return "cidadao/registoVeiculo";
+        } catch (Exception e) {
+
+            model.addAttribute("error", "Erro ao adicionar veículo: " + e.getMessage());
+            model.addAttribute("veiculosBase", veiculoService.getAllVeiculos());
             return "cidadao/registoVeiculo";
         }
-
-        String marca = partes[0];
-        String modelo = partes[1];
-
-        // 5. Buscar veículo base
-        Veiculo veiculoBase = veiculoService.getVeiculoByMarcaEModelo(marca, modelo);
-
-        if (veiculoBase == null) {
-            System.out.println("ERRO: Veículo base não encontrado");
-            model.addAttribute("error", "Modelo de veículo inválido.");
-            return "cidadao/registoVeiculo";
-        }
-
-        // 6. Criar novo veículo
-        Veiculo novoVeiculo = new Veiculo();
-        novoVeiculo.setMatricula(form.getMatricula().toUpperCase().trim());
-        novoVeiculo.setAnoRegisto(form.getAnoRegisto());
-        novoVeiculo.setMarca(veiculoBase.getMarca());
-        novoVeiculo.setModelo(veiculoBase.getModelo());
-        novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
-        novoVeiculo.setConsumo(veiculoBase.getConsumo());
-
-        // 7. Salvar o veículo
-        Veiculo veiculoSalvo = veiculoRepository.save(novoVeiculo);
-        System.out.println("Veículo salvo com ID: " + veiculoSalvo.getId());
-
-        // 8. Adicionar à lista de veículos do cidadão (como no RelacoesService)
-        List<Veiculo> veiculosAtuais = cidadao.getListaDeVeiculos();
-
-        if (veiculosAtuais == null) {
-            veiculosAtuais = new ArrayList<>();
-        }
-
-        veiculosAtuais.add(veiculoSalvo);
-        cidadao.setListaDeVeiculos(veiculosAtuais);
-
-        // 9. Salvar o cidadão atualizado (igual ao RelacoesService)
-        cidadaoRepository.save(cidadao);
-
-        System.out.println("Veículo associado ao cidadão. Total de veículos: " + veiculosAtuais.size());
 
         return "redirect:/cidadao/dashboardCidadao";
     }

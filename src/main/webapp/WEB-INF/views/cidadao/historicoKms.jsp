@@ -40,40 +40,37 @@
                 <h3 style="margin-bottom: 15px;">Histórico de registos</h3>
                 <table class="history-table">
                     <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Veículo</th>
-                        <th>Matrícula</th>
-                        <th>Combustível</th>
-                        <th>Quilómetros</th>
-                        <th>Emissão g/km</th>
-                        <th>Emissão total (kg)</th>
-                    </tr>
+                    <th>Data</th>
+                    <th>Veículo</th>
+                    <th>Matrícula</th>
+                    <th>Combustível</th>
+                    <th>Quilómetros</th>
+                    <th>Emissão g/km</th>
+                    <th>Emissão total (kg)</th>
                     </thead>
                     <tbody>
                     <c:forEach var="registo" items="${listaRegistos}">
-                        <tr>
-                            <td>
-                                <fmt:formatDate value="${registo.mes_ano}" pattern="dd/MM/yyyy"/>
-                            </td>
-                            <td>
-                                    ${registo.veiculo.marca} ${registo.veiculo.modelo}
-                            </td>
-                            <td>
-                                    ${registo.veiculo.matricula}
-                            </td>
-                            <td>
-                                    ${registo.veiculo.tipoDeCombustivel}
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${registo.kms_mes}" minFractionDigits="1" maxFractionDigits="1"/> km
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${registo.emissaoGPorKm}" minFractionDigits="2" maxFractionDigits="2"/>
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${registo.emissaoEfetivaKg}" minFractionDigits="2" maxFractionDigits="2"/>
-                            </td>
+                        <td>
+                            <fmt:formatDate value="${registo.mes_ano}" pattern="dd/MM/yyyy"/>
+                        </td>
+                        <td>
+                                ${registo.ownership.veiculo.marca} ${registo.ownership.veiculo.modelo}
+                        </td>
+                        <td>
+                                ${registo.ownership.matricula}
+                        </td>
+                        <td>
+                                ${registo.ownership.veiculo.tipoDeCombustivel}
+                        </td>
+                        <td>
+                            <fmt:formatNumber value="${registo.kms_mes}" minFractionDigits="1" maxFractionDigits="1"/> km
+                        </td>
+                        <td>
+                            <fmt:formatNumber value="${registo.emissaoGPorKm}" minFractionDigits="2" maxFractionDigits="2"/>
+                        </td>
+                        <td>
+                            <fmt:formatNumber value="${registo.emissaoEfetivaKg}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                        </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -82,18 +79,16 @@
 
             <br>
 
-            <!-- TABELA 2: TOTAIS POR MATRÍCULA -->
+            <!-- TABELA 2: TOTAIS POR MATRÍCULA (USANDO LISTA VEICULOS + MAPAS) -->
             <div class="history-table-wrapper">
                 <h3 style="margin-bottom: 15px;">Totais por matrícula</h3>
                 <table class="history-table">
                     <thead>
-                    <tr>
-                        <th>Veículo</th>
-                        <th>Matrícula</th>
-                        <th>Combustível</th>
-                        <th>Total Kms</th>
-                        <th>Total CO2 (kg)</th>
-                    </tr>
+                    <th>Veículo</th>
+                    <th>Matrícula</th>
+                    <th>Combustível</th>
+                    <th>Total Kms</th>
+                    <th>Total CO2 (kg)</th>
                     </thead>
                     <tbody>
                     <c:forEach var="veiculo" items="${listaVeiculos}">
@@ -102,7 +97,7 @@
                                     ${veiculo.marca} ${veiculo.modelo}
                             </td>
                             <td>
-                                    ${veiculo.matricula}
+                                    ${matriculaPorVeiculo[veiculo.id]}
                             </td>
                             <td>
                                     ${veiculo.tipoDeCombustivel}
@@ -126,10 +121,8 @@
                 <h3 style="margin-bottom: 15px;">Resumo global</h3>
                 <table class="history-table">
                     <thead>
-                    <tr>
-                        <th>Total Global de Quilómetros</th>
-                        <th>Total Global de CO2</th>
-                    </tr>
+                    <th>Total Global de Quilómetros</th>
+                    <th>Total Global de CO2</th>
                     </thead>
                     <tbody>
                     <tr>

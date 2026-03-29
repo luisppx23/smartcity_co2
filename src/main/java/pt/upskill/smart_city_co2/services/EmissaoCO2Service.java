@@ -2,6 +2,7 @@ package pt.upskill.smart_city_co2.services;
 
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
+import pt.upskill.smart_city_co2.entities.Ownership;
 import pt.upskill.smart_city_co2.entities.RegistoKms;
 import pt.upskill.smart_city_co2.entities.Veiculo;
 
@@ -12,16 +13,16 @@ import java.util.Date;
 @Service
 public class EmissaoCO2Service {
 
-    public double calcularEmissaoGPorKm(Veiculo veiculo, int anoReferencia) {
-        TipoDeCombustivel tipo = veiculo.getTipoDeCombustivel();
+    public double calcularEmissaoGPorKm(Ownership ownership, int anoReferencia) {
+        TipoDeCombustivel tipo = ownership.getVeiculo().getTipoDeCombustivel();
 
         if (tipo == TipoDeCombustivel.ELETRICO) {
             return 0.0;
         }
 
-        int anosVeiculo = Math.max(0, anoReferencia - veiculo.getAnoRegisto());
+        int anosVeiculo = Math.max(0, anoReferencia - ownership.getAnoRegisto());
 
-        double consumo = veiculo.getConsumo(); // L/100km
+        double consumo = ownership.getVeiculo().getConsumo(); // L/100km
         double fatorEmissaogPorLitro = tipo.getFatorEmissaogPorLitro(); // g/L
         double fatorDegradacao = tipo.getFatorDegradacaoAnual(); //%/ano
 
@@ -36,13 +37,13 @@ public class EmissaoCO2Service {
         return emissaoBase/ degradacao; //g/km
     }
 
-    public double calcularEmissaoEfetivaG(Veiculo veiculo, double kms, int anoReferencia) {
-        double emissaoGPorKm = calcularEmissaoGPorKm(veiculo, anoReferencia);
+    public double calcularEmissaoEfetivaG(Ownership ownership, double kms, int anoReferencia) {
+        double emissaoGPorKm = calcularEmissaoGPorKm(ownership, anoReferencia);
         return emissaoGPorKm * kms; //g
     }
 
-    public double calcularEmissaoEfetivaKg(Veiculo veiculo, double kms, int anoReferencia) {
-        return calcularEmissaoEfetivaG(veiculo, kms, anoReferencia) / 1000.0; //kg
+    public double calcularEmissaoEfetivaKg(Ownership ownership, double kms, int anoReferencia) {
+        return calcularEmissaoEfetivaG(ownership, kms, anoReferencia) / 1000.0; //kg
     }
 
 //    private int extrairAno(Date date) {

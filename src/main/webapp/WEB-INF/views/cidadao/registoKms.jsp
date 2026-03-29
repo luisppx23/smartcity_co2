@@ -35,9 +35,9 @@
                 <label for="veiculoId">Veículo</label>
                 <select id="veiculoId" name="veiculoId" class="smart-input" required>
                     <option value="">Selecione um veículo</option>
-                    <c:forEach var="veiculo" items="${listaVeiculos}">
-                        <option value="${veiculo.id}">
-                                ${veiculo.matricula}
+                    <c:forEach var="ownership" items="${cidadao.listaDeVeiculos}">
+                        <option value="${ownership.veiculo.id}">
+                                ${ownership.matricula} - ${ownership.veiculo.marca} ${ownership.veiculo.modelo}
                         </option>
                     </c:forEach>
                 </select>
@@ -52,7 +52,6 @@
                         placeholder="Ex: 150.5"
                         required>
             </div>
-
 
             <div class="smart-form-actions">
                 <button type="submit" class="smart-btn smart-btn-primary">

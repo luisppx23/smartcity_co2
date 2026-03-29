@@ -1,20 +1,17 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
 public class RegistoKms {
 
-    //ATRIBUTOS
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Importante para H2/MySQL
+    @GeneratedValue
     private Long id;
 
     private Date mes_ano;
     private double kms_mes;
-
     private double emissaoGPorKm;
     private double emissaoEfetivaKg;
 
@@ -22,12 +19,13 @@ public class RegistoKms {
     private Taxa taxa;
 
     @ManyToOne
-    private Veiculo veiculo;
+    @JoinColumn(name = "ownership_id")
+    private Ownership ownership;
 
-    //CONSTRUTOR VAZIO
+    // CONSTRUTOR VAZIO
     public RegistoKms(){}
 
-    //GETTERS e SETTERS
+    // GETTERS e SETTERS
     public Long getId() {return id;}
     public void setId(Long id) {this.id = id;}
 
@@ -43,9 +41,9 @@ public class RegistoKms {
     public double getEmissaoEfetivaKg() { return emissaoEfetivaKg; }
     public void setEmissaoEfetivaKg(double emissaoEfetivaKg) { this.emissaoEfetivaKg = emissaoEfetivaKg; }
 
-    public Veiculo getVeiculo() { return veiculo; }
-    public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }
-
     public Taxa getTaxa() {return taxa;}
     public void setTaxa(Taxa taxa) {this.taxa = taxa;}
+
+    public Ownership getOwnership() { return ownership; }
+    public void setOwnership(Ownership ownership) { this.ownership = ownership; }
 }

@@ -45,11 +45,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="veiculo" items="${cidadao.listaDeVeiculos}">
+                    <c:forEach var="ownership" items="${cidadao.listaDeVeiculos}">
                         <tr>
-                            <td>${veiculo.matricula}</td>
-                            <td>${veiculo.marca}</td>
-                            <td>${veiculo.modelo}</td>
+                            <td>${ownership.matricula}</td>
+                            <td>${ownership.veiculo.marca}</td>    <!-- Acessa através do veiculo associado -->
+                            <td>${ownership.veiculo.modelo}</td>   <!-- Acessa através do veiculo associado -->
                         </tr>
                     </c:forEach>
                     </tbody>

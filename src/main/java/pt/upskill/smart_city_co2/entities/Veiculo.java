@@ -3,9 +3,6 @@ package pt.upskill.smart_city_co2.entities;
 import jakarta.persistence.*;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Entity
 public class Veiculo {
 
@@ -14,24 +11,22 @@ public class Veiculo {
     @GeneratedValue
     private Long id;
 
-    private String matricula;
     private String marca;
     private String modelo;
     private double consumo;
-    private Integer anoRegisto;
 
-    @Enumerated(EnumType.STRING)
+    //Relação 1para1 Veiculo-Ownership
+    @OneToOne(cascade = CascadeType.ALL)
+    private Ownership ownership;
+
+    @Enumerated
     private TipoDeCombustivel tipoDeCombustivel;
-
-    //Relação 1paraMUITOS Veiculo-RegistoKms
-    @OneToMany
-    private List<RegistoKms> registos;
 
     //CONSTRUTOR VAZIO
     public Veiculo(){}
 
     //CONSTRUTOR PARA SERVICE
-    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo ){
+    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo){
         this.marca=marca;
         this.modelo=modelo;
         this.tipoDeCombustivel=tipoDeCombustivel;
@@ -39,20 +34,11 @@ public class Veiculo {
     }
 
     //GETTERS e SETTERS
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getMatricula() {
-        return matricula;
-    }
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
     }
 
     public String getMarca() {
@@ -74,22 +60,10 @@ public class Veiculo {
     }
     public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
 
-    public List<RegistoKms> getRegistos() {return registos;}
-    public void setRegistos(List<RegistoKms> registos) {this.registos = registos;}
-
     public double getConsumo() {
         return consumo;
     }
-
     public void setConsumo(double consumo) {
         this.consumo = consumo;
-    }
-
-    public Integer getAnoRegisto() {
-        return anoRegisto;
-    }
-
-    public void setAnoRegisto(Integer anoRegisto) {
-        this.anoRegisto = anoRegisto;
     }
 }

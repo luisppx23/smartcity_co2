@@ -13,13 +13,9 @@ public class Cidadao extends User {
     private String contacto;
     private String morada;
 
-    //Relação 1paraMUITOS Cidadão-Proprietario
-    @OneToMany
-    private List<Veiculo> listaDeVeiculos;
-
-    //Relação 1paraMUITOS Cidadão-RegistoKms
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<RegistoKms> listaDeRegistosKms = new ArrayList<>();
+    //Relação 1paraMUITOS Cidadão-Ownership
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ownership> listaDeVeiculos;
 
     //CONSTRUTOR VAZIO
     public Cidadao() {}
@@ -42,20 +38,12 @@ public class Cidadao extends User {
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public List<Veiculo> getListaDeVeiculos() {return listaDeVeiculos;}
-    public void setListaDeVeiculos(List<Veiculo> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
-
     public String getContacto() {return contacto;}
     public void setContacto(String contacto) {this.contacto = contacto;}
 
     public String getMorada() {return morada;}
     public void setMorada(String morada) {this.morada = morada;}
 
-    public List<RegistoKms> getListaDeRegistosKms() {
-        return listaDeRegistosKms;
-    }
-
-    public void setListaDeRegistosKms(List<RegistoKms> listaDeRegistosKms) {
-        this.listaDeRegistosKms = listaDeRegistosKms;
-    }
+    public List<Ownership> getListaDeVeiculos() {return listaDeVeiculos;}
+    public void setListaDeVeiculos(List<Ownership> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
 }

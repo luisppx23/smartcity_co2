@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.entities.Veiculo;
-import pt.upskill.smart_city_co2.models.AdicionarVeiculoModel;
 import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -176,21 +174,8 @@ public class VeiculoService {
         }
     }
 
-    public Veiculo adicionarVeiculo(AdicionarVeiculoModel model) {
-        Veiculo veiculo = new Veiculo();
-
-        veiculo.setMatricula(model.getMatricula());
-        veiculo.setMarca(model.getMarca());
-        veiculo.setModelo(model.getModelo());
-        veiculo.setAnoRegisto((model.getAnoRegisto()));
-
-        return veiculoRepository.save(veiculo);
-    }
-
     public List<Veiculo> getAllVeiculos() {
         return veiculoRepository.findAll().stream()
-                .filter(v -> v.getMatricula() == null || v.getMatricula().isEmpty())
-                // Adiciona esta linha para ordenar:
                 .sorted(Comparator.comparing(Veiculo::getMarca)
                         .thenComparing(Veiculo::getModelo))
                 .toList();
