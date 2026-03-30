@@ -15,6 +15,7 @@ import pt.upskill.smart_city_co2.repositories.VeiculoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @DependsOn({"veiculoService"})
@@ -43,7 +44,6 @@ public class OwnershipService {
         }
 
 
-        // Buscar cidadãos (IDs 3, 4, 5, 6)
         Cidadao cidadao3 = cidadaoRepository.findById(3L).orElse(null);
         Cidadao cidadao4 = cidadaoRepository.findById(4L).orElse(null);
         Cidadao cidadao5 = cidadaoRepository.findById(5L).orElse(null);
@@ -60,10 +60,14 @@ public class OwnershipService {
             return;
         }
 
+        Random random = new Random();
         // CRIAR VEÍCULOS PRIMEIRO (separadamente)
         List<Veiculo> veiculosCriados = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            Veiculo veiculoBase = veiculosBase.get(i);
+
+            int indiceAleatorio = random.nextInt(Math.min(veiculosBase.size(), 135));
+
+            Veiculo veiculoBase = veiculosBase.get(indiceAleatorio);
             Veiculo novoVeiculo = new Veiculo();
             novoVeiculo.setMarca(veiculoBase.getMarca());
             novoVeiculo.setModelo(veiculoBase.getModelo());
