@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="navbar.jsp"/>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +15,7 @@
     </style>
 </head>
 <body>
+<jsp:include page="navbarm.jsp"/>
 <div class="content-wrapper">
     <div class="container">
         <div class="card mt-4">

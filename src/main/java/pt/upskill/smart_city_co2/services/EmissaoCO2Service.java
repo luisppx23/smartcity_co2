@@ -28,8 +28,8 @@ public class EmissaoCO2Service {
 
         double degradacao= 1 - (fatorDegradacao * anosVeiculo);
 
-        if (degradacao <= 0.6) { //Ter só em conta uma degradação até 40%
-            return 0.6;
+        if (degradacao <= 0.7) { //Ter só em conta uma degradação até 40%
+            return 0.7;
         }
 
         double emissaoBase = (consumo * fatorEmissaogPorLitro ); //g/km

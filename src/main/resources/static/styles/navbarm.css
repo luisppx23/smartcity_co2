@@ -1,0 +1,153 @@
+.smart-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.18);
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 700;
+    transition: 0.2s ease;
+    min-width: 76px;
+}
+
+.smart-logout:hover {
+    background: rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.smart-navbar {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(90deg, #ff7a18, #ff9f43);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.10);
+}
+
+.smart-navbar-inner {
+    width: min(1100px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 12px 28px;
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: 20px;
+}
+
+.smart-navbar-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.smart-nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+}
+
+.smart-nav-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.smart-navbar-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    display: block;
+}
+
+.smart-navbar-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: nowrap;
+}
+
+.smart-navbar-role {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    opacity: 0.92;
+    margin-right: 14px;
+}
+
+.smart-navbar-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding-right: 6px;
+}
+
+.smart-navbar-user {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .smart-navbar-inner {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding: 12px 14px;
+        gap: 12px;
+    }
+
+    .smart-navbar-left,
+    .smart-navbar-center,
+    .smart-navbar-right {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .smart-navbar-logo {
+        width: 56px;
+        height: 56px;
+    }
+
+    .smart-navbar-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .smart-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .smart-nav-link {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.92rem;
+        font-weight: 700;
+        padding: 8px 12px;
+        border-radius: 999px;
+        transition: all 0.2s ease;
+    }
+
+    .smart-navbar-right {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .smart-navbar-user {
+        text-align: center;
+    }
+}

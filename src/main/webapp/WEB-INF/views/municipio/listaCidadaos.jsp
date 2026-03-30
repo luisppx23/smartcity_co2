@@ -1,23 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Home Municipio</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/form-pagesm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
 </head>
-<body>
-
-<div class="container">
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2>Cidadãos do Municipio ${user.getUsername()}</h2>
+<body class="form-page-body">
+<jsp:include page="../navbarm.jsp"/>
+<div class="form-page-wrapper">
+    <div class="form-page-background-shape"></div>
+    <div class="form-card history-card">
+        <div class="form-card-header">
+            <div class="form-card-logo">👥</div>
+            <h1 class="form-card-title">Município</h1>
+            <h2 class="form-card-subtitle">Cidadãos do Município ${user.getUsername()}</h2>
+            <p class="form-card-description">
+                Consulte abaixo a lista de cidadãos associados ao município.
+            </p>
         </div>
-        <div class="card-body">
-            <table class="table">
+
+        <div class="history-table-wrapper">
+            <table class="history-table">
                 <thead>
                 <tr>
                     <th>Nome</th>
@@ -36,12 +44,11 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
-<div class="container">
-    <div class="card mt-4">
-        <div class="mt-3 text-center">
-            <a href="/municipio/dashboardMunicipio">Voltar ao Dashboard</a>
+
+        <div class="smart-form-actions history-actions">
+            <a href="/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
+                Voltar ao Dashboard
+            </a>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@ body {
     min-height: 100vh;
     font-family: Arial, sans-serif;
     color: #111111;
-    background-color: #f3f5f2;
+    background-color: #fff6ee;
     background-image: url("../images/background-leaf.png");
     background-repeat: no-repeat;
     background-position: center top;
@@ -13,8 +13,8 @@ body {
 }
 
 .dashboard-theme-strip {
-    background: rgba(255, 255, 255, 0.72);
-    border-bottom: 1px solid rgba(31, 90, 61, 0.10);
+    background: rgba(255, 255, 255, 0.78);
+    border-bottom: 1px solid rgba(255, 122, 24, 0.18);
 }
 
 .dashboard-theme-content {
@@ -28,12 +28,12 @@ body {
     margin: 0;
     font-size: 1.8rem;
     font-weight: 700;
-    color: #111111;
+    color: #d65f00;
 }
 
 .dashboard-theme-content p {
     margin: 8px 0 0;
-    color: #5f5f5f;
+    color: #7a5a46;
 }
 
 .dashboard-container {
@@ -50,48 +50,49 @@ body {
 }
 
 .dashboard-card {
-    background: rgba(255, 255, 255, 0.90);
+    background: rgba(255, 255, 255, 0.92);
     border-radius: 18px;
     padding: 24px;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(31, 90, 61, 0.10);
+    border: 1px solid rgba(255, 122, 24, 0.14);
 }
 
 .dashboard-card-blue {
-    background: linear-gradient(135deg, rgba(238,245,255,0.95), rgba(255,255,255,0.92));
+    background: linear-gradient(135deg, rgba(255, 244, 235, 0.96), rgba(255, 255, 255, 0.92));
 }
 
 .dashboard-card-beige {
-    background: linear-gradient(135deg, rgba(248,240,225,0.95), rgba(255,255,255,0.92));
+    background: linear-gradient(135deg, rgba(255, 237, 214, 0.96), rgba(255, 255, 255, 0.92));
 }
 
 .dashboard-card h3 {
     margin-top: 0;
     margin-bottom: 10px;
     font-size: 1.4rem;
-    color: #204c35;
+    color: #cc5a00;
 }
 
 .dashboard-card p {
-    color: #5f5f5f;
+    color: #6b5a4d;
     line-height: 1.45;
 }
 
 .dashboard-button {
     display: inline-block;
     margin-top: 10px;
-    background: linear-gradient(to right, #1f5a3d, #2b6a49);
+    background: linear-gradient(to right, #ff7a18, #ff9f43);
     color: #ffffff;
     text-decoration: none;
     border-radius: 10px;
     padding: 12px 18px;
     font-weight: 700;
+    transition: all 0.2s ease;
 }
 
 .dashboard-button:hover {
     color: #ffffff;
     text-decoration: none;
-    background: linear-gradient(to right, #17442e, #22553a);
+    background: linear-gradient(to right, #e56710, #f08d2f);
 }
 
 .dashboard-links-card,
@@ -106,13 +107,14 @@ body {
 }
 
 .dashboard-links a {
-    color: #1f5a3d;
+    color: #e06a11;
     font-weight: 600;
     text-decoration: none;
 }
 
 .dashboard-links a:hover {
     text-decoration: underline;
+    color: #c95700;
 }
 
 .vehicle-list {
@@ -130,27 +132,28 @@ body {
     align-items: center;
     gap: 12px;
     padding: 16px 18px;
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.97);
     border-radius: 14px;
     box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255, 159, 67, 0.12);
 }
 
 .vehicle-name {
     font-weight: 700;
+    color: #2f2f2f;
 }
 
 .vehicle-plate {
-    color: #1f5a3d;
+    color: #d96108;
     font-weight: 700;
 }
 
 .empty-state {
     margin: 0;
-    color: #666666;
+    color: #7a7a7a;
 }
 
 @media (max-width: 768px) {
-
     body {
         display: flex;
         flex-direction: column;

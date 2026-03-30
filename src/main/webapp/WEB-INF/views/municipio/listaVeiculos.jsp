@@ -1,16 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lista de Veículos - Município</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
 </head>
 <body>
-
+<jsp:include page="../navbarm.jsp"/>
 <div class="container">
     <div class="card mt-4">
         <div class="card-header">
@@ -29,11 +29,11 @@
                 </thead>
                 <tbody>
                 <c:forEach var="cidadao" items="${municipio.listaDeCidadaos}">
-                    <c:forEach var="veiculo" items="${cidadao.listaDeVeiculos}">
+                    <c:forEach var="ownership" items="${cidadao.listaDeVeiculos}">
                         <tr>
-                            <td>${veiculo.matricula}</td>
-                            <td>${veiculo.marca}</td>
-                            <td>${veiculo.modelo}</td>
+                            <td>${ownership.matricula}</td>
+                            <td>${ownership.veiculo.marca}</td>
+                            <td>${ownership.veiculo.modelo}</td>
                             <td>${cidadao.firstName} ${cidadao.lastName}</td>
                             <td>${cidadao.contacto}</td>
                         </tr>

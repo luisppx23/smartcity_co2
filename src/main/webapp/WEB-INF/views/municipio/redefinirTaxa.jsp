@@ -1,15 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Redefinir Taxa</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
 </head>
 <body>
+<jsp:include page="../navbarm.jsp"/>
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">

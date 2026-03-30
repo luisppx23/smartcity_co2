@@ -139,7 +139,7 @@
         </c:if>
 
         <div class="smart-form-actions history-actions">
-            <a href="${pageContext.request.contextPath}/auth/autenticado" class="smart-btn smart-btn-secondary">
+            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-secondary">
                 Voltar ao Dashboard
             </a>
         </div>
