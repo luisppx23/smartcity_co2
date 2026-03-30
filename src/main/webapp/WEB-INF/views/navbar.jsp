@@ -13,7 +13,7 @@
             <span class="smart-navbar-role">Conta do ${user.tipo} ${user.username} </span>
 
             <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-nav-link">Home</a>
-            <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="dashboard-button">
+            <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="smart-nav-link">
                 Registar Veículo
             </a>
             <a href="${pageContext.request.contextPath}/cidadao/simularTaxa" class="smart-nav-link">Simular Taxa</a>

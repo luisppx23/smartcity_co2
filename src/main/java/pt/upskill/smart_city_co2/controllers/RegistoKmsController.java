@@ -115,15 +115,12 @@ public class RegistoKmsController {
         model.addAttribute("cidadao", cidadao);
 
         if (cidadao != null) {
-            // Buscar todos os Ownerships do cidadão
             List<Ownership> ownerships = cidadao.getListaDeVeiculos();
 
-            // Criar uma lista de veículos e um mapa de matrículas por veículo
             List<Veiculo> listaVeiculos = new ArrayList<>();
             Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
             Map<Long, String> combustivelPorVeiculo = new LinkedHashMap<>();
 
-            // Buscar todos os registos
             List<RegistoKms> todosRegistos = new ArrayList<>();
 
             for (Ownership ownership : ownerships) {
@@ -142,39 +139,106 @@ public class RegistoKmsController {
             model.addAttribute("combustivelPorVeiculo", combustivelPorVeiculo);
             model.addAttribute("listaRegistos", todosRegistos);
 
-            // Calcular totais
             double totalKmsGeral = 0.0;
             double totalCo2Geral = 0.0;
 
             Map<Long, Double> totalKmsPorVeiculo = new LinkedHashMap<>();
             Map<Long, Double> totalCo2PorVeiculo = new LinkedHashMap<>();
 
-            // Inicializar mapas
+            Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
+            Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
+            Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
+            Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
+
             for (Ownership ownership : ownerships) {
                 Veiculo veiculo = ownership.getVeiculo();
-                totalKmsPorVeiculo.put(veiculo.getId(), 0.0);
-                totalCo2PorVeiculo.put(veiculo.getId(), 0.0);
+                Long veiculoId = veiculo.getId();
+                String combustivel = veiculo.getTipoDeCombustivel().name();
+
+                totalKmsPorVeiculo.put(veiculoId, 0.0);
+                totalCo2PorVeiculo.put(veiculoId, 0.0);
+
+                totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
+                totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
             }
 
-            // Calcular totais por veículo
-            for (RegistoKms registo : todosRegistos) {
-                totalKmsGeral += registo.getKms_mes();
-                totalCo2Geral += registo.getEmissaoEfetivaKg();
+            for (Ownership ownership : ownerships) {
+                Veiculo veiculo = ownership.getVeiculo();
+                Long veiculoId = veiculo.getId();
+                String combustivel = veiculo.getTipoDeCombustivel().name();
 
-                // Encontrar o veículo associado a este registo
-                for (Ownership ownership : ownerships) {
-                    if (ownership.getRegistos() != null && ownership.getRegistos().contains(registo)) {
-                        Long veiculoId = ownership.getVeiculo().getId();
+                if (ownership.getRegistos() != null) {
+                    for (RegistoKms registo : ownership.getRegistos()) {
+                        double kms = registo.getKms_mes();
+                        double co2 = registo.getEmissaoEfetivaKg();
+
+                        totalKmsGeral += kms;
+                        totalCo2Geral += co2;
+
                         totalKmsPorVeiculo.put(
                                 veiculoId,
-                                totalKmsPorVeiculo.getOrDefault(veiculoId, 0.0) + registo.getKms_mes()
+                                totalKmsPorVeiculo.getOrDefault(veiculoId, 0.0) + kms
                         );
+
                         totalCo2PorVeiculo.put(
                                 veiculoId,
-                                totalCo2PorVeiculo.getOrDefault(veiculoId, 0.0) + registo.getEmissaoEfetivaKg()
+                                totalCo2PorVeiculo.getOrDefault(veiculoId, 0.0) + co2
                         );
-                        break;
+
+                        totalKmsPorCombustivel.put(
+                                combustivel,
+                                totalKmsPorCombustivel.getOrDefault(combustivel, 0.0) + kms
+                        );
+
+                        totalCo2PorCombustivel.put(
+                                combustivel,
+                                totalCo2PorCombustivel.getOrDefault(combustivel, 0.0) + co2
+                        );
                     }
+                }
+            }
+
+            for (String combustivel : totalKmsPorCombustivel.keySet()) {
+                double kmsCombustivel = totalKmsPorCombustivel.get(combustivel);
+                double co2Combustivel = totalCo2PorCombustivel.get(combustivel);
+
+                double percentagemKms = totalKmsGeral > 0 ? (kmsCombustivel / totalKmsGeral) * 100 : 0.0;
+                double percentagemCo2 = totalCo2Geral > 0 ? (co2Combustivel / totalCo2Geral) * 100 : 0.0;
+
+                percentagemKmsPorCombustivel.put(combustivel, percentagemKms);
+                percentagemCo2PorCombustivel.put(combustivel, percentagemCo2);
+            }
+
+            // RANKING
+            List<Cidadao> todosCidadaos = cidadaoRepository.findAll();
+            Map<Long, Double> totalCo2PorCidadao = new LinkedHashMap<>();
+
+            for (Cidadao outroCidadao : todosCidadaos) {
+                double totalCo2Cidadao = 0.0;
+
+                List<Ownership> ownershipsOutroCidadao = outroCidadao.getListaDeVeiculos();
+                if (ownershipsOutroCidadao != null) {
+                    for (Ownership ownership : ownershipsOutroCidadao) {
+                        if (ownership.getRegistos() != null) {
+                            for (RegistoKms registo : ownership.getRegistos()) {
+                                totalCo2Cidadao += registo.getEmissaoEfetivaKg();
+                            }
+                        }
+                    }
+                }
+
+                totalCo2PorCidadao.put(outroCidadao.getId(), totalCo2Cidadao);
+            }
+
+            List<Map.Entry<Long, Double>> rankingPoluidores = new ArrayList<>(totalCo2PorCidadao.entrySet());
+            rankingPoluidores.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+            int posicaoRankingPoluicao = 0;
+
+            for (int i = 0; i < rankingPoluidores.size(); i++) {
+                if (rankingPoluidores.get(i).getKey().equals(cidadao.getId())) {
+                    posicaoRankingPoluicao = i + 1;
+                    break;
                 }
             }
 
@@ -182,6 +246,15 @@ public class RegistoKmsController {
             model.addAttribute("totalCo2Geral", totalCo2Geral);
             model.addAttribute("totalKmsPorVeiculo", totalKmsPorVeiculo);
             model.addAttribute("totalCo2PorVeiculo", totalCo2PorVeiculo);
+
+            model.addAttribute("totalKmsPorCombustivel", totalKmsPorCombustivel);
+            model.addAttribute("totalCo2PorCombustivel", totalCo2PorCombustivel);
+            model.addAttribute("percentagemKmsPorCombustivel", percentagemKmsPorCombustivel);
+            model.addAttribute("percentagemCo2PorCombustivel", percentagemCo2PorCombustivel);
+
+            model.addAttribute("posicaoRankingPoluicao", posicaoRankingPoluicao);
+            model.addAttribute("numeroTotalCidadaos", todosCidadaos.size());
+
             model.addAttribute("cidadao", cidadao);
         }
 
@@ -255,4 +328,149 @@ public class RegistoKmsController {
         model.addAttribute("totalKmsPorVeiculo", totalKmsPorVeiculo);
         model.addAttribute("totalCo2PorVeiculo", totalCo2PorVeiculo);
     }
+
+    @GetMapping("/estatisticas")
+    public String verEstatisticas(Authentication authentication, Model model) {
+        model.addAttribute("user", getAuthenticatedUser());
+
+        Cidadao cidadao = obterCidadaoAutenticado(authentication);
+        model.addAttribute("cidadao", cidadao);
+
+        if (cidadao == null) {
+            model.addAttribute("erro", "Não foi possível identificar o cidadão.");
+            return "cidadao/estatisticas";
+        }
+
+        List<Ownership> ownerships = cidadao.getListaDeVeiculos();
+
+        double totalKmsGeral = 0.0;
+        double totalCo2Geral = 0.0;
+
+        Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
+
+        Map<String, Double> totalKmsPorMatricula = new LinkedHashMap<>();
+        Map<String, Double> totalCo2PorMatricula = new LinkedHashMap<>();
+
+        if (ownerships != null) {
+            for (Ownership ownership : ownerships) {
+                String matricula = ownership.getMatricula();
+                String combustivel = ownership.getVeiculo().getTipoDeCombustivel().name();
+
+                totalKmsPorMatricula.put(matricula, 0.0);
+                totalCo2PorMatricula.put(matricula, 0.0);
+
+                totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
+                totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
+
+                List<RegistoKms> registos = ownership.getRegistos();
+                if (registos != null) {
+                    for (RegistoKms registo : registos) {
+                        double kms = registo.getKms_mes();
+                        double co2 = registo.getEmissaoEfetivaKg();
+
+                        totalKmsGeral += kms;
+                        totalCo2Geral += co2;
+
+                        totalKmsPorMatricula.put(
+                                matricula,
+                                totalKmsPorMatricula.getOrDefault(matricula, 0.0) + kms
+                        );
+
+                        totalCo2PorMatricula.put(
+                                matricula,
+                                totalCo2PorMatricula.getOrDefault(matricula, 0.0) + co2
+                        );
+
+                        totalKmsPorCombustivel.put(
+                                combustivel,
+                                totalKmsPorCombustivel.getOrDefault(combustivel, 0.0) + kms
+                        );
+
+                        totalCo2PorCombustivel.put(
+                                combustivel,
+                                totalCo2PorCombustivel.getOrDefault(combustivel, 0.0) + co2
+                        );
+                    }
+                }
+            }
+        }
+
+        Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
+
+        for (String combustivel : totalKmsPorCombustivel.keySet()) {
+            double kmsCombustivel = totalKmsPorCombustivel.getOrDefault(combustivel, 0.0);
+            double co2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
+
+            double percentagemKms = totalKmsGeral > 0 ? (kmsCombustivel / totalKmsGeral) * 100 : 0.0;
+            double percentagemCo2 = totalCo2Geral > 0 ? (co2Combustivel / totalCo2Geral) * 100 : 0.0;
+
+            percentagemKmsPorCombustivel.put(combustivel, percentagemKms);
+            percentagemCo2PorCombustivel.put(combustivel, percentagemCo2);
+        }
+
+        // ranking de poluição entre cidadãos
+        List<Cidadao> todosCidadaos = cidadaoRepository.findAll();
+        Map<Long, Double> totalCo2PorCidadao = new LinkedHashMap<>();
+
+        for (Cidadao outroCidadao : todosCidadaos) {
+            double totalCo2Cidadao = 0.0;
+
+            List<Ownership> ownershipsOutro = outroCidadao.getListaDeVeiculos();
+            if (ownershipsOutro != null) {
+                for (Ownership ownership : ownershipsOutro) {
+                    List<RegistoKms> registos = ownership.getRegistos();
+                    if (registos != null) {
+                        for (RegistoKms registo : registos) {
+                            totalCo2Cidadao += registo.getEmissaoEfetivaKg();
+                        }
+                    }
+                }
+            }
+
+            totalCo2PorCidadao.put(outroCidadao.getId(), totalCo2Cidadao);
+        }
+
+        List<Map.Entry<Long, Double>> rankingMaisPoluidores = new ArrayList<>(totalCo2PorCidadao.entrySet());
+        rankingMaisPoluidores.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        List<Map.Entry<Long, Double>> rankingMenosPoluidores = new ArrayList<>(totalCo2PorCidadao.entrySet());
+        rankingMenosPoluidores.sort(Map.Entry.comparingByValue());
+
+        int posicaoMaisPoluidor = 0;
+        int posicaoMenosPoluidor = 0;
+
+        for (int i = 0; i < rankingMaisPoluidores.size(); i++) {
+            if (rankingMaisPoluidores.get(i).getKey().equals(cidadao.getId())) {
+                posicaoMaisPoluidor = i + 1;
+                break;
+            }
+        }
+
+        for (int i = 0; i < rankingMenosPoluidores.size(); i++) {
+            if (rankingMenosPoluidores.get(i).getKey().equals(cidadao.getId())) {
+                posicaoMenosPoluidor = i + 1;
+                break;
+            }
+        }
+
+        model.addAttribute("totalKmsGeral", totalKmsGeral);
+        model.addAttribute("totalCo2Geral", totalCo2Geral);
+
+        model.addAttribute("totalKmsPorCombustivel", totalKmsPorCombustivel);
+        model.addAttribute("totalCo2PorCombustivel", totalCo2PorCombustivel);
+        model.addAttribute("percentagemKmsPorCombustivel", percentagemKmsPorCombustivel);
+        model.addAttribute("percentagemCo2PorCombustivel", percentagemCo2PorCombustivel);
+
+        model.addAttribute("totalKmsPorMatricula", totalKmsPorMatricula);
+        model.addAttribute("totalCo2PorMatricula", totalCo2PorMatricula);
+
+        model.addAttribute("posicaoMaisPoluidor", posicaoMaisPoluidor);
+        model.addAttribute("posicaoMenosPoluidor", posicaoMenosPoluidor);
+        model.addAttribute("numeroTotalCidadaos", todosCidadaos.size());
+
+        return "cidadao/estatisticas";
+    }
+
 }

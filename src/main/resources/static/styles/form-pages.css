@@ -4,19 +4,46 @@
     box-sizing: border-box;
 }
 
-
+html,
+body {
+    min-height: 100%;
+}
 
 .form-page-body {
     margin: 0;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
     background-color: #f3f5f2;
-    background-image: url("../images/background-leaf.png");
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: 900px auto;
     padding-top: 20px;
     padding-bottom: 40px;
+}
+
+/* imagem principal fixa */
+.form-page-body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("../images/background-leaf.png");
+    background-repeat: no-repeat;
+    background-position: center 40px;
+    background-size: 950px auto;
+    opacity: 0.22;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* camada decorativa suave por cima do fundo */
+.form-page-body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+            radial-gradient(circle at 15% 20%, rgba(88, 130, 106, 0.10) 0%, rgba(88, 130, 106, 0.04) 22%, rgba(88, 130, 106, 0.00) 42%),
+            radial-gradient(circle at 85% 75%, rgba(88, 130, 106, 0.08) 0%, rgba(88, 130, 106, 0.03) 20%, rgba(88, 130, 106, 0.00) 40%);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .form-page-wrapper {
@@ -26,7 +53,7 @@
     justify-content: center;
     padding: 60px 60px 40px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .form-page-background-shape {
@@ -34,8 +61,12 @@
     width: 420px;
     height: 420px;
     border-radius: 50%;
-    background:
-            radial-gradient(circle at center, rgba(88, 130, 106, 0.10) 0%, rgba(88, 130, 106, 0.04) 45%, rgba(88, 130, 106, 0.00) 70%);
+    background: radial-gradient(
+            circle at center,
+            rgba(88, 130, 106, 0.10) 0%,
+            rgba(88, 130, 106, 0.04) 45%,
+            rgba(88, 130, 106, 0.00) 70%
+    );
     right: -80px;
     bottom: -60px;
     z-index: 0;
@@ -48,16 +79,20 @@
     width: 100%;
     max-width: 520px;
     min-height: 620px;
-    background: rgba(255, 255, 255, 0.94);
-    border-radius: 16px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 18px;
+    box-shadow:
+            0 12px 35px rgba(0, 0, 0, 0.08),
+            0 2px 10px rgba(63, 111, 84, 0.05);
     padding: 34px 34px 32px;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
 .form-card-header {
     text-align: center;
     margin-bottom: 24px;
@@ -201,6 +236,7 @@
 .smart-btn-secondary:hover {
     background: #e5ebe6;
 }
+
 .profile-card {
     max-width: 560px;
     min-height: 620px;
@@ -297,7 +333,71 @@
     margin-top: 24px;
 }
 
+/* caixas tipo dashboard / resumo / ranking */
+.stats-section,
+.summary-section,
+.ranking-section {
+    margin-top: 18px;
+    border: 1px solid #dce3dd;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.78);
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(63, 111, 84, 0.04);
+}
+
+.stats-section-title,
+.summary-section-title,
+.ranking-section-title {
+    margin: 0;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2d23;
+    background: rgba(238, 243, 239, 0.85);
+    border-bottom: 1px solid #d6ddd7;
+}
+
+/* botão de voltar mais limpo */
+.back-dashboard-btn,
+.return-dashboard-btn {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #d7dfd9;
+    border-radius: 10px;
+    background: rgba(238, 242, 239, 0.88);
+    color: #324136;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.back-dashboard-btn:hover,
+.return-dashboard-btn:hover {
+    background: rgba(229, 235, 230, 0.95);
+}
+
 @media (max-width: 768px) {
+    .form-page-body {
+        padding-top: 12px;
+        padding-bottom: 24px;
+    }
+
+    .form-page-body::before {
+        background-position: center 20px;
+        background-size: 680px auto;
+        opacity: 0.16;
+    }
+
+    .form-page-body::after {
+        background:
+                radial-gradient(circle at 20% 18%, rgba(88, 130, 106, 0.09) 0%, rgba(88, 130, 106, 0.03) 24%, rgba(88, 130, 106, 0.00) 44%),
+                radial-gradient(circle at 80% 82%, rgba(88, 130, 106, 0.06) 0%, rgba(88, 130, 106, 0.02) 20%, rgba(88, 130, 106, 0.00) 38%);
+    }
+
     .form-page-wrapper {
         padding: 14px 12px 24px;
     }
@@ -314,17 +414,18 @@
 
     .form-card {
         max-width: 100%;
-        min-height: 640px;
-        padding: 26px 20px 24px;
+        min-height: auto;
+        padding: 24px 18px 22px;
         border-radius: 14px;
+        background: rgba(255, 255, 255, 0.94);
     }
 
     .form-card-title {
-        font-size: 38px;
+        font-size: 32px;
     }
 
     .form-card-subtitle {
-        font-size: 22px;
+        font-size: 20px;
     }
 
     .form-card-description {
@@ -350,6 +451,7 @@
         width: 100%;
         min-height: 46px;
     }
+
     .profile-card {
         min-height: auto;
     }

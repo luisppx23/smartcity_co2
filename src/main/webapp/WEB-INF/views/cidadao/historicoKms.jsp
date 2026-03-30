@@ -44,7 +44,7 @@
                     <th>Veículo</th>
                     <th>Matrícula</th>
                     <th>Combustível</th>
-                    <th>Quilómetros</th>
+                    <th>Kms</th>
                     <th>Emissão g/km</th>
                     <th>Emissão total (kg)</th>
                     </thead>
@@ -115,6 +115,44 @@
             </div>
 
             <br>
+            <!-- TABELA 3: PERCENTAGEM POR TIPO DE COMBUSTÍVEL -->
+            <br>
+
+            <div class="history-table-wrapper">
+                <h3 style="margin-bottom: 15px;">Percentagem por tipo de combustível</h3>
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>Combustível</th>
+                        <th>Total Kms</th>
+                        <th>% dos Kms</th>
+                        <th>Total CO2 (kg)</th>
+                        <th>% do CO2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="combustivel" items="${totalKmsPorCombustivel.keySet()}">
+                        <tr>
+                            <td>${combustivel}</td>
+                            <td>
+                                <fmt:formatNumber value="${totalKmsPorCombustivel[combustivel]}" minFractionDigits="1" maxFractionDigits="1"/> km
+                            </td>
+                            <td>
+                                <fmt:formatNumber value="${percentagemKmsPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
+                            </td>
+                            <td>
+                                <fmt:formatNumber value="${totalCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                            </td>
+                            <td>
+                                <fmt:formatNumber value="${percentagemCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
 
             <!-- RESUMO GLOBAL -->
             <div class="history-table-wrapper">
@@ -136,6 +174,26 @@
                     </tbody>
                 </table>
             </div>
+
+            <br>
+            <!-- TABELA 4: RANKING DE POLUIÇÃO -->
+            <div class="history-table-wrapper">
+                <h3 style="margin-bottom: 15px;">Ranking de poluição</h3>
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Valor</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Posição no ranking dos mais poluidores</td>
+                        <td>${posicaoRankingPoluicao}º em ${numeroTotalCidadaos}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </c:if>
 
         <div class="smart-form-actions history-actions">
@@ -145,6 +203,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>
