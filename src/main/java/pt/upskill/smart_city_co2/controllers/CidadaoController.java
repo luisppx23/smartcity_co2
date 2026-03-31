@@ -5,11 +5,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pt.upskill.smart_city_co2.entities.Cidadao;
+import pt.upskill.smart_city_co2.entities.Ownership;
 import pt.upskill.smart_city_co2.entities.User;
+import pt.upskill.smart_city_co2.models.SimularTaxaModel;
 import pt.upskill.smart_city_co2.services.CidadaoService;
+import pt.upskill.smart_city_co2.services.EmissaoCO2Service;
+import pt.upskill.smart_city_co2.services.TaxaService;
 
 @Controller
 @RequestMapping("/cidadao")
@@ -17,6 +20,12 @@ public class CidadaoController {
 
     @Autowired
     CidadaoService cidadaoService;
+
+    @Autowired
+    EmissaoCO2Service emissaoCO2Service;
+
+    @Autowired
+    TaxaService taxaService;
 
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,10 +56,59 @@ public class CidadaoController {
         return "cidadao/registoVeiculo";
     }
 
-    // Direciona para pagina de simular taxa
     @GetMapping("/simularTaxa")
     public String simularTaxa(Model model) {
-        model.addAttribute("user", getAuthenticatedUser());
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        model.addAttribute("cidadao", cidadao);
+
+        // Adicionar objetos vazios para o formulário
+        model.addAttribute("ownershipSelecionado", null);
+        model.addAttribute("kmsSimulacao", 0);
+        model.addAttribute("valorTaxa", null);
+
+        return "cidadao/simularTaxa";
+    }
+
+    @PostMapping("/simularTaxa")
+    public String calcularTaxa(@RequestParam Long veiculoId,
+                               @RequestParam double kms,
+                               Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        model.addAttribute("cidadao", cidadao);
+
+        // Encontrar o ownership pelo veículo
+        Ownership ownership = null;
+        for (Ownership own : cidadao.getListaDeVeiculos()) {
+            if (own.getVeiculo().getId().equals(veiculoId)) {
+                ownership = own;
+                break;
+            }
+        }
+
+        if (ownership == null) {
+            model.addAttribute("erro", "Veículo não encontrado");
+            return "cidadao/simularTaxa";
+        }
+
+        // Calcular emissão por km
+        int anoReferencia = java.time.LocalDate.now().getYear();
+        double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
+
+        // Simular taxa
+        double valorTaxa = taxaService.simularTaxa(emissaoGPorKm, kms);
+
+        // Adicionar dados ao modelo
+        model.addAttribute("ownershipSelecionado", ownership);
+        model.addAttribute("kmsSimulacao", kms);
+        model.addAttribute("emissaoGPorKm", emissaoGPorKm);
+        model.addAttribute("valorTaxa", valorTaxa);
+
         return "cidadao/simularTaxa";
     }
 

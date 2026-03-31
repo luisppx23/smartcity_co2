@@ -17,6 +17,10 @@ public class RelatorioMensal {
     private double kms_total;
     private Date mes_ano;
 
+    @ManyToOne
+    @JoinColumn(name = "municipio_id")
+    private Municipio municipio;
+
     //CONSTRUTOR VAZIO
     public RelatorioMensal() {}
 
@@ -51,4 +55,7 @@ public class RelatorioMensal {
     public void setMes_ano(Date mes_ano) {
         this.mes_ano = mes_ano;
     }
+
+    public Municipio getMunicipio() {return municipio;}
+    public void setMunicipio(Municipio municipio) {this.municipio = municipio;}
 }

@@ -39,10 +39,8 @@ public class OwnershipService {
     private void popularOwnerships() {
         // Verificar se já existem ownerships
         if (ownershipRepository.count() > 0) {
-
             return;
         }
-
 
         Cidadao cidadao3 = cidadaoRepository.findById(3L).orElse(null);
         Cidadao cidadao4 = cidadaoRepository.findById(4L).orElse(null);
@@ -53,7 +51,7 @@ public class OwnershipService {
             return;
         }
 
-        // Buscar veículos base
+        // Buscar veículos base EXISTENTES (já populados pelo VeiculoService)
         List<Veiculo> veiculosBase = veiculoRepository.findAll();
 
         if (veiculosBase.size() < 8) {
@@ -61,127 +59,77 @@ public class OwnershipService {
         }
 
         Random random = new Random();
-        // CRIAR VEÍCULOS PRIMEIRO (separadamente)
-        List<Veiculo> veiculosCriados = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-
-            int indiceAleatorio = random.nextInt(Math.min(veiculosBase.size(), 135));
-
-            Veiculo veiculoBase = veiculosBase.get(indiceAleatorio);
-            Veiculo novoVeiculo = new Veiculo();
-            novoVeiculo.setMarca(veiculoBase.getMarca());
-            novoVeiculo.setModelo(veiculoBase.getModelo());
-            novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
-            novoVeiculo.setConsumo(veiculoBase.getConsumo());
-            // Salvar cada veículo individualmente
-            Veiculo veiculoSalvo = veiculoRepository.save(novoVeiculo);
-            veiculosCriados.add(veiculoSalvo);
-           }
-
-        // Agora criar os ownerships com os veículos já persistidos
         List<Ownership> ownershipsParaSalvar = new ArrayList<>();
 
-        // Ownership 1 - Cidadão 3
-        Ownership own1 = new Ownership();
-        own1.setMatricula("AB-12-CD");
-        own1.setAnoRegisto(2022);
-        own1.setVeiculo(veiculosCriados.get(0));
-        ownershipsParaSalvar.add(own1);
+        // Criar ownerships USANDO veículos existentes (NÃO criar novos)
+        for (int i = 0; i < 8; i++) {
+            int indiceAleatorio = random.nextInt(veiculosBase.size());
+            Veiculo veiculoExistente = veiculosBase.get(indiceAleatorio);  // ← USAR VEÍCULO EXISTENTE
 
-        // Ownership 2 - Cidadão 3
-        Ownership own2 = new Ownership();
-        own2.setMatricula("EF-34-GH");
-        own2.setAnoRegisto(2021);
-        own2.setVeiculo(veiculosCriados.get(1));
-        ownershipsParaSalvar.add(own2);
+            // Criar ownership
+            Ownership ownership = new Ownership();
+            ownership.setMatricula(getMatriculaByIndex(i));
+            ownership.setAnoRegisto(getAnoRegistoByIndex(i));
+            ownership.setVeiculo(veiculoExistente);  // ← ASSOCIA VEÍCULO EXISTENTE
 
-        // Ownership 3 - Cidadão 4
-        Ownership own3 = new Ownership();
-        own3.setMatricula("IJ-56-KL");
-        own3.setAnoRegisto(2020);
-        own3.setVeiculo(veiculosCriados.get(2));
-        ownershipsParaSalvar.add(own3);
+            // Associar ao cidadão apropriado
+            if (i < 2) {
+                ownership.setCidadao(cidadao3);
+            } else if (i < 4) {
+                ownership.setCidadao(cidadao4);
+            } else if (i < 6) {
+                ownership.setCidadao(cidadao5);
+            } else {
+                ownership.setCidadao(cidadao6);
+            }
 
-        // Ownership 4 - Cidadão 4
-        Ownership own4 = new Ownership();
-        own4.setMatricula("MN-78-OP");
-        own4.setAnoRegisto(2023);
-        own4.setVeiculo(veiculosCriados.get(3));
-        ownershipsParaSalvar.add(own4);
-
-        // Ownership 5 - Cidadão 5
-        Ownership own5 = new Ownership();
-        own5.setMatricula("QR-90-ST");
-        own5.setAnoRegisto(2019);
-        own5.setVeiculo(veiculosCriados.get(4));
-        ownershipsParaSalvar.add(own5);
-
-        // Ownership 6 - Cidadão 5
-        Ownership own6 = new Ownership();
-        own6.setMatricula("UV-12-WX");
-        own6.setAnoRegisto(2024);
-        own6.setVeiculo(veiculosCriados.get(5));
-        ownershipsParaSalvar.add(own6);
-
-        // Ownership 7 - Cidadão 6
-        Ownership own7 = new Ownership();
-        own7.setMatricula("YZ-34-AB");
-        own7.setAnoRegisto(2022);
-        own7.setVeiculo(veiculosCriados.get(6));
-        ownershipsParaSalvar.add(own7);
-
-        // Ownership 8 - Cidadão 6
-        Ownership own8 = new Ownership();
-        own8.setMatricula("CD-56-EF");
-        own8.setAnoRegisto(2020);
-        own8.setVeiculo(veiculosCriados.get(7));
-        ownershipsParaSalvar.add(own8);
+            ownershipsParaSalvar.add(ownership);
+        }
 
         // Salvar todos os ownerships
         List<Ownership> ownershipsSalvos = ownershipRepository.saveAll(ownershipsParaSalvar);
 
-        // Agora associar os ownerships aos cidadãos
-        // Cidadão 3 recebe ownerships 1 e 2
-        List<Ownership> listaCidadao3 = new ArrayList<>();
-        listaCidadao3.add(ownershipsSalvos.get(0));
-        listaCidadao3.add(ownershipsSalvos.get(1));
-        cidadao3.setListaDeVeiculos(listaCidadao3);
-        cidadaoRepository.save(cidadao3);
-
-        // Cidadão 4 recebe ownerships 3 e 4
-        List<Ownership> listaCidadao4 = new ArrayList<>();
-        listaCidadao4.add(ownershipsSalvos.get(2));
-        listaCidadao4.add(ownershipsSalvos.get(3));
-        cidadao4.setListaDeVeiculos(listaCidadao4);
-        cidadaoRepository.save(cidadao4);
-
-        // Cidadão 5 recebe ownerships 5 e 6
-        List<Ownership> listaCidadao5 = new ArrayList<>();
-        listaCidadao5.add(ownershipsSalvos.get(4));
-        listaCidadao5.add(ownershipsSalvos.get(5));
-        cidadao5.setListaDeVeiculos(listaCidadao5);
-        cidadaoRepository.save(cidadao5);
-
-        // Cidadão 6 recebe ownerships 7 e 8
-        List<Ownership> listaCidadao6 = new ArrayList<>();
-        listaCidadao6.add(ownershipsSalvos.get(6));
-        listaCidadao6.add(ownershipsSalvos.get(7));
-        cidadao6.setListaDeVeiculos(listaCidadao6);
-        cidadaoRepository.save(cidadao6);
-
+        // Atualizar as listas dos cidadãos
+        atualizarListasCidadaos(cidadao3, cidadao4, cidadao5, cidadao6, ownershipsSalvos);
     }
 
-    private Veiculo criarCopiaVeiculo(Veiculo veiculoBase) {
-        Veiculo novoVeiculo = new Veiculo();
-        novoVeiculo.setMarca(veiculoBase.getMarca());
-        novoVeiculo.setModelo(veiculoBase.getModelo());
-        novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
-        novoVeiculo.setConsumo(veiculoBase.getConsumo());
-        return veiculoRepository.save(novoVeiculo);
+    private void atualizarListasCidadaos(Cidadao c3, Cidadao c4, Cidadao c5, Cidadao c6, List<Ownership> ownerships) {
+        List<Ownership> listaC3 = new ArrayList<>();
+        List<Ownership> listaC4 = new ArrayList<>();
+        List<Ownership> listaC5 = new ArrayList<>();
+        List<Ownership> listaC6 = new ArrayList<>();
+
+        for (int i = 0; i < ownerships.size(); i++) {
+            if (i < 2) listaC3.add(ownerships.get(i));
+            else if (i < 4) listaC4.add(ownerships.get(i));
+            else if (i < 6) listaC5.add(ownerships.get(i));
+            else listaC6.add(ownerships.get(i));
+        }
+
+        c3.setListaDeVeiculos(listaC3);
+        c4.setListaDeVeiculos(listaC4);
+        c5.setListaDeVeiculos(listaC5);
+        c6.setListaDeVeiculos(listaC6);
+
+        cidadaoRepository.save(c3);
+        cidadaoRepository.save(c4);
+        cidadaoRepository.save(c5);
+        cidadaoRepository.save(c6);
+    }
+
+    private String getMatriculaByIndex(int i) {
+        String[] matriculas = {"AB-12-CD", "EF-34-GH", "IJ-56-KL", "MN-78-OP",
+                "QR-90-ST", "UV-12-WX", "YZ-34-AB", "CD-56-EF"};
+        return matriculas[i];
+    }
+
+    private int getAnoRegistoByIndex(int i) {
+        int[] anos = {2022, 2021, 2020, 2023, 2019, 2024, 2022, 2020};
+        return anos[i];
     }
 
     @Transactional
-    public Ownership criarOwnership(AdicionarOwnershipModel model) {
+    public Ownership criarOwnership(AdicionarOwnershipModel model, Cidadao cidadao) {
         // Processar modelo de referência
         String[] partes = model.getModeloReferencia().split(":");
         if (partes.length < 2) {
@@ -198,13 +146,23 @@ public class OwnershipService {
                 .orElseThrow(() -> new IllegalArgumentException("Veículo não encontrado"));
 
         // Criar o Veiculo (cópia com os dados do veículo base)
-        Veiculo novoVeiculo = criarCopiaVeiculo(veiculoBase);
+        Veiculo novoVeiculo = new Veiculo();
+        novoVeiculo.setMarca(veiculoBase.getMarca());
+        novoVeiculo.setModelo(veiculoBase.getModelo());
+        novoVeiculo.setTipoDeCombustivel(veiculoBase.getTipoDeCombustivel());
+        novoVeiculo.setConsumo(veiculoBase.getConsumo());
+
+        Veiculo veiculoSalvo = veiculoRepository.save(novoVeiculo);
 
         // Criar a Ownership associada ao veículo
         Ownership ownership = new Ownership();
         ownership.setMatricula(model.getMatricula());
         ownership.setAnoRegisto(model.getAnoRegisto());
-        ownership.setVeiculo(novoVeiculo);
+        ownership.setVeiculo(veiculoSalvo);
+        ownership.setCidadao(cidadao);
+
+        // Associar ao cidadão autenticado (será definido pelo controller)
+        // O cidadão será definido no controller antes de salvar
 
         // Salvar a ownership
         return ownershipRepository.save(ownership);

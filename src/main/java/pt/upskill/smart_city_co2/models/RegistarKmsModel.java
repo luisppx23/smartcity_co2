@@ -7,7 +7,6 @@ public class RegistarKmsModel {
     public double getKms() {
         return kms;
     }
-
     public void setKms(double kms) {
         this.kms = kms;
     }

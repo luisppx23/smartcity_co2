@@ -6,64 +6,44 @@ import pt.upskill.smart_city_co2.TipoDeCombustivel;
 @Entity
 public class Veiculo {
 
-    //ATRIBUTOS
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String marca;
     private String modelo;
     private double consumo;
 
-    //Relação 1para1 Veiculo-Ownership
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "veiculo")
     private Ownership ownership;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TipoDeCombustivel tipoDeCombustivel;
 
-    //CONSTRUTOR VAZIO
-    public Veiculo(){}
+    public Veiculo() {}
 
-    //CONSTRUTOR PARA SERVICE
-    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel,double consumo){
-        this.marca=marca;
-        this.modelo=modelo;
-        this.tipoDeCombustivel=tipoDeCombustivel;
-        this.consumo=consumo;
-    }
-
-    //GETTERS e SETTERS
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-    public void setMarca(String marca) {
+    public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel, double consumo) {
         this.marca = marca;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-    public void setModelo(String modelo) {
         this.modelo = modelo;
-    }
-
-    public TipoDeCombustivel getTipoDeCombustivel() {
-        return tipoDeCombustivel;
-    }
-    public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) {this.tipoDeCombustivel = tipoDeCombustivel;}
-
-    public double getConsumo() {
-        return consumo;
-    }
-    public void setConsumo(double consumo) {
+        this.tipoDeCombustivel = tipoDeCombustivel;
         this.consumo = consumo;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getMarca() { return marca; }
+    public void setMarca(String marca) { this.marca = marca; }
+
+    public String getModelo() { return modelo; }
+    public void setModelo(String modelo) { this.modelo = modelo; }
+
+    public double getConsumo() { return consumo; }
+    public void setConsumo(double consumo) { this.consumo = consumo; }
+
+    public Ownership getOwnership() { return ownership; }
+    public void setOwnership(Ownership ownership) { this.ownership = ownership; }
+
+    public TipoDeCombustivel getTipoDeCombustivel() { return tipoDeCombustivel; }
+    public void setTipoDeCombustivel(TipoDeCombustivel tipoDeCombustivel) { this.tipoDeCombustivel = tipoDeCombustivel; }
 }

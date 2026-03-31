@@ -2,7 +2,6 @@ package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,14 +12,15 @@ public class Cidadao extends User {
     private String contacto;
     private String morada;
 
-    //Relação 1paraMUITOS Cidadão-Ownership
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "municipio_id")
+    private Municipio municipio;
+
+    @OneToMany(mappedBy = "cidadao")
     private List<Ownership> listaDeVeiculos;
 
-    //CONSTRUTOR VAZIO
     public Cidadao() {}
 
-    // CONSTRUTOR COM PARÂMETROS - ATUALIZADO
     public Cidadao(String firstName, String lastName, String username,
                    LocalDateTime data_registo, String email, String password,
                    int nif, String tipo, boolean ativo, String contacto, String morada) {
@@ -31,19 +31,21 @@ public class Cidadao extends User {
         this.morada = morada;
     }
 
-    //GETTERS e SETTERS
-    public String getFirstName() {return firstName;}
-    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getLastName() {return lastName;}
-    public void setLastName(String lastName) {this.lastName = lastName;}
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public String getContacto() {return contacto;}
-    public void setContacto(String contacto) {this.contacto = contacto;}
+    public String getContacto() { return contacto; }
+    public void setContacto(String contacto) { this.contacto = contacto; }
 
-    public String getMorada() {return morada;}
-    public void setMorada(String morada) {this.morada = morada;}
+    public String getMorada() { return morada; }
+    public void setMorada(String morada) { this.morada = morada; }
 
-    public List<Ownership> getListaDeVeiculos() {return listaDeVeiculos;}
-    public void setListaDeVeiculos(List<Ownership> listaDeVeiculos) {this.listaDeVeiculos = listaDeVeiculos;}
+    public Municipio getMunicipio() { return municipio; }
+    public void setMunicipio(Municipio municipio) { this.municipio = municipio; }
+
+    public List<Ownership> getListaDeVeiculos() { return listaDeVeiculos; }
+    public void setListaDeVeiculos(List<Ownership> listaDeVeiculos) { this.listaDeVeiculos = listaDeVeiculos; }
 }

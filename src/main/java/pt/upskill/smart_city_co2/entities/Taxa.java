@@ -1,45 +1,38 @@
 package pt.upskill.smart_city_co2.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 public class Taxa {
 
-    //ATRIBUTOS
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate mes_ano;
     private double valor;
+    private LocalDate mes_ano;
 
-    public Taxa(LocalDate mes_ano, double valor){
-        this.mes_ano=mes_ano;
-        this.valor=valor;
-    }
+    @OneToOne
+    @JoinColumn(name = "registo_kms_id")
+    private RegistoKms registoKms;
 
-    //CONSTRUTOR VAZIO
-    public Taxa(){}
+    public Taxa() {}
 
-    //GETTERS e SETTERS
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
-
-    public LocalDate getMes_ano() {return mes_ano;}
-    public void setMes_ano(LocalDate mes_ano) {this.mes_ano = mes_ano;}
-
-
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
+    public Taxa(double valor, LocalDate mes_ano) {
         this.valor = valor;
+        this.mes_ano = mes_ano;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public double getValor() { return valor; }
+    public void setValor(double valor) { this.valor = valor; }
+
+    public LocalDate getMes_ano() { return mes_ano; }
+    public void setMes_ano(LocalDate mes_ano) { this.mes_ano = mes_ano; }
+
+    public RegistoKms getRegistoKms() { return registoKms; }
+    public void setRegistoKms(RegistoKms registoKms) { this.registoKms = registoKms; }
 }

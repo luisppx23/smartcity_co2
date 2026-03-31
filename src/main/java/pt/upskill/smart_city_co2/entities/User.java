@@ -7,9 +7,8 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public abstract class User {
 
-    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,16 +21,11 @@ public class User {
     private String tipo;
     private boolean ativo;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Veiculo> meusVeiculos = new ArrayList<>();
+    public User() {}
 
-    //CONSTRUTOR VAZIO
-    public User(){}
-
-    //Construtor para UserService
-    public User(String username, LocalDateTime dataRegisto, String email, String password, int nif, String tipo, boolean ativo) {
+    public User(String username, LocalDateTime data_registo, String email, String password, int nif, String tipo, boolean ativo) {
         this.username = username;
-        this.data_registo = dataRegisto;
+        this.data_registo = data_registo;
         this.email = email;
         this.password = password;
         this.nif = nif;
@@ -39,36 +33,27 @@ public class User {
         this.ativo = ativo;
     }
 
-    //GETTERS E SETTERS
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getUsername() {return username;}
-    public void setUsername(String username) {this.username = username;}
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public LocalDateTime getData_registo() {return data_registo;}
-    public void setData_registo(LocalDateTime data_registo) {this.data_registo = data_registo;}
+    public LocalDateTime getData_registo() { return data_registo; }
+    public void setData_registo(LocalDateTime data_registo) { this.data_registo = data_registo; }
 
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() {return password;}
-    public void setPassword(String password) {this.password = password;}
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getTipo() {return tipo;}
-    public void setTipo(String tipo) {this.tipo = tipo;}
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
-    public Boolean getAtivo() {return ativo;}
-    public void setAtivo(Boolean ativo) {this.ativo = ativo;}
+    public Boolean getAtivo() { return ativo; }
+    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 
-    public int getNif() {return nif;}
-    public void setNif(int nif) {this.nif = nif;}
-
-    public List<Veiculo> getMeusVeiculos() {
-        return meusVeiculos;
-    }
-
-    public void setMeusVeiculos(List<Veiculo> meusVeiculos) {
-        this.meusVeiculos = meusVeiculos;
-    }
+    public int getNif() { return nif; }
+    public void setNif(int nif) { this.nif = nif; }
 }

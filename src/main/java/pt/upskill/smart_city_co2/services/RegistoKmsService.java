@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.entities.*;
-import pt.upskill.smart_city_co2.repositories.OwnershipRepository;
-import pt.upskill.smart_city_co2.repositories.RegistoKmsRepository;
+import pt.upskill.smart_city_co2.repositories.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -23,7 +22,13 @@ public class RegistoKmsService {
     private OwnershipRepository ownershipRepository;
 
     @Autowired
-    private EmissaoCO2Service emissaoCO2Service;
+    private EmissaoCO2Service emissaoCO2Service;  // ← MANTER ESTE
+
+    @Autowired
+    private TaxaService taxaService;
+
+    @Autowired
+    private TaxaRepository taxaRepository;
 
     @PostConstruct
     @Transactional
@@ -32,20 +37,16 @@ public class RegistoKmsService {
     }
 
     private void popularRegistos() {
-        // Evitar duplicados se a base de dados já tiver dados
         if (registoKmsRepository.count() > 0) {
             return;
         }
 
-        // Definir os meses (Janeiro, Fevereiro, Março de 2024, por exemplo)
         int ano = 2024;
-        int[] meses = {0, 1, 2}; // Calendar.JANUARY é 0
-        double kmsPadrao = 500.0; // Valor base para kms
+        int[] meses = {0, 1, 2};
+        double kmsPadrao = 1000.0;
 
-        // Iterar pelos IDs de Ownership de 1 a 8
         for (long i = 1; i <= 8; i++) {
-            final long currentId = i;
-            Ownership ownership = ownershipRepository.findById(currentId).orElse(null);
+            Ownership ownership = ownershipRepository.findById(i).orElse(null);
 
             if (ownership != null) {
                 for (int mes : meses) {
@@ -53,23 +54,24 @@ public class RegistoKmsService {
                     cal.set(ano, mes, 1, 0, 0);
                     Date dataRegisto = cal.getTime();
 
-                    // Criar o registo
-                    RegistoKms novoRegisto = new RegistoKms();
-                    // Pequena variação de kms para não ser tudo igual
-                    double kmsGerados = kmsPadrao + (currentId * 10) + (mes * 5);
+                    RegistoKms registo = new RegistoKms();
+                    double kmsGerados = kmsPadrao + (i * 10) + (mes * 5);
 
-                    novoRegisto.setKms_mes(kmsGerados);
-                    novoRegisto.setMes_ano(dataRegisto);
-                    novoRegisto.setOwnership(ownership);
+                    registo.setKms_mes(kmsGerados);
+                    registo.setMes_ano(dataRegisto);
+                    registo.setOwnership(ownership);
 
-                    // Cálculo de emissões usando o seu serviço existente
+                    // USAR CÁLCULOS REAIS
                     double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, ano);
                     double emissaoEfetivaKg = emissaoCO2Service.calcularEmissaoEfetivaKg(ownership, kmsGerados, ano);
 
-                    novoRegisto.setEmissaoGPorKm(emissaoGPorKm);
-                    novoRegisto.setEmissaoEfetivaKg(emissaoEfetivaKg);
+                    registo.setEmissaoGPorKm(emissaoGPorKm);
+                    registo.setEmissaoEfetivaKg(emissaoEfetivaKg);
 
-                    registoKmsRepository.save(novoRegisto);
+                    RegistoKms registoSalvo = registoKmsRepository.save(registo);
+
+                    Taxa taxa = taxaService.criarTaxa(registoSalvo);
+                    taxaRepository.save(taxa);
                 }
             }
         }
@@ -77,34 +79,30 @@ public class RegistoKmsService {
 
     @Transactional
     public RegistoKms salvarRegisto(Cidadao cidadao, Ownership ownership, double kms) {
-        // Criar o registo
-        RegistoKms novoRegisto = new RegistoKms();
-        novoRegisto.setKms_mes(kms);
-        novoRegisto.setMes_ano(new Date());
-        novoRegisto.setOwnership(ownership);
+        RegistoKms registo = new RegistoKms();
+        registo.setKms_mes(kms);
+        registo.setMes_ano(new Date());
+        registo.setOwnership(ownership);
 
         int anoReferencia = LocalDate.now().getYear();
 
+        // USAR CÁLCULOS REAIS
         double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
         double emissaoEfetivaKg = emissaoCO2Service.calcularEmissaoEfetivaKg(ownership, kms, anoReferencia);
 
-        novoRegisto.setEmissaoGPorKm(emissaoGPorKm);
-        novoRegisto.setEmissaoEfetivaKg(emissaoEfetivaKg);
+        registo.setEmissaoGPorKm(emissaoGPorKm);
+        registo.setEmissaoEfetivaKg(emissaoEfetivaKg);
 
-        // Salvar o registo
-        RegistoKms registoSalvo = registoKmsRepository.save(novoRegisto);
+        RegistoKms registoSalvo = registoKmsRepository.save(registo);
 
-        // Adicionar à lista do ownership (se necessário)
-        if (ownership.getRegistos() == null) {
-            ownership.setRegistos(new java.util.ArrayList<>());
+        Taxa taxa = taxaService.criarTaxa(registoSalvo);
+        taxaRepository.save(taxa);
+
+        if (ownership.getRegistosKms() == null) {
+            ownership.setRegistosKms(new java.util.ArrayList<>());
         }
-        ownership.getRegistos().add(registoSalvo);
-
-        // Salvar o ownership para persistir a lista atualizada
+        ownership.getRegistosKms().add(registoSalvo);
         ownershipRepository.save(ownership);
-
-        // Nota: Não precisa salvar o cidadão, pois não há alteração direta nele
-        // cidadaoRepository.saveAndFlush(cidadao); // REMOVA ESTA LINHA
 
         return registoSalvo;
     }

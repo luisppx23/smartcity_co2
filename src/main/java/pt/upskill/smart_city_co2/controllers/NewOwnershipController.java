@@ -34,9 +34,6 @@ public class NewOwnershipController {
     @Autowired
     private CidadaoRepository cidadaoRepository;
 
-    @Autowired
-    private OwnershipRepository ownershipRepository;
-
     private Cidadao getAuthenticatedCidadao() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
@@ -98,7 +95,7 @@ public class NewOwnershipController {
 
         try {
             // 4. Criar a ownership usando o service (que já cria o Veiculo associado)
-            Ownership novaOwnership = ownershipService.criarOwnership(form);
+            Ownership novaOwnership = ownershipService.criarOwnership(form, cidadao);
 
             // 5. Adicionar à lista de veículos do cidadão
             List<Ownership> ownershipsAtuais = cidadao.getListaDeVeiculos();

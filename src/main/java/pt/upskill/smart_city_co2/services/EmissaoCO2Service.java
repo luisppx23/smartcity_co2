@@ -43,11 +43,6 @@ public class EmissaoCO2Service {
     }
 
     public double calcularEmissaoEfetivaKg(Ownership ownership, double kms, int anoReferencia) {
-        return calcularEmissaoEfetivaG(ownership, kms, anoReferencia) / 1000.0; //kg
+        return calcularEmissaoEfetivaG(ownership, kms, anoReferencia) / 1000.0;
     }
-
-//    private int extrairAno(Date date) {
-//        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        return localDate.getYear();
-//    }
 }

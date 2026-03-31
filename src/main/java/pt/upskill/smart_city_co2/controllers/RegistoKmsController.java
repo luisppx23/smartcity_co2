@@ -129,8 +129,8 @@ public class RegistoKmsController {
                 matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
                 combustivelPorVeiculo.put(veiculo.getId(), veiculo.getTipoDeCombustivel().name());
 
-                if (ownership.getRegistos() != null) {
-                    todosRegistos.addAll(ownership.getRegistos());
+                if (ownership.getRegistosKms() != null) {
+                    todosRegistos.addAll(ownership.getRegistosKms());
                 }
             }
 
@@ -167,8 +167,8 @@ public class RegistoKmsController {
                 Long veiculoId = veiculo.getId();
                 String combustivel = veiculo.getTipoDeCombustivel().name();
 
-                if (ownership.getRegistos() != null) {
-                    for (RegistoKms registo : ownership.getRegistos()) {
+                if (ownership.getRegistosKms() != null) {
+                    for (RegistoKms registo : ownership.getRegistosKms()) {
                         double kms = registo.getKms_mes();
                         double co2 = registo.getEmissaoEfetivaKg();
 
@@ -219,8 +219,8 @@ public class RegistoKmsController {
                 List<Ownership> ownershipsOutroCidadao = outroCidadao.getListaDeVeiculos();
                 if (ownershipsOutroCidadao != null) {
                     for (Ownership ownership : ownershipsOutroCidadao) {
-                        if (ownership.getRegistos() != null) {
-                            for (RegistoKms registo : ownership.getRegistos()) {
+                        if (ownership.getRegistosKms() != null) {
+                            for (RegistoKms registo : ownership.getRegistosKms()) {
                                 totalCo2Cidadao += registo.getEmissaoEfetivaKg();
                             }
                         }
@@ -304,7 +304,7 @@ public class RegistoKmsController {
                 Veiculo veiculo = ownership.getVeiculo();
                 listaVeiculos.add(veiculo);
 
-                List<RegistoKms> registos = ownership.getRegistos();
+                List<RegistoKms> registos = ownership.getRegistosKms();
                 if (registos == null) {
                     registos = new ArrayList<>();
                 }
@@ -363,7 +363,7 @@ public class RegistoKmsController {
                 totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
                 totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
 
-                List<RegistoKms> registos = ownership.getRegistos();
+                List<RegistoKms> registos = ownership.getRegistosKms();
                 if (registos != null) {
                     for (RegistoKms registo : registos) {
                         double kms = registo.getKms_mes();
@@ -420,7 +420,7 @@ public class RegistoKmsController {
             List<Ownership> ownershipsOutro = outroCidadao.getListaDeVeiculos();
             if (ownershipsOutro != null) {
                 for (Ownership ownership : ownershipsOutro) {
-                    List<RegistoKms> registos = ownership.getRegistos();
+                    List<RegistoKms> registos = ownership.getRegistosKms();
                     if (registos != null) {
                         for (RegistoKms registo : registos) {
                             totalCo2Cidadao += registo.getEmissaoEfetivaKg();

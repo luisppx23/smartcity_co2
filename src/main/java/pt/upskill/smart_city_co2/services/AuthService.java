@@ -14,6 +14,7 @@ import pt.upskill.smart_city_co2.repositories.MunicipioRepository;
 import pt.upskill.smart_city_co2.repositories.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 public class AuthService {
@@ -42,7 +43,6 @@ public class AuthService {
             throw new RuntimeException("Username já está em uso");
         }
 
-
         String encodedPassword = passwordEncoder.encode(signUpModel.getPassword());
 
         if ("cidadao".equals(signUpModel.getTipo())) {
@@ -67,13 +67,16 @@ public class AuthService {
                     signUpModel.getMorada()
             );
 
-            // Primeiro salva o cidadão para gerar o ID
+            // Associar ao município
+            cidadao.setMunicipio(municipio);
+
+            // Salvar o cidadão
             Cidadao savedCidadao = cidadaoRepository.save(cidadao);
 
-            // Depois adiciona à lista do município (se existir)
+            // Adicionar à lista do município (se existir)
             if (municipio != null) {
                 if (municipio.getListaDeCidadaos() == null) {
-                    municipio.setListaDeCidadaos(new java.util.ArrayList<>());
+                    municipio.setListaDeCidadaos(new ArrayList<>());
                 }
                 municipio.getListaDeCidadaos().add(savedCidadao);
                 municipioRepository.save(municipio);
@@ -81,23 +84,6 @@ public class AuthService {
 
             return savedCidadao;
         }
-
-
-        //Só será necessário qd for o admin a adicionar contas de Município
-        /*else if ("municipio".equals(signUpModel.getTipo())) {
-            Municipio municipio = new Municipio(
-                    null, // nome do municipio - definido posteriormente
-                    0.0, // objetivo_co2_mes_hab - definido posteriormente
-                    signUpModel.getUsername(),
-                    LocalDateTime.now(),
-                    signUpModel.getEmail(),
-                    encodedPassword,
-                    signUpModel.getNif(),
-                    signUpModel.getTipo(),
-                    true
-            );
-            return municipioRepository.save(municipio);
-        }*/
 
         return null;
     }

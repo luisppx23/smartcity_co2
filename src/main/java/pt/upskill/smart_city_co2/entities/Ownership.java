@@ -1,49 +1,50 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
 public class Ownership {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String matricula;
     private Integer anoRegisto;
 
-    //Relação 1paraMUITOS Ownership-RegistoKms
-    @OneToMany(mappedBy = "ownership", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<RegistoKms> registos;
+    @ManyToOne
+    @JoinColumn(name = "cidadao_id")
+    private Cidadao cidadao;
 
-    //Relação 1para1 Ownership-Veiculo
     @OneToOne
+    @JoinColumn(name = "veiculo_id")
     private Veiculo veiculo;
 
+    @OneToMany(mappedBy = "ownership")
+    private List<RegistoKms> registosKms;
 
-    //CONSTRUTOR VAZIO
     public Ownership() {}
 
-    // CONSTRUTOR COM PARÂMETRO - ATUALIZADO
     public Ownership(String matricula) {
         this.matricula = matricula;
     }
 
-    //GETTERS e SETTERS
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getMatricula() {return matricula;}
-    public void setMatricula(String matricula) {this.matricula = matricula;}
+    public String getMatricula() { return matricula; }
+    public void setMatricula(String matricula) { this.matricula = matricula; }
 
-    public Integer getAnoRegisto() {return anoRegisto;}
-    public void setAnoRegisto(Integer anoRegisto) {this.anoRegisto = anoRegisto;}
+    public Integer getAnoRegisto() { return anoRegisto; }
+    public void setAnoRegisto(Integer anoRegisto) { this.anoRegisto = anoRegisto; }
 
-    public List<RegistoKms> getRegistos() {return registos;}
-    public void setRegistos(List<RegistoKms> registos) {this.registos = registos;}
+    public Cidadao getCidadao() { return cidadao; }
+    public void setCidadao(Cidadao cidadao) { this.cidadao = cidadao; }
 
-    public Veiculo getVeiculo() {return veiculo;}
-    public void setVeiculo(Veiculo veiculo) {this.veiculo = veiculo;}
+    public Veiculo getVeiculo() { return veiculo; }
+    public void setVeiculo(Veiculo veiculo) { this.veiculo = veiculo; }
+
+    public List<RegistoKms> getRegistosKms() { return registosKms; }
+    public void setRegistosKms(List<RegistoKms> registosKms) { this.registosKms = registosKms; }
 }

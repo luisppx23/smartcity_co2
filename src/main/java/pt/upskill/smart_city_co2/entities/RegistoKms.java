@@ -7,7 +7,7 @@ import java.util.Date;
 public class RegistoKms {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Date mes_ano;
@@ -15,25 +15,28 @@ public class RegistoKms {
     private double emissaoGPorKm;
     private double emissaoEfetivaKg;
 
-    @OneToOne
-    private Taxa taxa;
-
     @ManyToOne
     @JoinColumn(name = "ownership_id")
     private Ownership ownership;
 
-    // CONSTRUTOR VAZIO
-    public RegistoKms(){}
+    @OneToOne(mappedBy = "registoKms")
+    private Taxa taxa;
 
-    // GETTERS e SETTERS
-    public Long getId() {return id;}
-    public void setId(Long id) {this.id = id;}
+    public RegistoKms() {}
 
-    public Date getMes_ano() {return mes_ano;}
-    public void setMes_ano(Date mes_ano) {this.mes_ano = mes_ano;}
+    public RegistoKms(Date mes_ano, double kms_mes) {
+        this.mes_ano = mes_ano;
+        this.kms_mes = kms_mes;
+    }
 
-    public double getKms_mes() {return kms_mes;}
-    public void setKms_mes(double kms_mes) {this.kms_mes = kms_mes;}
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Date getMes_ano() { return mes_ano; }
+    public void setMes_ano(Date mes_ano) { this.mes_ano = mes_ano; }
+
+    public double getKms_mes() { return kms_mes; }
+    public void setKms_mes(double kms_mes) { this.kms_mes = kms_mes; }
 
     public double getEmissaoGPorKm() { return emissaoGPorKm; }
     public void setEmissaoGPorKm(double emissaoGPorKm) { this.emissaoGPorKm = emissaoGPorKm; }
@@ -41,9 +44,9 @@ public class RegistoKms {
     public double getEmissaoEfetivaKg() { return emissaoEfetivaKg; }
     public void setEmissaoEfetivaKg(double emissaoEfetivaKg) { this.emissaoEfetivaKg = emissaoEfetivaKg; }
 
-    public Taxa getTaxa() {return taxa;}
-    public void setTaxa(Taxa taxa) {this.taxa = taxa;}
-
     public Ownership getOwnership() { return ownership; }
     public void setOwnership(Ownership ownership) { this.ownership = ownership; }
+
+    public Taxa getTaxa() { return taxa; }
+    public void setTaxa(Taxa taxa) { this.taxa = taxa; }
 }
