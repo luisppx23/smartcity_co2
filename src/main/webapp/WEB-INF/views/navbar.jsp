@@ -5,7 +5,7 @@
     <div class="smart-navbar-inner">
 
         <div class="smart-navbar-left">
-            <img src="${pageContext.request.contextPath}/images/logo.jpeg" alt="Logo" class="smart-navbar-logo">
+            <img src="${pageContext.request.contextPath}/images/logo_gradient_white.png" alt="Logo" class="smart-navbar-logo">
 
         </div>
 
