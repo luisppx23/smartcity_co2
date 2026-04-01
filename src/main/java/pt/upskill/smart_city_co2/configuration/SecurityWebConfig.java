@@ -12,52 +12,50 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityWebConfig {
 
     @Autowired
-    UserAuthenticationProvider userAuthenticationProvider; // Provedor de autenticação customizado
+    UserAuthenticationProvider userAuthenticationProvider;
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        // Desabilita CSRF para simplificar em produção
+
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-        // Configuração de regras de autorização
         httpSecurity.authorizeHttpRequests(auth -> {
-            // Requisições de forward (redirecionamentos internos)
-            auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
 
-            // Acesso público a rotas de autenticação e recursos estáticos
-            auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/scripts","/images/**").permitAll();
+            auth.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll();
 
-            // Acesso mediante Role do User - endpoints reais dos controllers
+            // Recursos públicos — sem login
+            auth.requestMatchers(
+                    "/auth/**",
+                    "/assets/**",        // ← ESTA É A LINHA QUE FALTAVA
+                    "/styles/**",
+                    "/scripts/**",
+                    "/images/**",
+                    "/WEB-INF/**"
+            ).permitAll();
+
+            // Rotas por role
             auth.requestMatchers("/auth/autenticado").authenticated();
             auth.requestMatchers("/auth/homeCidadao").hasRole("CIDADAO");
             auth.requestMatchers("/auth/homeMunicipio").hasRole("MUNICIPIO");
-
-            // Rotas do cidadão
             auth.requestMatchers("/cidadao/**").hasRole("CIDADAO");
-
-            // Rotas do município
             auth.requestMatchers("/municipio/**").hasRole("MUNICIPIO");
 
-
-            auth.requestMatchers("/**").denyAll();
+            auth.anyRequest().denyAll();
         });
 
-        // Formulário de Login sob httpSecurity
         httpSecurity.formLogin(login -> {
-            login.loginPage("/auth/login");           // Página personalizada de login
-            login.loginProcessingUrl("/login");       // Endpoint que processa o login
-            login.defaultSuccessUrl("/auth/autenticado", true); // Redireciona para autenticado após login bem-sucedido
-            login.permitAll();                        // acesso geral à página de login
+            login.loginPage("/auth/login");
+            login.loginProcessingUrl("/login");
+            login.defaultSuccessUrl("/auth/autenticado", true);
+            login.permitAll();
         });
 
-        // Configuração de logout
         httpSecurity.logout(logout -> {
             logout.logoutUrl("/logout");
             logout.logoutSuccessUrl("/auth/login");
             logout.permitAll();
         });
 
-        // Define o provedor de autenticação
         httpSecurity.authenticationProvider(userAuthenticationProvider);
         return httpSecurity.build();
     }
