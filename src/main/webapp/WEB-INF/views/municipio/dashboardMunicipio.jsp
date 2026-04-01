@@ -25,7 +25,7 @@
         <div class="dashboard-links">
             <a href="/municipio/redefinirTaxa">Redefinir Taxa</a>
             <a href="/municipio/homeMunicipio">Home Município</a>
-            <a href="/municipio/relatoriosMunicipio">Relatórios Município</a>
+            <a href="/municipio/relatoriosMunicipio">Relatorios Município</a>
             <a href="/municipio/listaCidadaos">Lista de Cidadãos</a>
             <a href="/municipio/listaVeiculos">Lista de Veículos Associados aos Cidadãos do Município</a>
         </div>

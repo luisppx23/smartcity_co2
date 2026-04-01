@@ -1,6 +1,7 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class Municipio extends User {
     @OneToMany(mappedBy = "municipio")
     private List<RelatorioMensal> relatoriosMensais;
 
-    public Municipio() {}
+    public Municipio() {
+    }
 
     public Municipio(String nome, double objetivo_co2_mes_hab, String username,
                      LocalDateTime data_registo, String email, String password,
@@ -26,15 +28,35 @@ public class Municipio extends User {
         this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;
     }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getNome() {
+        return nome;
+    }
 
-    public double getObjetivo_co2_mes_hab() { return objetivo_co2_mes_hab; }
-    public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) { this.objetivo_co2_mes_hab = objetivo_co2_mes_hab; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public List<Cidadao> getListaDeCidadaos() { return listaDeCidadaos; }
-    public void setListaDeCidadaos(List<Cidadao> listaDeCidadaos) { this.listaDeCidadaos = listaDeCidadaos; }
+    public double getObjetivo_co2_mes_hab() {
+        return objetivo_co2_mes_hab;
+    }
 
-    public List<RelatorioMensal> getRelatoriosMensais() { return relatoriosMensais; }
-    public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) { this.relatoriosMensais = relatoriosMensais; }
+    public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) {
+        this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;
+    }
+
+    public List<Cidadao> getListaDeCidadaos() {
+        return listaDeCidadaos;
+    }
+
+    public void setListaDeCidadaos(List<Cidadao> listaDeCidadaos) {
+        this.listaDeCidadaos = listaDeCidadaos;
+    }
+
+    public List<RelatorioMensal> getRelatoriosMensais() {
+        return relatoriosMensais;
+    }
+
+    public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {
+        this.relatoriosMensais = relatoriosMensais;
+    }
 }

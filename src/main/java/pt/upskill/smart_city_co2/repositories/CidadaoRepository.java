@@ -17,9 +17,19 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
     @Query(value = "SELECT * FROM Cidadao", nativeQuery = true)
     List<Cidadao> customQuery(@Param("email") String email);
 
+    @Query("""
+        SELECT DISTINCT c
+        FROM Cidadao c
+        LEFT JOIN FETCH c.listaDeVeiculos o
+        LEFT JOIN FETCH o.veiculo v
+        WHERE c.municipio.id = :municipioId
+    """)
+    List<Cidadao> buscarCidadaosDoMunicipioComVeiculos(@Param("municipioId") Long municipioId);
+
     //Optional<Cidadao> findByUsername(String username);
 
     Optional<Cidadao> findByUsername(String username);
 
     Optional<Cidadao> findByEmail(String email);
+
 }

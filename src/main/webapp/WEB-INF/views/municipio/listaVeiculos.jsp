@@ -8,15 +8,17 @@
     <meta charset="UTF-8">
     <title>Lista de Veículos - Município</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/formpagesm.css">
 </head>
 <body>
 <jsp:include page="../navbarm.jsp"/>
-<div class="container">
-    <div class="card mt-4">
-        <div class="card-header">
+<div class="form-page-wrapper">
+    <div class="form-page-background-shape"></div>
+    <div class="form-card history-card">
+        <div class="form-card-header">
             <h2>Veículos dos Cidadãos do Município ${user.username}</h2>
         </div>
-        <div class="card-body">
+        <div class="form-card-description">
             <table class="table">
                 <thead>
                 <tr>
