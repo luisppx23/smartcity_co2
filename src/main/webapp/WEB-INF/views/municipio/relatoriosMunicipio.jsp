@@ -53,6 +53,44 @@
         </c:if>
 
         <c:if test="${empty erro and not empty listaRegistos}">
+
+            <div class="history-table-wrapper">
+                <h3 style="margin-bottom: 15px;">Resumo geral</h3>
+
+                <table class="history-table">
+                    <tbody>
+                    <tr>
+                        <th>Total de habitantes</th>
+                        <td>${numeroHabitantes}</td>
+                    </tr>
+                    <tr>
+                        <th>Quantidade total de veículos</th>
+                        <td>${quantidadeVeiculosTotais}</td>
+                    </tr>
+                    <tr>
+                        <th>Total global de quilómetros</th>
+                        <td>
+                            <fmt:formatNumber value="${totalKmsGeral}" minFractionDigits="1" maxFractionDigits="1"/> km
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Total global de CO2</th>
+                        <td>
+                            <fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Média global de emissões mensais</th>
+                        <td>
+                            <fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+
             <div class="history-table-wrapper">
                 <h3 style="margin-bottom: 15px;">Resumo mensal</h3>
 
@@ -66,6 +104,8 @@
                         <th>Média CO2 por Habitante</th>
                         <th>Objetivo CO2 por Habitante</th>
                         <th>Estado do Objetivo</th>
+                        <th>Comparação com mês anterior</th>
+                        <th>Comparação com ano anterior</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -94,6 +134,57 @@
                                         Objetivo não atingido
                                     </c:otherwise>
                                 </c:choose>
+                            </td>
+
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty variacaoMesAnterior[mesAno]}">
+                                        <span style="color:${corComparacaoMesAnterior[mesAno]}; font-weight:bold;">
+                                            <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        -
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty variacaoAnoAnteriorPorMes[mesAno]}">
+                                        <span style="color:${corComparacaoAnoAnteriorPorMes[mesAno]}; font-weight:bold;">
+                                            <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                        </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        -
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="history-table-wrapper">
+                <h3 style="margin-bottom: 15px;">Evolução das emissões mensais</h3>
+
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Emissões Totais</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="mesAno" items="${evolucaoEmissoesMensais.keySet()}">
+                        <tr>
+                            <td>${mesAno}</td>
+                            <td>
+                                <fmt:formatNumber value="${evolucaoEmissoesMensais[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                             </td>
                         </tr>
                     </c:forEach>
@@ -137,6 +228,32 @@
                     </tbody>
                 </table>
             </div>
+
+            <br>
+
+            <div class="history-table-wrapper">
+                <h3 style="margin-bottom: 15px;">Emissões médias por tipo de combustível</h3>
+
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>Combustível</th>
+                        <th>Emissão média</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="combustivel" items="${emissaoMediaPorCombustivel.keySet()}">
+                        <tr>
+                            <td>${combustivel}</td>
+                            <td>
+                                <fmt:formatNumber value="${emissaoMediaPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
         </c:if>
 
         <div class="smart-form-actions history-actions">

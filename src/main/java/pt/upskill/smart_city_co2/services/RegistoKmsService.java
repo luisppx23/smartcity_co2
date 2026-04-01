@@ -9,7 +9,10 @@ import pt.upskill.smart_city_co2.entities.*;
 import pt.upskill.smart_city_co2.repositories.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 @Service
 @DependsOn({"ownershipService"})
@@ -32,36 +35,39 @@ public class RegistoKmsService {
 
     @PostConstruct
     @Transactional
-    public void init() {
-        popularRegistos();
-    }
-
-    private void popularRegistos() {
+    public void popularRegistos() {
         if (registoKmsRepository.count() > 0) {
             return;
         }
 
-        int ano = 2024;
-        int[] meses = {0, 1, 2};
-        double kmsPadrao = 1000.0;
+        Random random = new Random();
 
         for (long i = 1; i <= 8; i++) {
             Ownership ownership = ownershipRepository.findById(i).orElse(null);
 
-            if (ownership != null) {
-                for (int mes : meses) {
-                    java.util.Calendar cal = java.util.Calendar.getInstance();
-                    cal.set(ano, mes, 1, 0, 0);
+            if (ownership == null) {
+                continue;
+            }
+
+            for (int ano = 2024; ano <= 2026; ano++) {
+
+                int ultimoMes = (ano == 2026) ? 3 : 11; // 2026 até abril
+
+                for (int mes = 0; mes <= ultimoMes; mes++) {
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(ano, mes, 1, 0, 0, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
                     Date dataRegisto = cal.getTime();
 
-                    RegistoKms registo = new RegistoKms();
-                    double kmsGerados = kmsPadrao + (i * 10) + (mes * 5);
+                    // Kms aleatórios entre 0 e 1000
+                    double kmsGerados = random.nextInt(1001);
 
+                    RegistoKms registo = new RegistoKms();
                     registo.setKms_mes(kmsGerados);
                     registo.setMes_ano(dataRegisto);
                     registo.setOwnership(ownership);
 
-                    // USAR CÁLCULOS REAIS
                     double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, ano);
                     double emissaoEfetivaKg = emissaoCO2Service.calcularEmissaoEfetivaKg(ownership, kmsGerados, ano);
 
@@ -99,7 +105,7 @@ public class RegistoKmsService {
         taxaRepository.save(taxa);
 
         if (ownership.getRegistosKms() == null) {
-            ownership.setRegistosKms(new java.util.ArrayList<>());
+            ownership.setRegistosKms(new ArrayList<>());
         }
         ownership.getRegistosKms().add(registoSalvo);
         ownershipRepository.save(ownership);

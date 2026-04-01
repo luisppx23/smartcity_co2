@@ -17,10 +17,8 @@ import pt.upskill.smart_city_co2.entities.Veiculo;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
 import pt.upskill.smart_city_co2.services.MunicipioService;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/municipio")
@@ -137,11 +135,12 @@ public class MunicipioController {
     }
 
     private void prepararDadosRelatorioMunicipio(Model model, Municipio municipio) {
-        List<Cidadao> listaCidadaos =
-                cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
+        List<Cidadao> listaCidadaos = cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
 
         List<RegistoKms> listaRegistos = new ArrayList<>();
         List<Veiculo> listaVeiculos = new ArrayList<>();
+
+        Set<Long> idsVeiculosUnicos = new LinkedHashSet<>();
 
         Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
         Map<Long, String> combustivelPorVeiculo = new LinkedHashMap<>();
@@ -154,17 +153,32 @@ public class MunicipioController {
         Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
         Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
 
+        Map<String, Integer> numeroRegistosPorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> emissaoMediaPorCombustivel = new LinkedHashMap<>();
+
         Map<String, Double> totalKmsPorMes = new LinkedHashMap<>();
         Map<String, Double> totalCo2PorMes = new LinkedHashMap<>();
         Map<String, Double> mediaCo2PorHabitantePorMes = new LinkedHashMap<>();
         Map<String, Boolean> objetivoAtingidoPorMes = new LinkedHashMap<>();
 
+        Map<String, Double> mediaEmissoesPorMes = new LinkedHashMap<>();
+
+        Map<String, Double> variacaoAnoAnteriorPorMes = new LinkedHashMap<>();
+        Map<String, String> corComparacaoAnoAnteriorPorMes = new LinkedHashMap<>();
+
+        Map<String, Double> variacaoMesAnterior = new LinkedHashMap<>();
+        Map<String, String> corComparacaoMesAnterior = new LinkedHashMap<>();
+
+        Map<String, Double> evolucaoEmissoesMensais = new LinkedHashMap<>();
+
         double totalKmsGeral = 0.0;
         double totalCo2Geral = 0.0;
+        double somaEmissoesMensais = 0.0;
 
         int numeroHabitantes = (listaCidadaos != null) ? listaCidadaos.size() : 0;
+        int quantidadeVeiculosTotais = 0;
 
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 
         System.out.println("Município: " + municipio.getNome());
         System.out.println("Número de cidadãos: " + numeroHabitantes);
@@ -184,6 +198,8 @@ public class MunicipioController {
                         }
 
                         listaVeiculos.add(veiculo);
+                        idsVeiculosUnicos.add(veiculo.getId());
+
                         matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
 
                         String combustivel = veiculo.getTipoDeCombustivel() != null
@@ -197,6 +213,7 @@ public class MunicipioController {
 
                         totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
                         totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
+                        numeroRegistosPorCombustivel.putIfAbsent(combustivel, 0);
 
                         System.out.println("Ownership ID: " + ownership.getId());
                         System.out.println("Registos: " +
@@ -236,6 +253,11 @@ public class MunicipioController {
                                         totalCo2PorCombustivel.getOrDefault(combustivel, 0.0) + co2
                                 );
 
+                                numeroRegistosPorCombustivel.put(
+                                        combustivel,
+                                        numeroRegistosPorCombustivel.getOrDefault(combustivel, 0) + 1
+                                );
+
                                 String mesAno = sdf.format(registo.getMes_ano());
 
                                 totalKmsPorMes.put(
@@ -254,9 +276,11 @@ public class MunicipioController {
             }
         }
 
+        quantidadeVeiculosTotais = idsVeiculosUnicos.size();
+
         for (String combustivel : totalKmsPorCombustivel.keySet()) {
-            double kmsCombustivel = totalKmsPorCombustivel.get(combustivel);
-            double co2Combustivel = totalCo2PorCombustivel.get(combustivel);
+            double kmsCombustivel = totalKmsPorCombustivel.getOrDefault(combustivel, 0.0);
+            double co2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
 
             double percentagemKms = totalKmsGeral > 0 ? (kmsCombustivel / totalKmsGeral) * 100 : 0.0;
             double percentagemCo2 = totalCo2Geral > 0 ? (co2Combustivel / totalCo2Geral) * 100 : 0.0;
@@ -265,17 +289,99 @@ public class MunicipioController {
             percentagemCo2PorCombustivel.put(combustivel, percentagemCo2);
         }
 
-        for (String mesAno : totalCo2PorMes.keySet()) {
-            double co2Mes = totalCo2PorMes.get(mesAno);
-            double mediaMes = numeroHabitantes > 0 ? co2Mes / numeroHabitantes : 0.0;
+        for (String combustivel : totalCo2PorCombustivel.keySet()) {
+            double totalCo2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
+            int totalRegistosCombustivel = numeroRegistosPorCombustivel.getOrDefault(combustivel, 0);
 
-            mediaCo2PorHabitantePorMes.put(mesAno, mediaMes);
-            objetivoAtingidoPorMes.put(mesAno, mediaMes <= municipio.getObjetivo_co2_mes_hab());
+            double mediaCombustivel = totalRegistosCombustivel > 0
+                    ? totalCo2Combustivel / totalRegistosCombustivel
+                    : 0.0;
+
+            emissaoMediaPorCombustivel.put(combustivel, mediaCombustivel);
         }
 
-        System.out.println("Total de registos encontrados: " + listaRegistos.size());
-        System.out.println("Total kms geral: " + totalKmsGeral);
-        System.out.println("Total CO2 geral: " + totalCo2Geral);
+        for (String mesAno : totalCo2PorMes.keySet()) {
+            double co2Mes = totalCo2PorMes.get(mesAno);
+            double mediaMesPorHabitante = numeroHabitantes > 0 ? co2Mes / numeroHabitantes : 0.0;
+
+            mediaCo2PorHabitantePorMes.put(mesAno, mediaMesPorHabitante);
+            objetivoAtingidoPorMes.put(mesAno, mediaMesPorHabitante <= municipio.getObjetivo_co2_mes_hab());
+
+            mediaEmissoesPorMes.put(mesAno, co2Mes);
+            somaEmissoesMensais += co2Mes;
+        }
+
+        double mediaGlobalEmissoesMensais = totalCo2PorMes.size() > 0
+                ? somaEmissoesMensais / totalCo2PorMes.size()
+                : 0.0;
+
+        List<String> mesesOrdenados = new ArrayList<>(totalCo2PorMes.keySet());
+
+        Collections.sort(mesesOrdenados, new Comparator<String>() {
+            @Override
+            public int compare(String m1, String m2) {
+                String[] p1 = m1.split("/");
+                String[] p2 = m2.split("/");
+
+                int mes1 = Integer.parseInt(p1[0]);
+                int ano1 = Integer.parseInt(p1[1]);
+
+                int mes2 = Integer.parseInt(p2[0]);
+                int ano2 = Integer.parseInt(p2[1]);
+
+                if (ano1 != ano2) {
+                    return Integer.compare(ano1, ano2);
+                }
+                return Integer.compare(mes1, mes2);
+            }
+        });
+
+        for (int i = 1; i < mesesOrdenados.size(); i++) {
+            String mesAtual = mesesOrdenados.get(i);
+            String mesAnterior = mesesOrdenados.get(i - 1);
+
+            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAtual, 0.0);
+            double emissaoAnterior = totalCo2PorMes.getOrDefault(mesAnterior, 0.0);
+
+            double variacao = emissaoAtual - emissaoAnterior;
+            variacaoMesAnterior.put(mesAtual, variacao);
+
+            if (variacao < 0) {
+                corComparacaoMesAnterior.put(mesAtual, "green");
+            } else if (variacao > 0) {
+                corComparacaoMesAnterior.put(mesAtual, "red");
+            } else {
+                corComparacaoMesAnterior.put(mesAtual, "gray");
+            }
+        }
+
+        for (String mesAno : totalCo2PorMes.keySet()) {
+            String[] partes = mesAno.split("/");
+            int mes = Integer.parseInt(partes[0]);
+            int ano = Integer.parseInt(partes[1]);
+
+            String mesAnoAnterior = String.format("%02d/%d", mes, ano - 1);
+
+            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAno, 0.0);
+            double emissaoAnoAnterior = totalCo2PorMes.getOrDefault(mesAnoAnterior, -1.0);
+
+            if (emissaoAnoAnterior >= 0) {
+                double variacao = emissaoAtual - emissaoAnoAnterior;
+                variacaoAnoAnteriorPorMes.put(mesAno, variacao);
+
+                if (variacao < 0) {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "green");
+                } else if (variacao > 0) {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "red");
+                } else {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "gray");
+                }
+            }
+        }
+
+        for (String mes : mesesOrdenados) {
+            evolucaoEmissoesMensais.put(mes, totalCo2PorMes.get(mes));
+        }
 
         model.addAttribute("listaCidadaos", listaCidadaos);
         model.addAttribute("listaRegistos", listaRegistos);
@@ -300,5 +406,20 @@ public class MunicipioController {
         model.addAttribute("objetivoAtingidoPorMes", objetivoAtingidoPorMes);
 
         model.addAttribute("numeroHabitantes", numeroHabitantes);
+
+        model.addAttribute("quantidadeVeiculosTotais", quantidadeVeiculosTotais);
+
+        model.addAttribute("mediaEmissoesPorMes", mediaEmissoesPorMes);
+        model.addAttribute("mediaGlobalEmissoesMensais", mediaGlobalEmissoesMensais);
+
+        model.addAttribute("variacaoAnoAnteriorPorMes", variacaoAnoAnteriorPorMes);
+        model.addAttribute("corComparacaoAnoAnteriorPorMes", corComparacaoAnoAnteriorPorMes);
+
+        model.addAttribute("variacaoMesAnterior", variacaoMesAnterior);
+        model.addAttribute("corComparacaoMesAnterior", corComparacaoMesAnterior);
+
+        model.addAttribute("evolucaoEmissoesMensais", evolucaoEmissoesMensais);
+
+        model.addAttribute("emissaoMediaPorCombustivel", emissaoMediaPorCombustivel);
     }
 }
