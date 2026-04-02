@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Área do Cidadão</title>
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/auth.css">
 </head>
 <body>

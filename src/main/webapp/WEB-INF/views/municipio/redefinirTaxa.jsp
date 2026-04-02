@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Redefinir Taxa</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
 </head>
 <body>
 <jsp:include page="../navbarm.jsp"/>

@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Veículos - Município</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/form-pagesm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/form-pagesm.css">
 </head>
 <body class="form-page-body">
 

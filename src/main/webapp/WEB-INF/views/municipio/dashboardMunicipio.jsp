@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Municipio</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/dashboardm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
 </head>
 <body>
 <jsp:include page="../navbarm.jsp"/>

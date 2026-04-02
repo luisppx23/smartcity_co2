@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Municipio</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/form-pagesm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/form-pagesm.css">
 </head>
 <body class="form-page-body">
 <jsp:include page="../navbarm.jsp"/>
