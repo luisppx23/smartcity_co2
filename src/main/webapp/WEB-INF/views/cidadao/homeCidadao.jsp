@@ -5,10 +5,9 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Cidadão</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
+    <title>Dashboard Cidadão</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/dashboard.css">
 </head>
 <body>
 
@@ -24,7 +23,7 @@
 <div class="dashboard-container">
 
     <div class="dashboard-grid">
-        <div class="dashboard-card dashboard-card-blue">
+        <div class="dashboard-card">
             <h3>Registar Veículo</h3>
             <p>Adicione um novo veículo à sua conta.</p>
             <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="dashboard-button">
@@ -32,7 +31,7 @@
             </a>
         </div>
 
-        <div class="dashboard-card dashboard-card-beige">
+        <div class="dashboard-card">
             <h3>Simular Taxa</h3>
             <p>Consulte uma simulação da taxa associada.</p>
             <a href="${pageContext.request.contextPath}/cidadao/simularTaxa" class="dashboard-button">
@@ -61,10 +60,32 @@
 
     <div class="dashboard-card dashboard-links-card">
         <h3>Acessos Rápidos</h3>
+
         <div class="dashboard-links">
-            <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">Lista de Veículos Associados ao Cidadão</a>
+            <a href="${pageContext.request.contextPath}/cidadao/perfil">O Meu Perfil / Dados da Conta</a>
+            <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">Lista de Veículos</a>
         </div>
     </div>
+
+<%--    <div class="dashboard-card dashboard-vehicles-card">--%>
+<%--        <h3>Meus Veículos Registados</h3>--%>
+
+<%--        <c:choose>--%>
+<%--            <c:when test="${not empty user.meusVeiculos}">--%>
+<%--                <ul class="vehicle-list">--%>
+<%--                    <c:forEach items="${user.meusVeiculos}" var="v">--%>
+<%--                        <li class="vehicle-item">--%>
+<%--                            <span class="vehicle-name">${v.marca} ${v.modelo}</span>--%>
+<%--                            <span class="vehicle-plate">${v.matricula}</span>--%>
+<%--                        </li>--%>
+<%--                    </c:forEach>--%>
+<%--                </ul>--%>
+<%--            </c:when>--%>
+<%--            <c:otherwise>--%>
+<%--                <p class="empty-state">Ainda não existem veículos registados.</p>--%>
+<%--            </c:otherwise>--%>
+<%--        </c:choose>--%>
+<%--    </div>--%>
 
 </div>
 

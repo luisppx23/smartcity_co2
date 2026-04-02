@@ -27,7 +27,7 @@ public class AuthController {
     MunicipioService municipioService;
 
     // Exibe a página de registo de novo user
-    // Exibe a página de registo de novo user
+
     @GetMapping(value = "/signup")
     public String signUpPage(Model model) {  // ← ADICIONAR Model COMO PARÂMETRO
         // Buscar todos os municípios

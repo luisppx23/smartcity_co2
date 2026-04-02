@@ -58,8 +58,8 @@
         </c:if>
 
         <div class="smart-form-actions history-actions">
-            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-secondary">
-                Voltar ao Dashboard
+            <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                Voltar à Home
             </a>
         </div>
     </div>

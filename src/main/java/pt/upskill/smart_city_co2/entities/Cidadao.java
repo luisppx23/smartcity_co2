@@ -11,6 +11,8 @@ public class Cidadao extends User {
     private String lastName;
     private String contacto;
     private String morada;
+    @Column(columnDefinition = "LONGTEXT") // Usamos LONGTEXT porque Base64 é uma String muito comprida
+    private String fotoUrl;
 
     @ManyToOne
     @JoinColumn(name = "municipio_id")
@@ -48,4 +50,11 @@ public class Cidadao extends User {
 
     public List<Ownership> getListaDeVeiculos() { return listaDeVeiculos; }
     public void setListaDeVeiculos(List<Ownership> listaDeVeiculos) { this.listaDeVeiculos = listaDeVeiculos; }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
 }

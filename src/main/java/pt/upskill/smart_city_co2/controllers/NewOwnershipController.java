@@ -122,6 +122,6 @@ public class NewOwnershipController {
             return "cidadao/registoVeiculo";
         }
 
-        return "redirect:/cidadao/dashboardCidadao";
+        return "redirect:/cidadao/homeCidadao";
     }
 }

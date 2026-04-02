@@ -42,6 +42,11 @@
                 <input type="hidden" name="tipo" value="cidadao">
 
                 <div class="mb-3">
+                    <label>Foto de Perfil (Opcional)</label>
+                    <input type="file" name="fotoFicheiro" class="form-control">
+                </div>
+
+                <div class="mb-3">
                     <label for="firstName" class="form-label">Primeiro Nome</label>
                     <input
                             type="text"

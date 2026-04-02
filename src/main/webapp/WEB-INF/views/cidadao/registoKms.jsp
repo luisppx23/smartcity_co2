@@ -57,7 +57,7 @@
                 <button type="submit" class="smart-btn smart-btn-primary">
                     Salvar Registo
                 </button>
-                <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-secondary">
+                <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
                     Voltar
                 </a>
             </div>

@@ -22,10 +22,10 @@ public class CidadaoService {
     public void init() {
         if (cidadaoRepository.count() > 0) return;
         {
-            cidadaoRepository.save(new Cidadao("João", "Castor", "joaocastor", LocalDateTime.now(), "joao@gmail.com", passwordEncoder.encode("joao123"), 123456789, "cidadao", true, "911888333","Rua Um"));
-            cidadaoRepository.save(new Cidadao("Maria", "Silva", "mariasilva", LocalDateTime.now(), "maria@gmail.com", passwordEncoder.encode("maria123"), 987654321, "cidadao", true, "911888332","Rua Dois"));
-            cidadaoRepository.save(new Cidadao("Carlos", "Ferreira", "carlosferreira", LocalDateTime.now(), "carlos@gmail.com", passwordEncoder.encode("carlos123"), 456789123, "cidadao", true, "911888331","Rua Três"));
-            cidadaoRepository.save(new Cidadao("Ana", "Costa", "anacosta", LocalDateTime.now(), "ana@gmail.com", passwordEncoder.encode("ana123"), 789123456, "cidadao", true, "911888330","Rua Quatro"));
+            cidadaoRepository.save(new Cidadao("João", "Castor", "joaocastor", LocalDateTime.now(), "joao@gmail.com", passwordEncoder.encode("joao123"), 123456789, "cidadao", true, "911888333", "Rua Um"));
+            cidadaoRepository.save(new Cidadao("Maria", "Silva", "mariasilva", LocalDateTime.now(), "maria@gmail.com", passwordEncoder.encode("maria123"), 987654321, "cidadao", true, "911888332", "Rua Dois"));
+            cidadaoRepository.save(new Cidadao("Carlos", "Ferreira", "carlosferreira", LocalDateTime.now(), "carlos@gmail.com", passwordEncoder.encode("carlos123"), 456789123, "cidadao", true, "911888331", "Rua Três"));
+            cidadaoRepository.save(new Cidadao("Ana", "Costa", "anacosta", LocalDateTime.now(), "ana@gmail.com", passwordEncoder.encode("ana123"), 789123456, "cidadao", true, "911888330", "Rua Quatro"));
         }
     }
 
@@ -35,5 +35,13 @@ public class CidadaoService {
 
     public Cidadao getUserC(Long id) {
         return cidadaoRepository.getReferenceById(id);
+    }
+
+    public void salvarAlteracoes(Cidadao cidadao) {
+        try {
+            cidadaoRepository.save(cidadao);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar os dados do cidadão: " + e.getMessage());
+        }
     }
 }

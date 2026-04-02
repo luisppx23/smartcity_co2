@@ -1,11 +1,13 @@
 package pt.upskill.smart_city_co2.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Ownership;
 import pt.upskill.smart_city_co2.entities.User;
@@ -13,6 +15,8 @@ import pt.upskill.smart_city_co2.models.SimularTaxaModel;
 import pt.upskill.smart_city_co2.services.CidadaoService;
 import pt.upskill.smart_city_co2.services.EmissaoCO2Service;
 import pt.upskill.smart_city_co2.services.TaxaService;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/cidadao")
@@ -36,10 +40,64 @@ public class CidadaoController {
     }
 
     // Direciona para pagina de dashboard do cidadão
-    @GetMapping("/dashboardCidadao")
-    public String dashboardCidadao(Model model) {
-        model.addAttribute("user", getAuthenticatedUser());
-        return "cidadao/dashboardCidadao";
+    @GetMapping("/perfil")
+    public String exibirPerfil(Model model) {
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+
+        // Vamos buscar o Cidadao completo para garantir que temos morada, contacto, etc.
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
+        return "cidadao/perfil";
+    }
+
+    @GetMapping("/perfil/editar")
+    public String exibirFormEditar(Model model) {
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
+        return "cidadao/editarPerfil";
+    }
+
+    @PostMapping("/perfil/salvar")
+    public String salvarPerfil(@RequestParam String email,
+                               @RequestParam String contacto,
+                               @RequestParam String morada,
+                               @RequestParam String firstName,
+                               @RequestParam String lastName,
+                               @RequestParam(value = "fotoFicheiro", required = false) MultipartFile foto) {
+
+        User userLogado = getAuthenticatedUser();
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+
+        // Atualiza os dados
+        cidadao.setEmail(email);
+        cidadao.setContacto(contacto);
+        cidadao.setMorada(morada);
+        cidadao.setFirstName(firstName);
+        cidadao.setLastName(lastName);
+
+        // Lógica da Foto em Base64
+        if (foto != null && !foto.isEmpty()) {
+            try {
+                String base64Image = java.util.Base64.getEncoder().encodeToString(foto.getBytes());
+                cidadao.setFotoUrl("data:" + foto.getContentType() + ";base64," + base64Image);
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        cidadaoService.salvarAlteracoes(cidadao);
+
+        // Atualiza a sessão para a Navbar mostrar o novo nome/foto
+        Authentication oldAuth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                cidadao, oldAuth.getCredentials(), oldAuth.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return "redirect:/cidadao/perfil?sucesso=true";
     }
 
     // Direciona para pagina de home do cidadão
@@ -123,4 +181,6 @@ public class CidadaoController {
 
         return "cidadao/listaVeiculos";
     }
+
+
 }
