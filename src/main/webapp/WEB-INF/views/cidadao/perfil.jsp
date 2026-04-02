@@ -7,8 +7,8 @@
 <head>
     <meta charset="UTF-8">
     <title>O Meu Perfil</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/form-pages.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
 </head>
 <body class="form-page-body">
 <div class="form-page-wrapper">

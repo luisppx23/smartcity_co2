@@ -1,17 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Cidadão</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
+
 </head>
 <body>
 
-<jsp:include page="../navbar.jsp"/>
+
 
 <div class="dashboard-theme-strip">
     <div class="dashboard-theme-content">
