@@ -1,0 +1,262 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.dashboard-body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f3f7f4;
+    min-height: 100vh;
+    color: #1f2937;
+}
+
+.dashboard-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* HERO */
+.dashboard-hero {
+    color: white;
+    border-radius: 20px;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.cidadao-hero {
+    background: linear-gradient(135deg, #14532d, #166534);
+    box-shadow: 0 10px 25px rgba(22, 101, 52, 0.28);
+}
+
+.dashboard-hero h1 {
+    margin: 0 0 8px;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.dashboard-hero p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.96;
+    font-weight: 500;
+}
+
+/* SECTIONS */
+.dashboard-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.dashboard-row {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+}
+
+.row-2 {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+.row-3 {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+}
+
+.row-vehicles {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+/* CARDS */
+.info-card,
+.fuel-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+    min-height: 165px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card:hover,
+.fuel-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.10);
+}
+
+.card-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 14px;
+}
+
+.card-value {
+    font-size: 34px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.1;
+    margin-bottom: 12px;
+}
+
+.card-subtext {
+    font-size: 15px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* CARDS DE DESTAQUE */
+.destaque-card {
+    border-width: 2px;
+}
+
+.destaque-verde {
+    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+    border-color: #86efac;
+}
+
+.destaque-verde .card-value {
+    color: #15803d;
+}
+
+.destaque-verde-escuro {
+    background: linear-gradient(180deg, #dcfce7, #bbf7d0);
+    border-color: #4ade80;
+}
+
+.destaque-verde-escuro .card-value {
+    color: #166534;
+}
+
+/* CARDS DOS VEÍCULOS */
+.fuel-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    min-height: 220px;
+}
+
+.fuel-cidadao {
+    background: linear-gradient(180deg, #f0fdf4, #dcfce7);
+    border-top: 6px solid #166534;
+}
+
+.fuel-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 4px;
+}
+
+.fuel-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fuel-info span {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fuel-info strong {
+    font-size: 21px;
+    font-weight: 800;
+    color: #166534;
+}
+
+/* EMPTY STATE */
+.empty-state-box {
+    margin-top: 18px;
+    padding: 18px 16px;
+    border-radius: 14px;
+    background: #ecfdf5;
+    border: 1px solid #86efac;
+    color: #166534;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* BOTÃO */
+.dashboard-actions {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+}
+
+.smart-btn {
+    min-height: 46px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.smart-btn-secondary {
+    background: #ecfdf5;
+    color: #14532d;
+    border: 1px solid #86efac;
+}
+
+.smart-btn-secondary:hover {
+    background: #d1fae5;
+    transform: translateY(-1px);
+}
+
+/* RESPONSIVO */
+@media (max-width: 950px) {
+    .row-2,
+    .row-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        padding: 14px;
+    }
+
+    .dashboard-hero {
+        padding: 22px 18px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 26px;
+    }
+
+    .dashboard-hero p {
+        font-size: 14px;
+    }
+
+    .card-value {
+        font-size: 28px;
+    }
+
+    .fuel-info strong {
+        font-size: 20px;
+    }
+
+    .fuel-title {
+        font-size: 20px;
+    }
+}

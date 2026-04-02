@@ -69,7 +69,7 @@
 
         <div class="smart-form-actions profile-actions">
             <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-primary">
-                Ir para o Dashboard
+                Ir para o Home
             </a>
         </div>
     </div>

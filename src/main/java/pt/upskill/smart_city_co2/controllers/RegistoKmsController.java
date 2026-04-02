@@ -108,6 +108,109 @@ public class RegistoKmsController {
         return "cidadao/registoKms";
     }
 
+    @GetMapping("/dashboardCidadao")
+    public String verDashboardCidadao(Authentication authentication, Model model) {
+        model.addAttribute("user", getAuthenticatedUser());
+
+        Cidadao cidadao = obterCidadaoAutenticado(authentication);
+        model.addAttribute("cidadao", cidadao);
+
+        if (cidadao == null) {
+            model.addAttribute("listaVeiculos", new ArrayList<>());
+            model.addAttribute("matriculaPorVeiculo", new LinkedHashMap<>());
+            model.addAttribute("totalKmsPorVeiculo", new LinkedHashMap<>());
+            model.addAttribute("totalCo2PorVeiculo", new LinkedHashMap<>());
+            model.addAttribute("mediaKmsMensalCidadao", 0.0);
+            model.addAttribute("mediaCo2MensalCidadao", 0.0);
+            model.addAttribute("kmsMesAtual", 0.0);
+            model.addAttribute("co2MesAtual", 0.0);
+            model.addAttribute("co2MesmoMesAnoPassado", 0.0);
+            return "cidadao/dashboardCidadao";
+        }
+
+        List<Ownership> ownerships = cidadao.getListaDeVeiculos();
+
+        List<Veiculo> listaVeiculos = new ArrayList<>();
+        Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
+        Map<Long, Double> totalKmsPorVeiculo = new LinkedHashMap<>();
+        Map<Long, Double> totalCo2PorVeiculo = new LinkedHashMap<>();
+
+        double somaTodosKms = 0.0;
+        double somaTodosCo2 = 0.0;
+        int totalRegistos = 0;
+
+        double kmsMesAtual = 0.0;
+        double co2MesAtual = 0.0;
+        double co2MesmoMesAnoPassado = 0.0;
+
+        java.time.LocalDate hoje = java.time.LocalDate.now();
+        int mesAtual = hoje.getMonthValue();
+        int anoAtual = hoje.getYear();
+        int anoPassado = anoAtual - 1;
+
+        if (ownerships != null) {
+            for (Ownership ownership : ownerships) {
+                Veiculo veiculo = ownership.getVeiculo();
+
+                if (veiculo == null) {
+                    continue;
+                }
+
+                Long veiculoId = veiculo.getId();
+
+                listaVeiculos.add(veiculo);
+                matriculaPorVeiculo.put(veiculoId, ownership.getMatricula());
+                totalKmsPorVeiculo.put(veiculoId, 0.0);
+                totalCo2PorVeiculo.put(veiculoId, 0.0);
+
+                List<RegistoKms> registos = ownership.getRegistosKms();
+                if (registos != null) {
+                    for (RegistoKms registo : registos) {
+                        double kms = registo.getKms_mes();
+                        double co2 = registo.getEmissaoEfetivaKg();
+
+                        somaTodosKms += kms;
+                        somaTodosCo2 += co2;
+                        totalRegistos++;
+
+                        totalKmsPorVeiculo.put(veiculoId, totalKmsPorVeiculo.get(veiculoId) + kms);
+                        totalCo2PorVeiculo.put(veiculoId, totalCo2PorVeiculo.get(veiculoId) + co2);
+
+                        if (registo.getMes_ano() != null) {
+                            java.time.LocalDate dataRegisto =
+                                    new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+
+                            if (dataRegisto.getMonthValue() == mesAtual && dataRegisto.getYear() == anoAtual) {
+                                kmsMesAtual += kms;
+                                co2MesAtual += co2;
+                            }
+
+                            if (dataRegisto.getMonthValue() == mesAtual && dataRegisto.getYear() == anoPassado) {
+                                co2MesmoMesAnoPassado += co2;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        double mediaKmsMensalCidadao = totalRegistos > 0 ? somaTodosKms / totalRegistos : 0.0;
+        double mediaCo2MensalCidadao = totalRegistos > 0 ? somaTodosCo2 / totalRegistos : 0.0;
+
+        model.addAttribute("listaVeiculos", listaVeiculos);
+        model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
+        model.addAttribute("totalKmsPorVeiculo", totalKmsPorVeiculo);
+        model.addAttribute("totalCo2PorVeiculo", totalCo2PorVeiculo);
+        model.addAttribute("mediaKmsMensalCidadao", mediaKmsMensalCidadao);
+        model.addAttribute("mediaCo2MensalCidadao", mediaCo2MensalCidadao);
+        model.addAttribute("kmsMesAtual", kmsMesAtual);
+        model.addAttribute("co2MesAtual", co2MesAtual);
+        model.addAttribute("co2MesmoMesAnoPassado", co2MesmoMesAnoPassado);
+
+        return "cidadao/dashboardCidadao";
+    }
+
+
     @GetMapping("/verRegistosKms")
     public String verHistorico(Authentication authentication, Model model) {
         model.addAttribute("user", getAuthenticatedUser());

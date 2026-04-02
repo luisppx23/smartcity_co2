@@ -6,7 +6,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Cidadão</title>
+    <title>Home Cidadão</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
 
@@ -66,6 +66,7 @@
         <div class="dashboard-links">
             <a href="${pageContext.request.contextPath}/cidadao/perfil">O Meu Perfil / Dados da Conta</a>
             <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">Lista de Veículos</a>
+            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao">Dashboard de Cidadão</a>
         </div>
     </div>
 
