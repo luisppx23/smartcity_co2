@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Cidadão</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
 </head>
 <body>
 

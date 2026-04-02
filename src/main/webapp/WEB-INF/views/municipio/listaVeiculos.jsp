@@ -51,7 +51,7 @@
         </div>
 
         <div class="history-actions">
-            <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio"
+            <a href="${pageContext.request.contextPath}/municipio/homeMunicipio"
                class="smart-btn smart-btn-secondary">
                 Voltar ao Dashboard
             </a>

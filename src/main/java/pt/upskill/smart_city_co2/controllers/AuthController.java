@@ -53,9 +53,9 @@ public class AuthController {
 
             // Redirect based on user type
             if ("cidadao".equals(user.getTipo())) {
-                return "cidadao/homeCidadao";
+                return "redirect:/cidadao/homeCidadao";
             } else if ("municipio".equals(user.getTipo())) {
-                return "municipio/homeMunicipio";
+                return "redirect:/municipio/homeMunicipio";
             }
         }
 

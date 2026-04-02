@@ -14,7 +14,7 @@
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">
-            <a href="/municipio/dashboardMunicipio">Voltar ao Dashboard</a>
+            <a href="/municipio/homeMunicipio">Voltar ao Dashboard</a>
         </div>
     </div>
 </div>

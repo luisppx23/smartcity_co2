@@ -1,78 +1,71 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<jsp:include page="../navbar.jsp"/>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Cidadão</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
 </head>
-<body class="form-page-body">
+<body>
 
-<div class="form-page-wrapper">
-    <div class="form-page-background-shape"></div>
+<jsp:include page="../navbar.jsp"/>
 
-    <div class="form-card profile-card">
-        <div class="form-card-header">
-            <div class="form-card-logo">
-                <span>👤</span>
-            </div>
-            <h1 class="form-card-title">Área do Cidadão</h1>
-            <h2 class="form-card-subtitle">
-                Bem-vindo, ${user.firstName} ${user.lastName}
-            </h2>
-            <p class="form-card-description">
-                Consulte aqui os dados associados à sua conta.
-            </p>
+<div class="dashboard-theme-strip">
+    <div class="dashboard-theme-content">
+        <h2>Transformando quilómetros em consciência.</h2>
+        <p>Mobilidade mais inteligente para uma cidade mais sustentável.</p>
+    </div>
+</div>
+
+<div class="dashboard-container">
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card dashboard-card-blue">
+            <h3>Registar Veículo</h3>
+            <p>Adicione um novo veículo à sua conta.</p>
+            <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="dashboard-button">
+                Registar Veículo
+            </a>
         </div>
 
-        <div class="profile-info-list">
-            <div class="profile-info-row">
-                <span class="profile-label">Username</span>
-                <span class="profile-value">${user.username}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Email</span>
-                <span class="profile-value">${user.email}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Contacto</span>
-                <span class="profile-value">${user.contacto}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Morada</span>
-                <span class="profile-value">${user.morada}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Data de Registo</span>
-                <span class="profile-value">${user.data_registo}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Ativo</span>
-                <span class="profile-value">${user.ativo}</span>
-            </div>
-
-            <div class="profile-info-row">
-                <span class="profile-label">Tipo</span>
-                <span class="profile-value">${user.tipo}</span>
-            </div>
-        </div>
-
-        <div class="smart-form-actions profile-actions">
-            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-primary">
-                Ir para o Dashboard
+        <div class="dashboard-card dashboard-card-beige">
+            <h3>Simular Taxa</h3>
+            <p>Consulte uma simulação da taxa associada.</p>
+            <a href="${pageContext.request.contextPath}/cidadao/simularTaxa" class="dashboard-button">
+                Simular Taxa
             </a>
         </div>
     </div>
+
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <h3>Registar KMs</h3>
+            <p>Introduza novos registos de quilometragem do seu veículo.</p>
+            <a href="${pageContext.request.contextPath}/cidadao/registoKms" class="dashboard-button">
+                Registar KMs
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Ver Registos de KMs</h3>
+            <p>Consulte o histórico dos seus registos de quilometragem.</p>
+            <a href="${pageContext.request.contextPath}/cidadao/verRegistosKms" class="dashboard-button">
+                Ver Registos de KMs
+            </a>
+        </div>
+    </div>
+
+    <div class="dashboard-card dashboard-links-card">
+        <h3>Acessos Rápidos</h3>
+        <div class="dashboard-links">
+            <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">Lista de Veículos Associados ao Cidadão</a>
+        </div>
+    </div>
+
 </div>
 
 </body>

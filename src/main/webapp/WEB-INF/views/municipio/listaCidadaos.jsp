@@ -46,7 +46,7 @@
         </div>
 
         <div class="smart-form-actions history-actions">
-            <a href="/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
+            <a href="/municipio/homeMunicipio" class="smart-btn smart-btn-secondary">
                 Voltar ao Dashboard
             </a>
         </div>

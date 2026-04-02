@@ -1,185 +1,243 @@
-body {
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.dashboard-body {
     margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6f8;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
-    color: #111111;
-    background-color: #fff6ee;
-    background-image: url("../../images/background-leaf.png");
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
-    padding-top: 20px;
-    padding-bottom: 40px;
 }
 
-.dashboard-theme-strip {
-    background: rgba(255, 255, 255, 0.78);
-    border-bottom: 1px solid rgba(255, 122, 24, 0.18);
-}
-
-.dashboard-theme-content {
-    max-width: 900px;
+.dashboard-wrapper {
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 18px 20px;
-    text-align: center;
-}
-
-.dashboard-theme-content h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #d65f00;
-}
-
-.dashboard-theme-content p {
-    margin: 8px 0 0;
-    color: #7a5a46;
-}
-
-.dashboard-container {
-    max-width: 1000px;
-    margin: 34px auto 50px;
-    padding: 0 20px;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
-}
-
-.dashboard-card {
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: 18px;
     padding: 24px;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(255, 122, 24, 0.14);
 }
 
-.dashboard-card-blue {
-    background: linear-gradient(135deg, rgba(255, 244, 235, 0.96), rgba(255, 255, 255, 0.92));
-}
-
-.dashboard-card-beige {
-    background: linear-gradient(135deg, rgba(255, 237, 214, 0.96), rgba(255, 255, 255, 0.92));
-}
-
-.dashboard-card h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.4rem;
-    color: #cc5a00;
-}
-
-.dashboard-card p {
-    color: #6b5a4d;
-    line-height: 1.45;
-}
-
-.dashboard-button {
-    display: inline-block;
-    margin-top: 10px;
-    background: linear-gradient(to right, #ff7a18, #ff9f43);
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-weight: 700;
-    transition: all 0.2s ease;
-}
-
-.dashboard-button:hover {
-    color: #ffffff;
-    text-decoration: none;
-    background: linear-gradient(to right, #e56710, #f08d2f);
-}
-
-.dashboard-links-card,
-.dashboard-vehicles-card {
-    margin-bottom: 24px;
-}
-
-.dashboard-links {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.dashboard-links a {
-    color: #e06a11;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.dashboard-links a:hover {
-    text-decoration: underline;
-    color: #c95700;
-}
-
-.vehicle-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.vehicle-item {
+.dashboard-hero {
+    background: linear-gradient(135deg, #0ea5a0, #14b8a6);
+    color: white;
+    border-radius: 18px;
+    padding: 28px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    padding: 16px 18px;
-    background: rgba(255, 255, 255, 0.97);
-    border-radius: 14px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    border: 1px solid rgba(255, 159, 67, 0.12);
+    margin-bottom: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
 }
 
-.vehicle-name {
-    font-weight: 700;
-    color: #2f2f2f;
+.dashboard-hero h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    font-weight: 800;
 }
 
-.vehicle-plate {
-    color: #d96108;
-    font-weight: 700;
-}
-
-.empty-state {
+.dashboard-hero p {
     margin: 0;
-    color: #7a7a7a;
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+.dashboard-hero-icon {
+    font-size: 52px;
+    opacity: 0.85;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.info-card,
+.fuel-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    border: 1px solid #ececec;
+}
+
+.card-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: #3b4453;
+    margin-bottom: 14px;
+}
+
+.card-value {
+    font-size: 38px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.card-subtext {
+    font-size: 15px;
+    color: #667085;
+}
+
+.destaque-card {
+    border-width: 2px;
+}
+
+.destaque-verde {
+    background: #eafaf7;
+    border-color: #59d8c9;
+}
+
+.destaque-verde .card-value {
+    color: #0f9488;
+}
+
+.destaque-azul {
+    background: #eef5ff;
+    border-color: #93c5fd;
+}
+
+.destaque-azul .card-value {
+    color: #2563eb;
+}
+
+.destaque-roxo {
+    background: #f8efff;
+    border-color: #d8b4fe;
+}
+
+.destaque-roxo .card-value {
+    color: #9333ea;
+}
+
+.fuel-card {
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fuel-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #1f2937;
+}
+
+.fuel-line {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fuel-line span {
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.fuel-line strong {
+    font-size: 34px;
+    font-weight: 800;
+}
+
+.fuel-gasolina {
+    background: #fff6ed;
+    border-left: 6px solid #f97316;
+}
+
+.fuel-gasolina strong {
+    color: #f97316;
+}
+
+.fuel-diesel {
+    background: #eff6ff;
+    border-left: 6px solid #3b82f6;
+}
+
+.fuel-diesel strong {
+    color: #3b82f6;
+}
+
+.fuel-hibrido {
+    background: #ecfdf5;
+    border-left: 6px solid #10b981;
+}
+
+.fuel-hibrido strong {
+    color: #10b981;
+}
+
+.fuel-gpl {
+    background: #faf5ff;
+    border-left: 6px solid #a855f7;
+}
+
+.fuel-gpl strong {
+    color: #a855f7;
+}
+
+.empty-state-box {
+    margin-top: 18px;
+    padding: 18px 16px;
+    border-radius: 12px;
+    background: #fff4db;
+    border: 1px solid #f3d59a;
+    color: #8a6420;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.dashboard-actions {
+    margin-top: 28px;
+}
+
+.smart-btn {
+    min-height: 44px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.smart-btn-secondary {
+    background: #fff4ea;
+    color: #8a4b1f;
+    border: 1px solid #f0d3bb;
+}
+
+.smart-btn-secondary:hover {
+    background: #ffe9d6;
 }
 
 @media (max-width: 768px) {
-    body {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
+    .dashboard-wrapper {
+        padding: 14px;
     }
 
-    .dashboard-card {
-        margin-bottom: 12px;
-    }
-
-    .dashboard-grid {
-        margin-top: 10px;
-        margin-bottom: 20px;
-    }
-
-    .dashboard-container {
-        margin-top: 60px;
-        padding-bottom: 60px;
-    }
-
-    .dashboard-theme-content h2 {
-        font-size: 1.35rem;
-    }
-
-    .vehicle-item {
+    .dashboard-hero {
         flex-direction: column;
         align-items: flex-start;
+        gap: 14px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 24px;
+    }
+
+    .card-value {
+        font-size: 30px;
+    }
+
+    .fuel-line strong {
+        font-size: 28px;
     }
 }
