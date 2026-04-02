@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.Ownership;
@@ -31,6 +32,9 @@ public class MunicipioController {
         {return (User) authentication.getPrincipal(); }
         return null;
     }
+
+    @GetMapping("/dashboardMunicipio")
+    @Transactional(readOnly = true)
     public String dashboardMunicipio(Model model) {
         User user = getAuthenticatedUser();
         model.addAttribute("user", user);
@@ -52,6 +56,7 @@ public class MunicipioController {
 
         return "municipio/dashboardMunicipio";
     }
+
     @GetMapping("/homeMunicipio")
     public String homeMunicipio(Model model) {
         model.addAttribute("user", getAuthenticatedUser());
@@ -60,7 +65,8 @@ public class MunicipioController {
     @GetMapping("/redefinirTaxa")
     public String redefinirTaxa(Model model) {
         model.addAttribute("user", getAuthenticatedUser());
-        return "municipio/redefinirTaxa"; }
+        return "municipio/redefinirTaxa";
+    }
 
     @GetMapping("/relatoriosMunicipio")
     @Transactional(readOnly = true)
@@ -117,7 +123,12 @@ public class MunicipioController {
         return "municipio/listaVeiculos";
     }
     private void prepararDadosRelatorioMunicipio(Model model, Municipio municipio) {
-        List<Cidadao> listaCidadaos = cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
+        List<Cidadao> listaCidadaos =
+                cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
+
+        if (listaCidadaos == null) {
+            listaCidadaos = new ArrayList<>();
+        }
 
         List<RegistoKms> listaRegistos = new ArrayList<>();
         List<Veiculo> listaVeiculos = new ArrayList<>();
@@ -150,118 +161,111 @@ public class MunicipioController {
         double totalCo2Geral = 0.0;
         double somaEmissoesMensais = 0.0;
 
-        int numeroHabitantes = (listaCidadaos != null) ? listaCidadaos.size() : 0;
-        int quantidadeVeiculosTotais = 0;
+        int numeroHabitantes = listaCidadaos.size();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 
-        if (listaCidadaos != null) {
-            for (Cidadao cidadao : listaCidadaos) {
-                if (cidadao.getListaDeVeiculos() != null) {
-                    for (Ownership ownership : cidadao.getListaDeVeiculos()) {
-                        Veiculo veiculo = ownership.getVeiculo();
-                        if (veiculo == null) {
-                            continue;
-                        }
+        for (Cidadao cidadao : listaCidadaos) {
+            if (cidadao.getListaDeVeiculos() == null) {
+                continue;
+            }
 
-                        listaVeiculos.add(veiculo);
-                        idsVeiculosUnicos.add(veiculo.getId());
+            for (Ownership ownership : cidadao.getListaDeVeiculos()) {
+                if (ownership == null || ownership.getVeiculo() == null) {
+                    continue;
+                }
 
-                        matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
+                Veiculo veiculo = ownership.getVeiculo();
+                Long veiculoId = veiculo.getId();
 
-                        String combustivel = veiculo.getTipoDeCombustivel() != null
-                                ? veiculo.getTipoDeCombustivel().name()
-                                : "DESCONHECIDO";
+                listaVeiculos.add(veiculo);
+                idsVeiculosUnicos.add(veiculoId);
 
-                        combustivelPorVeiculo.put(veiculo.getId(), combustivel);
+                matriculaPorVeiculo.put(veiculoId, ownership.getMatricula());
 
-                        totalKmsPorVeiculo.putIfAbsent(veiculo.getId(), 0.0);
-                        totalCo2PorVeiculo.putIfAbsent(veiculo.getId(), 0.0);
+                String combustivel = getCombustivel(veiculo);
+                combustivelPorVeiculo.put(veiculoId, combustivel);
 
-                        totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
-                        totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
-                        numeroRegistosPorCombustivel.putIfAbsent(combustivel, 0);
+                totalKmsPorVeiculo.putIfAbsent(veiculoId, 0.0);
+                totalCo2PorVeiculo.putIfAbsent(veiculoId, 0.0);
 
-                        if (ownership.getRegistosKms() != null) {
-                            for (RegistoKms registo : ownership.getRegistosKms()) {
-                                if (registo == null) {
-                                    continue;
-                                }
+                totalKmsPorCombustivel.putIfAbsent(combustivel, 0.0);
+                totalCo2PorCombustivel.putIfAbsent(combustivel, 0.0);
+                numeroRegistosPorCombustivel.putIfAbsent(combustivel, 0);
 
-                                listaRegistos.add(registo);
+                if (ownership.getRegistosKms() == null) {
+                    continue;
+                }
 
-                                double kms = registo.getKms_mes();
-                                double co2 = registo.getEmissaoEfetivaKg();
-
-                                totalKmsGeral += kms;
-                                totalCo2Geral += co2;
-
-                                totalKmsPorVeiculo.put(
-                                        veiculo.getId(),
-                                        totalKmsPorVeiculo.getOrDefault(veiculo.getId(), 0.0) + kms
-                                );
-
-                                totalCo2PorVeiculo.put(
-                                        veiculo.getId(),
-                                        totalCo2PorVeiculo.getOrDefault(veiculo.getId(), 0.0) + co2
-                                );
-
-                                totalKmsPorCombustivel.put(
-                                        combustivel,
-                                        totalKmsPorCombustivel.getOrDefault(combustivel, 0.0) + kms
-                                );
-
-                                totalCo2PorCombustivel.put(
-                                        combustivel,
-                                        totalCo2PorCombustivel.getOrDefault(combustivel, 0.0) + co2
-                                );
-
-                                numeroRegistosPorCombustivel.put(
-                                        combustivel,
-                                        numeroRegistosPorCombustivel.getOrDefault(combustivel, 0) + 1
-                                );
-
-                                String mesAno = sdf.format(registo.getMes_ano());
-
-                                totalKmsPorMes.put(
-                                        mesAno,
-                                        totalKmsPorMes.getOrDefault(mesAno, 0.0) + kms
-                                );
-
-                                totalCo2PorMes.put(
-                                        mesAno,
-                                        totalCo2PorMes.getOrDefault(mesAno, 0.0) + co2
-                                );
-                            }
-                        }
+                for (RegistoKms registo : ownership.getRegistosKms()) {
+                    if (registo == null) {
+                        continue;
                     }
+
+                    listaRegistos.add(registo);
+
+                    double kms = registo.getKms_mes();
+                    double co2 = registo.getEmissaoEfetivaKg();
+
+                    totalKmsGeral += kms;
+                    totalCo2Geral += co2;
+
+                    totalKmsPorVeiculo.put(
+                            veiculoId,
+                            totalKmsPorVeiculo.getOrDefault(veiculoId, 0.0) + kms
+                    );
+
+                    totalCo2PorVeiculo.put(
+                            veiculoId,
+                            totalCo2PorVeiculo.getOrDefault(veiculoId, 0.0) + co2
+                    );
+
+                    totalKmsPorCombustivel.put(
+                            combustivel,
+                            totalKmsPorCombustivel.getOrDefault(combustivel, 0.0) + kms
+                    );
+
+                    totalCo2PorCombustivel.put(
+                            combustivel,
+                            totalCo2PorCombustivel.getOrDefault(combustivel, 0.0) + co2
+                    );
+
+                    numeroRegistosPorCombustivel.put(
+                            combustivel,
+                            numeroRegistosPorCombustivel.getOrDefault(combustivel, 0) + 1
+                    );
+
+                    String mesAno = sdf.format(registo.getMes_ano());
+
+                    totalKmsPorMes.put(
+                            mesAno,
+                            totalKmsPorMes.getOrDefault(mesAno, 0.0) + kms
+                    );
+
+                    totalCo2PorMes.put(
+                            mesAno,
+                            totalCo2PorMes.getOrDefault(mesAno, 0.0) + co2
+                    );
                 }
             }
         }
 
-        quantidadeVeiculosTotais = idsVeiculosUnicos.size();
+        int quantidadeVeiculosTotais = idsVeiculosUnicos.size();
 
-        for (String combustivel : totalKmsPorCombustivel.keySet()) {
-            double kmsCombustivel = totalKmsPorCombustivel.getOrDefault(combustivel, 0.0);
-            double co2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
+        calcularPercentagensPorCombustivel(
+                totalKmsPorCombustivel,
+                totalCo2PorCombustivel,
+                percentagemKmsPorCombustivel,
+                percentagemCo2PorCombustivel,
+                totalKmsGeral,
+                totalCo2Geral
+        );
 
-            double percentagemKms = totalKmsGeral > 0 ? (kmsCombustivel / totalKmsGeral) * 100 : 0.0;
-            double percentagemCo2 = totalCo2Geral > 0 ? (co2Combustivel / totalCo2Geral) * 100 : 0.0;
-
-            percentagemKmsPorCombustivel.put(combustivel, percentagemKms);
-            percentagemCo2PorCombustivel.put(combustivel, percentagemCo2);
-        }
-
-        for (String combustivel : totalCo2PorCombustivel.keySet()) {
-            double totalCo2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
-            int totalRegistosCombustivel = numeroRegistosPorCombustivel.getOrDefault(combustivel, 0);
-
-            double mediaCombustivel = totalRegistosCombustivel > 0
-                    ? totalCo2Combustivel / totalRegistosCombustivel
-                    : 0.0;
-
-            emissaoMediaPorCombustivel.put(combustivel, mediaCombustivel);
-        }
+        calcularMediaEmissaoPorCombustivel(
+                totalCo2PorCombustivel,
+                numeroRegistosPorCombustivel,
+                emissaoMediaPorCombustivel
+        );
 
         for (String mesAno : totalCo2PorMes.keySet()) {
             double co2Mes = totalCo2PorMes.get(mesAno);
@@ -277,71 +281,24 @@ public class MunicipioController {
             somaEmissoesMensais += co2Mes;
         }
 
-        double mediaGlobalEmissoesMensais = totalCo2PorMes.size() > 0
-                ? somaEmissoesMensais / totalCo2PorMes.size()
-                : 0.0;
+        double mediaGlobalEmissoesMensais = totalCo2PorMes.isEmpty()
+                ? 0.0
+                : somaEmissoesMensais / totalCo2PorMes.size();
 
-        List<String> mesesOrdenados = new ArrayList<>(totalCo2PorMes.keySet());
-        Collections.sort(mesesOrdenados, new Comparator<String>() {
-            @Override
-            public int compare(String m1, String m2) {
-                String[] p1 = m1.split("/");
-                String[] p2 = m2.split("/");
+        List<String> mesesOrdenados = ordenarMeses(totalCo2PorMes.keySet());
 
-                int mes1 = Integer.parseInt(p1[0]);
-                int ano1 = Integer.parseInt(p1[1]);
-                int mes2 = Integer.parseInt(p2[0]);
-                int ano2 = Integer.parseInt(p2[1]);
+        calcularVariacaoMesAnterior(
+                mesesOrdenados,
+                totalCo2PorMes,
+                variacaoMesAnterior,
+                corComparacaoMesAnterior
+        );
 
-                if (ano1 != ano2) {
-                    return Integer.compare(ano1, ano2);
-                }
-                return Integer.compare(mes1, mes2);
-            }
-        });
-
-        for (int i = 1; i < mesesOrdenados.size(); i++) {
-            String mesAtual = mesesOrdenados.get(i);
-            String mesAnterior = mesesOrdenados.get(i - 1);
-
-            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAtual, 0.0);
-            double emissaoAnterior = totalCo2PorMes.getOrDefault(mesAnterior, 0.0);
-
-            double variacao = emissaoAtual - emissaoAnterior;
-            variacaoMesAnterior.put(mesAtual, variacao);
-
-            if (variacao < 0) {
-                corComparacaoMesAnterior.put(mesAtual, "green");
-            } else if (variacao > 0) {
-                corComparacaoMesAnterior.put(mesAtual, "red");
-            } else {
-                corComparacaoMesAnterior.put(mesAtual, "gray");
-            }
-        }
-
-        for (String mesAno : totalCo2PorMes.keySet()) {
-            String[] partes = mesAno.split("/");
-            int mes = Integer.parseInt(partes[0]);
-            int ano = Integer.parseInt(partes[1]);
-
-            String mesAnoAnterior = String.format("%02d/%d", mes, ano - 1);
-
-            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAno, 0.0);
-            double emissaoAnoAnterior = totalCo2PorMes.getOrDefault(mesAnoAnterior, -1.0);
-
-            if (emissaoAnoAnterior >= 0) {
-                double variacao = emissaoAtual - emissaoAnoAnterior;
-                variacaoAnoAnteriorPorMes.put(mesAno, variacao);
-
-                if (variacao < 0) {
-                    corComparacaoAnoAnteriorPorMes.put(mesAno, "green");
-                } else if (variacao > 0) {
-                    corComparacaoAnoAnteriorPorMes.put(mesAno, "red");
-                } else {
-                    corComparacaoAnoAnteriorPorMes.put(mesAno, "gray");
-                }
-            }
-        }
+        calcularVariacaoAnoAnterior(
+                totalCo2PorMes,
+                variacaoAnoAnteriorPorMes,
+                corComparacaoAnoAnteriorPorMes
+        );
 
         for (String mes : mesesOrdenados) {
             evolucaoEmissoesMensais.put(mes, totalCo2PorMes.get(mes));
@@ -364,7 +321,6 @@ public class MunicipioController {
 
         double somaAnoAtual = 0.0;
         int countAnoAtual = 0;
-
         double somaAnoAnterior = 0.0;
         int countAnoAnterior = 0;
 
@@ -383,6 +339,8 @@ public class MunicipioController {
                 countAnoAnterior++;
             }
         }
+
+        Map<String, Integer> quantidadeVeiculosPorCombustivel = contarVeiculosPorCombustivel(listaCidadaos);
 
         double mediaAnoAtual = countAnoAtual > 0 ? somaAnoAtual / countAnoAtual : 0.0;
         double mediaAnoAnterior = countAnoAnterior > 0 ? somaAnoAnterior / countAnoAnterior : 0.0;
@@ -433,5 +391,177 @@ public class MunicipioController {
         model.addAttribute("anoAnterior", anoAnterior);
         model.addAttribute("mediaAnoAtual", mediaAnoAtual);
         model.addAttribute("anoAtual", anoAtual);
+
+        model.addAttribute("quantidadeVeiculosPorCombustivel", quantidadeVeiculosPorCombustivel);
+    }
+
+    private String getCombustivel(Veiculo veiculo) {
+        return veiculo.getTipoDeCombustivel() != null
+                ? veiculo.getTipoDeCombustivel().name()
+                : "DESCONHECIDO";
+    }
+
+    private void calcularPercentagensPorCombustivel(
+            Map<String, Double> totalKmsPorCombustivel,
+            Map<String, Double> totalCo2PorCombustivel,
+            Map<String, Double> percentagemKmsPorCombustivel,
+            Map<String, Double> percentagemCo2PorCombustivel,
+            double totalKmsGeral,
+            double totalCo2Geral
+    ) {
+        for (String combustivel : totalKmsPorCombustivel.keySet()) {
+            double kmsCombustivel = totalKmsPorCombustivel.getOrDefault(combustivel, 0.0);
+            double co2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
+
+            double percentagemKms = totalKmsGeral > 0 ? (kmsCombustivel / totalKmsGeral) * 100 : 0.0;
+            double percentagemCo2 = totalCo2Geral > 0 ? (co2Combustivel / totalCo2Geral) * 100 : 0.0;
+
+            percentagemKmsPorCombustivel.put(combustivel, percentagemKms);
+            percentagemCo2PorCombustivel.put(combustivel, percentagemCo2);
+        }
+    }
+
+    private Map<String, Integer> contarVeiculosPorCombustivel(List<Cidadao> listaCidadaos) {
+        Map<String, Integer> quantidadeVeiculosPorCombustivel = new LinkedHashMap<>();
+
+        for (TipoDeCombustivel tipo : TipoDeCombustivel.values()) {
+            quantidadeVeiculosPorCombustivel.put(tipo.name(), 0);
+        }
+
+        if (listaCidadaos == null) {
+            return quantidadeVeiculosPorCombustivel;
+        }
+
+        Set<Long> veiculosJaContados = new HashSet<>();
+
+        for (Cidadao cidadao : listaCidadaos) {
+            if (cidadao == null || cidadao.getListaDeVeiculos() == null) {
+                continue;
+            }
+
+            for (Ownership ownership : cidadao.getListaDeVeiculos()) {
+                if (ownership == null || ownership.getVeiculo() == null) {
+                    continue;
+                }
+
+                Veiculo veiculo = ownership.getVeiculo();
+                Long veiculoId = veiculo.getId();
+
+                if (veiculoId != null && veiculosJaContados.contains(veiculoId)) {
+                    continue;
+                }
+
+                if (veiculoId != null) {
+                    veiculosJaContados.add(veiculoId);
+                }
+
+                if (veiculo.getTipoDeCombustivel() != null) {
+                    String combustivel = veiculo.getTipoDeCombustivel().name();
+                    quantidadeVeiculosPorCombustivel.put(
+                            combustivel,
+                            quantidadeVeiculosPorCombustivel.getOrDefault(combustivel, 0) + 1
+                    );
+                }
+            }
+        }
+
+        return quantidadeVeiculosPorCombustivel;
+    }
+
+    private void calcularMediaEmissaoPorCombustivel(
+            Map<String, Double> totalCo2PorCombustivel,
+            Map<String, Integer> numeroRegistosPorCombustivel,
+            Map<String, Double> emissaoMediaPorCombustivel
+    ) {
+        for (String combustivel : totalCo2PorCombustivel.keySet()) {
+            double totalCo2Combustivel = totalCo2PorCombustivel.getOrDefault(combustivel, 0.0);
+            int totalRegistosCombustivel = numeroRegistosPorCombustivel.getOrDefault(combustivel, 0);
+
+            double mediaCombustivel = totalRegistosCombustivel > 0
+                    ? totalCo2Combustivel / totalRegistosCombustivel
+                    : 0.0;
+
+            emissaoMediaPorCombustivel.put(combustivel, mediaCombustivel);
+        }
+    }
+
+    private List<String> ordenarMeses(Set<String> meses) {
+        List<String> mesesOrdenados = new ArrayList<>(meses);
+
+        mesesOrdenados.sort(new Comparator<String>() {
+            @Override
+            public int compare(String m1, String m2) {
+                String[] p1 = m1.split("/");
+                String[] p2 = m2.split("/");
+
+                int mes1 = Integer.parseInt(p1[0]);
+                int ano1 = Integer.parseInt(p1[1]);
+                int mes2 = Integer.parseInt(p2[0]);
+                int ano2 = Integer.parseInt(p2[1]);
+
+                if (ano1 != ano2) {
+                    return Integer.compare(ano1, ano2);
+                }
+                return Integer.compare(mes1, mes2);
+            }
+        });
+
+        return mesesOrdenados;
+    }
+
+    private void calcularVariacaoMesAnterior(
+            List<String> mesesOrdenados,
+            Map<String, Double> totalCo2PorMes,
+            Map<String, Double> variacaoMesAnterior,
+            Map<String, String> corComparacaoMesAnterior
+    ) {
+        for (int i = 1; i < mesesOrdenados.size(); i++) {
+            String mesAtual = mesesOrdenados.get(i);
+            String mesAnterior = mesesOrdenados.get(i - 1);
+
+            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAtual, 0.0);
+            double emissaoAnterior = totalCo2PorMes.getOrDefault(mesAnterior, 0.0);
+
+            double variacao = emissaoAtual - emissaoAnterior;
+            variacaoMesAnterior.put(mesAtual, variacao);
+
+            if (variacao < 0) {
+                corComparacaoMesAnterior.put(mesAtual, "green");
+            } else if (variacao > 0) {
+                corComparacaoMesAnterior.put(mesAtual, "red");
+            } else {
+                corComparacaoMesAnterior.put(mesAtual, "gray");
+            }
+        }
+    }
+
+    private void calcularVariacaoAnoAnterior(
+            Map<String, Double> totalCo2PorMes,
+            Map<String, Double> variacaoAnoAnteriorPorMes,
+            Map<String, String> corComparacaoAnoAnteriorPorMes
+    ) {
+        for (String mesAno : totalCo2PorMes.keySet()) {
+            String[] partes = mesAno.split("/");
+            int mes = Integer.parseInt(partes[0]);
+            int ano = Integer.parseInt(partes[1]);
+
+            String mesAnoAnterior = String.format("%02d/%d", mes, ano - 1);
+
+            double emissaoAtual = totalCo2PorMes.getOrDefault(mesAno, 0.0);
+            double emissaoAnoAnterior = totalCo2PorMes.getOrDefault(mesAnoAnterior, -1.0);
+
+            if (emissaoAnoAnterior >= 0) {
+                double variacao = emissaoAtual - emissaoAnoAnterior;
+                variacaoAnoAnteriorPorMes.put(mesAno, variacao);
+
+                if (variacao < 0) {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "green");
+                } else if (variacao > 0) {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "red");
+                } else {
+                    corComparacaoAnoAnteriorPorMes.put(mesAno, "gray");
+                }
+            }
+        }
     }
 }
