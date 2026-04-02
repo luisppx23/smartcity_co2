@@ -20,7 +20,7 @@
     <section class="login-section">
         <div class="login-card">
             <div class="text-center mb-4">
-                <img src="/images/logo-smart-city.png" alt="Logótipo" class="login-logo">
+                <img src="/images/logo.jpeg" alt="Logótipo" class="login-logo">
                 <h1 class="portal-title">Portal Smart City</h1>
             </div>
 
