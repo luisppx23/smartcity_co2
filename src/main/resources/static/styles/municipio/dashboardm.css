@@ -4,13 +4,13 @@
     box-sizing: border-box;
 }
 
-.dashboard-body {
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f7f7f8;
-    min-height: 100vh;
-    color: #1f2937;
-}
+/*.dashboard-body {*/
+/*    margin: 0;*/
+/*    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+/*    background: #f7f7f8;*/
+/*    min-height: 100vh;*/
+/*    color: #1f2937;*/
+/*}*/
 
 .dashboard-wrapper {
     max-width: 1400px;
@@ -50,6 +50,15 @@
 .dashboard-hero-icon {
     display: none;
 }
+
+.mun-hero {
+    text-align: left;
+    padding: 48px 24px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+
 
 /* SECTIONS */
 .dashboard-sections {

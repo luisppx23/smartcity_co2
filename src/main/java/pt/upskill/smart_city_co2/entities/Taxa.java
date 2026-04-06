@@ -1,6 +1,8 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
+import pt.upskill.smart_city_co2.EscalaTaxaEmissao;
+
 import java.time.LocalDate;
 
 @Entity
@@ -12,6 +14,12 @@ public class Taxa {
 
     private double valor;
     private LocalDate mes_ano;
+
+    private double taxaPorKmAplicada;
+    private double emissaoGPorKmReferencia;
+
+    @Enumerated(EnumType.STRING)
+    private EscalaTaxaEmissao nivelEscala;
 
     @OneToOne
     @JoinColumn(name = "registo_kms_id")
@@ -32,6 +40,15 @@ public class Taxa {
 
     public LocalDate getMes_ano() { return mes_ano; }
     public void setMes_ano(LocalDate mes_ano) { this.mes_ano = mes_ano; }
+
+    public double getTaxaPorKmAplicada() { return taxaPorKmAplicada; }
+    public void setTaxaPorKmAplicada(double taxaPorKmAplicada) { this.taxaPorKmAplicada = taxaPorKmAplicada; }
+
+    public double getEmissaoGPorKmReferencia() { return emissaoGPorKmReferencia; }
+    public void setEmissaoGPorKmReferencia(double emissaoGPorKmReferencia) { this.emissaoGPorKmReferencia = emissaoGPorKmReferencia; }
+
+    public EscalaTaxaEmissao getNivelEscala() { return nivelEscala; }
+    public void setNivelEscala(EscalaTaxaEmissao nivelEscala) { this.nivelEscala = nivelEscala; }
 
     public RegistoKms getRegistoKms() { return registoKms; }
     public void setRegistoKms(RegistoKms registoKms) { this.registoKms = registoKms; }

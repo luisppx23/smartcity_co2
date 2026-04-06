@@ -1,0 +1,309 @@
+/* ═══════════════════════════════════════════════
+   SMART CITY CO₂ — base-municipio.css
+   Caminho: src/main/resources/static/styles/base-municipio.css
+   Norma Gráfica: Portal do Município
+   Conceito: "Lente de Governança"
+   Institucional · Minimalista · Tecnológico
+
+   Incluir PRIMEIRO em todos os JSP do município.
+   ════════════════════════════════════════════════ */
+
+/* ── TOKENS DE DESIGN ── */
+:root {
+
+    /* CORES PRINCIPAIS — Azul Oxford */
+    --mun-navy:         #001F3F;    /* Navbar, botões primários */
+    --mun-navy-mid:     #002D5A;    /* Navbar gradiente fim */
+    --mun-navy-hover:   #00183A;    /* Hover de botões */
+    --mun-blue-light:   #E8F0FB;    /* Fundo hover de links */
+    --mun-blue-accent:  #1A5276;    /* Accent secundário */
+
+    /* CORES DE APOIO */
+    --mun-sage:         #7D9E8A;    /* Verde sálvia — traços do fundo */
+    --mun-mineral:      #8C9BAA;    /* Cinza mineral */
+    --mun-off-white:    #F8F9FA;    /* Fundo da página */
+    --mun-white:        #FFFFFF;
+
+    /* TEXTO */
+    --mun-text-dark:    #1A2332;    /* Texto principal */
+    --mun-text-muted:   #6B7A8D;    /* Texto secundário */
+    --mun-text-light:   rgba(255, 255, 255, 0.92); /* Texto na navbar */
+
+    /* CARDS */
+    --mun-card-bg:      rgba(255, 255, 255, 0.88);
+    --mun-card-radius:  24px;
+    --mun-card-shadow:  0 8px 32px rgba(0, 31, 63, 0.08);
+    --mun-card-blur:    blur(10px);
+    --mun-card-border:  1px solid rgba(255, 255, 255, 0.60);
+
+    /* TIPOGRAFIA */
+    --mun-font:         'Outfit', sans-serif;
+
+    /* LAYOUT */
+    --mun-navbar-height: 72px;
+    --mun-max-width:     1080px;
+    --mun-page-padding:  0 24px;
+
+    /* BACKGROUND */
+    --mun-bg-image:     url('/images/Background_municipio.png');
+    --mun-bg-color:     #F0F3EE;    /* fallback */
+
+    /* SEMÂNTICAS */
+    --mun-success:      #1A7A4A;
+    --mun-danger:       #C0392B;
+    --mun-warning:      #D4A017;
+}
+
+/* ── RESET BASE ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── BODY ── */
+html, body {
+    min-height: 100vh;
+    font-family: var(--mun-font);
+    color: var(--mun-text-dark);
+}
+
+body {
+    background-color: var(--mun-bg-color);
+    background-image: var(--mun-bg-image);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+/* ── CONTEÚDO PRINCIPAL ── */
+.mun-page-content {
+    position: relative;
+    z-index: 1;
+    max-width: var(--mun-max-width);
+    margin: 0 auto;
+    padding: var(--mun-page-padding);
+    padding-top: 32px;
+    padding-bottom: 60px;
+}
+
+/* ── TIPOGRAFIA ── */
+a {
+    color: var(--mun-navy);
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+
+a:hover {
+    color: var(--mun-navy-mid);
+    text-decoration: underline;
+}
+
+/* ── BOTÃO PRIMÁRIO ── */
+.mun-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--mun-navy);
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 22px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--mun-font);
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.mun-btn-primary:hover {
+    background: var(--mun-navy-hover);
+    color: #ffffff;
+    text-decoration: none;
+    transform: scale(1.02);
+}
+
+/* ── BOTÃO SECUNDÁRIO ── */
+.mun-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0, 31, 63, 0.07);
+    color: var(--mun-navy);
+    text-decoration: none;
+    border: 1px solid rgba(0, 31, 63, 0.20);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--mun-font);
+    cursor: pointer;
+    transition: background 0.18s ease;
+}
+
+.mun-btn-secondary:hover {
+    background: rgba(0, 31, 63, 0.13);
+    color: var(--mun-navy);
+    text-decoration: none;
+}
+
+/* ── CARD BASE ── */
+.mun-card {
+    background: var(--mun-card-bg);
+    border-radius: var(--mun-card-radius);
+    padding: 28px 26px;
+    box-shadow: var(--mun-card-shadow);
+    backdrop-filter: var(--mun-card-blur);
+    -webkit-backdrop-filter: var(--mun-card-blur);
+    border: var(--mun-card-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mun-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(0, 31, 63, 0.11);
+}
+
+/* ── CARD TITLE ── */
+.mun-card-title {
+    font-family: var(--mun-font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--mun-navy);
+    margin-bottom: 6px;
+}
+
+.mun-card-description {
+    font-family: var(--mun-font);
+    font-size: 0.85rem;
+    color: var(--mun-text-muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+/* ── SECÇÃO COM MARGEM ── */
+.mun-section {
+    margin-bottom: 20px;
+}
+
+/* ── GRID 2 COLUNAS ── */
+.mun-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* ── GRID 3 COLUNAS ── */
+.mun-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+/* ── INPUT CLEAN ── */
+.mun-input-clean {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid rgba(0, 31, 63, 0.22);
+    border-radius: 0;
+    background: transparent;
+    padding: 10px 4px;
+    font-size: 0.95rem;
+    font-family: var(--mun-font);
+    color: var(--mun-text-dark);
+    outline: none;
+    transition: border-color 0.18s ease;
+}
+
+.mun-input-clean:focus {
+    border-bottom-color: var(--mun-navy);
+}
+
+/* ── TABELA ── */
+.mun-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    font-family: var(--mun-font);
+}
+
+.mun-table thead th {
+    text-align: left;
+    padding: 12px 16px;
+    background: rgba(0, 31, 63, 0.06);
+    color: var(--mun-navy);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(0, 31, 63, 0.12);
+}
+
+.mun-table tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: var(--mun-text-dark);
+}
+
+.mun-table tbody tr:hover {
+    background: rgba(0, 31, 63, 0.03);
+}
+
+.mun-table tfoot td {
+    padding: 12px 16px;
+    border-top: 2px solid rgba(0, 31, 63, 0.15);
+    background: rgba(0, 31, 63, 0.04);
+    color: var(--mun-navy);
+    font-weight: 700;
+}
+
+/* ── ALERTA ── */
+.mun-alert {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+    font-family: var(--mun-font);
+}
+
+.mun-alert-info {
+    background: rgba(0, 31, 63, 0.06);
+    border: 1px solid rgba(0, 31, 63, 0.18);
+    color: var(--mun-navy);
+}
+
+.mun-alert-success {
+    background: rgba(26, 122, 74, 0.08);
+    border: 1px solid rgba(26, 122, 74, 0.25);
+    color: var(--mun-success);
+}
+
+.mun-alert-danger {
+    background: rgba(192, 57, 43, 0.08);
+    border: 1px solid rgba(192, 57, 43, 0.25);
+    color: var(--mun-danger);
+}
+
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+    .mun-grid-2,
+    .mun-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .mun-page-content {
+        padding: 16px 16px 40px;
+    }
+}

@@ -1,73 +1,92 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/styles/reset.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/styles/estilos.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login – Smart City CO₂</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="/styles/auth-entrada.css" />
 </head>
-<body>
-<div class="page-overlay"></div>
+<body class="auth-page">
 
-<div class="page-content">
-    <div class="hero-text">
-        <h2>Transformando quilómetros<br>em consciência.</h2>
+<div class="auth-card">
+
+    <div class="auth-card-header">
+        <img src="/images/logo.jpeg" alt="Smart City CO₂" class="auth-logo" />
+        <h1 class="auth-card-title">Portal Smart City</h1>
     </div>
 
-    <section class="login-section">
-        <div class="login-card">
-            <div class="text-center mb-4">
-                <img src="/images/logo.jpeg" alt="Logótipo" class="login-logo">
-                <h1 class="portal-title">Portal Smart City</h1>
-            </div>
+    <div class="auth-divider"></div>
 
-            <form method="POST" action="/login">
-                <div class="mb-4">
-                    <label for="username" class="form-label">Username</label>
-                    <input
-                            type="text"
-                            class="form-control custom-input"
-                            id="username"
-                            name="username"
-                            placeholder="Introduza o seu username"
-                            required
-                    >
-                </div>
-
-                <div class="mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input
-                            type="password"
-                            class="form-control custom-input"
-                            id="password"
-                            name="password"
-                            placeholder="Introduza a sua password"
-                            required
-                    >
-                </div>
-
-                <div class="d-grid mb-4">
-                    <button type="submit" class="btn btn-primary custom-btn">
-                        ENTRAR NO FUTURO SUSTENTÁVEL
-                    </button>
-                </div>
-
-                <div class="text-center mb-2">
-                    <a href="/auth/recuperarPassword">Esqueceu-se da password?</a>
-                </div>
-
-                <div class="text-center">
-                    <span>Ainda não tem conta? <a href="/auth/signup">Registe-se aqui</a></span>
-                </div>
-            </form>
+    <%-- Alert erro: credenciais erradas (Spring Security) --%>
+    <c:if test="${not empty param.error}">
+        <div class="auth-alert auth-alert-error">
+            <i class="bi bi-exclamation-circle"></i> Credenciais inválidas. Tente novamente.
         </div>
-    </section>
+    </c:if>
+
+    <%-- Alert sucesso: vindo do signup via RedirectAttributes flash --%>
+    <c:if test="${registoSucesso == true}">
+        <div class="auth-alert auth-alert-success">
+            <i class="bi bi-check-circle"></i> Conta criada com sucesso
+            <c:if test="${not empty nomeUtilizador}">, <strong>${nomeUtilizador}</strong></c:if>!
+            Faça login para continuar.
+        </div>
+    </c:if>
+
+    <%-- Alert erro: vindo do signup via flash (passwords não coincidem, etc.) --%>
+    <c:if test="${not empty erro}">
+        <div class="auth-alert auth-alert-error">
+            <i class="bi bi-exclamation-circle"></i> ${erro}
+        </div>
+    </c:if>
+
+    <%-- Alert mensagem genérica (recuperação de password, etc.) --%>
+    <c:if test="${not empty message}">
+        <div class="auth-alert auth-alert-success">
+            <i class="bi bi-check-circle"></i> ${message}
+        </div>
+    </c:if>
+
+    <form method="POST" action="/login">
+
+        <div class="auth-group">
+            <label class="auth-label" for="username">Username</label>
+            <input type="text" id="username" name="username"
+                   class="auth-input"
+                   placeholder="Introduza o seu username"
+                   required />
+        </div>
+
+        <div class="auth-group">
+            <label class="auth-label" for="password">Password</label>
+            <input type="password" id="password" name="password"
+                   class="auth-input"
+                   placeholder="Introduza a sua password"
+                   required />
+        </div>
+
+        <div class="auth-btn-icon-wrap">🌿</div>
+
+        <button type="submit" class="auth-btn-primary">
+            ENTRAR NO FUTURO SUSTENTÁVEL
+        </button>
+
+    </form>
+
+    <div class="auth-links">
+        <a href="/auth/recuperarPassword" class="auth-link">Esqueceu-se da password?</a>
+        <p class="auth-link-text">Ainda não tem conta? <a href="/auth/signup">Registe-se aqui</a></p>
+    </div>
+
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+
+<%--<p class="auth-page-footer">X Toneladas de CO₂ evitadas pelo seu município.</p>--%>
+
 </body>
 </html>

@@ -4,19 +4,6 @@
     box-sizing: border-box;
 }
 
-.form-page-body {
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    min-height: 100vh;
-    background-color: #fff6ee;
-    background-image: url("../../images/background-leaf.png");
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: 900px auto;
-    padding-top: 20px;
-    padding-bottom: 40px;
-}
-
 .form-page-wrapper {
     min-height: calc(100vh - 70px);
     display: flex;
@@ -34,9 +21,9 @@
     border-radius: 50%;
     background:
             radial-gradient(circle at center,
-            rgba(255, 122, 24, 0.12) 0%,
-            rgba(255, 159, 67, 0.06) 45%,
-            rgba(255, 159, 67, 0.00) 70%);
+            rgba(13, 59, 102, 0.12) 0%,
+            rgba(20, 93, 160, 0.06) 45%,
+            rgba(20, 93, 160, 0.00) 70%);
     right: -80px;
     bottom: -60px;
     z-index: 0;
@@ -49,12 +36,12 @@
     width: 100%;
     max-width: 520px;
     min-height: 620px;
-    background: rgba(255, 255, 255, 0.94);
-    border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.93);
+    border-radius: 22px;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.10);
     padding: 34px 34px 32px;
-    border: 1px solid rgba(255, 122, 24, 0.12);
-    backdrop-filter: blur(2px);
+    border: 1px solid rgba(0, 61, 121, 0.12);
+    backdrop-filter: blur(3px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -69,34 +56,34 @@
     width: 72px;
     height: 72px;
     margin: 0 auto 16px;
-    border-radius: 14px;
-    background: #fff1e3;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #eef4fb, #f8fbff);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
-    color: #d96108;
-    box-shadow: inset 0 0 0 1px rgba(255, 122, 24, 0.10);
+    color: #0d3b66;
+    box-shadow: inset 0 0 0 1px rgba(0, 61, 121, 0.10);
 }
 
 .form-card-title {
     margin: 0;
     font-size: 24px;
     font-weight: 700;
-    color: #2f241d;
+    color: #002f5f;
 }
 
 .form-card-subtitle {
     margin: 8px 0 8px;
     font-size: 20px;
     font-weight: 600;
-    color: #cc5a00;
+    color: #e36b00;
 }
 
 .form-card-description {
     margin: 0;
     font-size: 14px;
-    color: #7a5a46;
+    color: #5b6472;
     line-height: 1.5;
 }
 
@@ -113,30 +100,30 @@
     margin-bottom: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: #5c4637;
+    color: #344054;
 }
 
 .smart-input {
     width: 100%;
     height: 46px;
     border: none;
-    border-bottom: 1px solid #e3c7b1;
+    border-bottom: 1px solid #cfd9e6;
     background: transparent;
     padding: 10px 2px;
     font-size: 14px;
-    color: #2f241d;
+    color: #0f172a;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     border-radius: 0;
 }
 
 .smart-input::placeholder {
-    color: #b89d8a;
+    color: #94a3b8;
 }
 
 .smart-input:focus {
-    border-bottom: 1px solid #ff7a18;
-    box-shadow: 0 1px 0 #ff7a18;
+    border-bottom: 1px solid #145da0;
+    box-shadow: 0 1px 0 #145da0;
 }
 
 .smart-select {
@@ -145,8 +132,8 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     background-image:
-            linear-gradient(45deg, transparent 50%, #c76d2d 50%),
-            linear-gradient(135deg, #c76d2d 50%, transparent 50%);
+            linear-gradient(45deg, transparent 50%, #145da0 50%),
+            linear-gradient(135deg, #145da0 50%, transparent 50%);
     background-position:
             calc(100% - 16px) calc(50% - 3px),
             calc(100% - 10px) calc(50% - 3px);
@@ -159,7 +146,7 @@
     display: block;
     margin-top: 8px;
     font-size: 12px;
-    color: #8b6e5c;
+    color: #667085;
 }
 
 .smart-form-actions {
@@ -172,7 +159,7 @@
 .smart-btn {
     flex: 1;
     min-height: 44px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     font-size: 13px;
     font-weight: 700;
@@ -186,22 +173,24 @@
 }
 
 .smart-btn-primary {
-    background: linear-gradient(to right, #ff7a18, #ff9f43);
+    background: linear-gradient(135deg, #0d3b66, #145da0);
     color: #ffffff;
+    box-shadow: 0 8px 16px rgba(13, 59, 102, 0.18);
 }
 
 .smart-btn-primary:hover {
-    background: linear-gradient(to right, #e56710, #f08d2f);
+    background: linear-gradient(135deg, #0a3156, #114d85);
+    transform: translateY(-1px);
 }
 
 .smart-btn-secondary {
-    background: #fff4ea;
-    color: #8a4b1f;
-    border: 1px solid #f0d3bb;
+    background: #f4f8fb;
+    color: #0d3b66;
+    border: 1px solid #d6e2ee;
 }
 
 .smart-btn-secondary:hover {
-    background: #ffe9d6;
+    background: #eaf2f9;
 }
 
 .profile-card {
@@ -220,13 +209,13 @@
     display: flex;
     flex-direction: column;
     padding: 12px 0;
-    border-bottom: 1px solid #f0dccb;
+    border-bottom: 1px solid #e5edf5;
 }
 
 .profile-label {
     font-size: 12px;
     font-weight: 700;
-    color: #9a6a49;
+    color: #145da0;
     margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.4px;
@@ -234,7 +223,7 @@
 
 .profile-value {
     font-size: 15px;
-    color: #2f241d;
+    color: #0f172a;
     word-break: break-word;
 }
 
@@ -243,16 +232,16 @@
 }
 
 .history-card {
-    max-width: 700px;
+    max-width: 900px;
     min-height: 620px;
 }
 
 .history-table-wrapper {
     margin-top: 10px;
     overflow-x: auto;
-    border: 1px solid #f0dccb;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.80);
+    border: 1px solid #dce7f1;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.88);
 }
 
 .history-table {
@@ -264,17 +253,17 @@
 .history-table thead th {
     text-align: left;
     padding: 14px 16px;
-    background: #fff1e3;
-    color: #8a4b1f;
+    background: #eef4fb;
+    color: #0d3b66;
     font-size: 13px;
     font-weight: 700;
-    border-bottom: 1px solid #f0dccb;
+    border-bottom: 1px solid #dce7f1;
 }
 
 .history-table tbody td {
     padding: 14px 16px;
-    border-bottom: 1px solid #f7e8dc;
-    color: #2f241d;
+    border-bottom: 1px solid #edf2f7;
+    color: #0f172a;
 }
 
 .history-table tbody tr:last-child td {
@@ -282,16 +271,16 @@
 }
 
 .history-table tbody tr:hover {
-    background: rgba(255, 122, 24, 0.05);
+    background: rgba(20, 93, 160, 0.05);
 }
 
 .empty-state-box {
     margin-top: 18px;
     padding: 18px 16px;
     border-radius: 12px;
-    background: #fff4db;
-    border: 1px solid #f3d59a;
-    color: #8a6420;
+    background: #eef4fb;
+    border: 1px solid #d6e2ee;
+    color: #36526b;
     font-size: 14px;
     line-height: 1.5;
 }
@@ -319,15 +308,15 @@
         max-width: 100%;
         min-height: 640px;
         padding: 26px 20px 24px;
-        border-radius: 14px;
+        border-radius: 16px;
     }
 
     .form-card-title {
-        font-size: 38px;
+        font-size: 30px;
     }
 
     .form-card-subtitle {
-        font-size: 22px;
+        font-size: 20px;
     }
 
     .form-card-description {
@@ -376,7 +365,7 @@
     }
 
     .history-table {
-        min-width: 320px;
+        min-width: 420px;
         font-size: 13px;
     }
 

@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:include page="../navbar.jsp"/>
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -13,7 +12,7 @@
 </head>
 <body>
 
-
+<jsp:include page="../navbar.jsp"/>
 
 <div class="dashboard-theme-strip">
     <div class="dashboard-theme-content">
@@ -24,7 +23,7 @@
 
 <div class="dashboard-container">
 
-    <div class="dashboard-grid">
+    <div class="dashboard-card">
         <div class="dashboard-card">
             <h3>Registar Veículo</h3>
             <p>Adicione um novo veículo à sua conta.</p>
@@ -33,16 +32,16 @@
             </a>
         </div>
 
-        <div class="dashboard-card">
-            <h3>Simular Taxa</h3>
-            <p>Consulte uma simulação da taxa associada.</p>
-            <a href="${pageContext.request.contextPath}/cidadao/simularTaxa" class="dashboard-button">
-                Simular Taxa
-            </a>
-        </div>
+<%--        <div class="dashboard-card">--%>
+<%--            <h3>Simular Taxa</h3>--%>
+<%--            <p>Consulte uma simulação da taxa associada.</p>--%>
+<%--            <a href="${pageContext.request.contextPath}/cidadao/simularTaxa" class="dashboard-button">--%>
+<%--                Simular Taxa--%>
+<%--            </a>--%>
+<%--        </div>--%>
     </div>
 
-    <div class="dashboard-grid">
+    <div class="dashboard-card">
         <div class="dashboard-card">
             <h3>Registar KMs</h3>
             <p>Introduza novos registos de quilometragem do seu veículo.</p>
@@ -64,9 +63,9 @@
         <h3>Acessos Rápidos</h3>
 
         <div class="dashboard-links">
-            <a href="${pageContext.request.contextPath}/cidadao/perfil">O Meu Perfil / Dados da Conta</a>
+<%--            <a href="${pageContext.request.contextPath}/cidadao/perfil">O Meu Perfil / Dados da Conta</a>--%>
             <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">Lista de Veículos</a>
-            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao">Dashboard de Cidadão</a>
+<%--            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao">Dashboard de Cidadão</a>--%>
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:include page="../navbar.jsp"/>
+
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
 </head>
 <body class="form-page-body">
+<jsp:include page="../navbar.jsp"/>
 <div class="form-page-wrapper">
     <div class="form-card profile-card">
         <div class="form-card-header">

@@ -9,6 +9,7 @@
     <title>Editar Perfil</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
 </head>
 <body class="form-page-body">
 <div class="form-page-wrapper">

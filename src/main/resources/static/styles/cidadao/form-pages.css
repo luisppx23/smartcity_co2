@@ -20,19 +20,19 @@ body {
     padding-bottom: 40px;
 }
 
-/* imagem principal fixa */
-.form-page-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("../../images/background-leaf.png");
-    background-repeat: no-repeat;
-    background-position: center 40px;
-    background-size: 950px auto;
-    opacity: 0.22;
-    z-index: -2;
-    pointer-events: none;
-}
+/*!* imagem principal fixa *!*/
+/*.form-page-body::before {*/
+/*    content: "";*/
+/*    position: fixed;*/
+/*    inset: 0;*/
+/*    background-image: url("../../images/Background_cidadao.png");*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: center 40px;*/
+/*    background-size: 950px auto;*/
+/*    opacity: 0.22;*/
+/*    z-index: -2;*/
+/*    pointer-events: none;*/
+/*}*/
 
 /* camada decorativa suave por cima do fundo */
 .form-page-body::after {

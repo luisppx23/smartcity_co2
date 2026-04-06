@@ -8,6 +8,7 @@
     <title>Perfil Municipio</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/homem.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
 <body class="form-page-body">
 <jsp:include page="../navbarm.jsp"/>

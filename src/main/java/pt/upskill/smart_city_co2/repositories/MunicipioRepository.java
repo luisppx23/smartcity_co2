@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
     Optional<Municipio> findByUsername(String username);
+
+    Optional<Municipio> findByNome(String nome);
 }

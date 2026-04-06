@@ -420,4 +420,61 @@ public class MunicipioService {
             return attrs;
         }
     }
+
+    /**
+     * Actualiza o objectivo de CO₂ por habitante por mês do município autenticado.
+     * Só o próprio município pode alterar o seu objectivo.
+     *
+     * @param username   username do município autenticado
+     * @param novoValor  novo objectivo em kg CO₂/habitante/mês (deve ser > 0)
+     * @throws IllegalArgumentException se o valor for inválido ou o município não existir
+     */
+    @Transactional
+    public void atualizarObjetivoCo2(String username, double novoValor) {
+        if (novoValor <= 0) {
+            throw new IllegalArgumentException("O objectivo de CO₂ deve ser um valor positivo.");
+        }
+        if (novoValor > 1000) {
+            throw new IllegalArgumentException("O objectivo de CO₂ não pode exceder 1000 kg por habitante por mês.");
+        }
+
+        Municipio municipio = municipioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Município não encontrado."));
+
+        municipio.setObjetivo_co2_mes_hab(novoValor);
+        municipioRepository.save(municipio);
+    }
+
+    public void atualizarTaxas(
+            String username,
+            double taxaNivel1,
+            double taxaNivel2,
+            double taxaNivel3,
+            double taxaNivel4,
+            double taxaNivel5,
+            double taxaNivel6,
+            double taxaNivel7
+    ) {
+        Municipio municipio = municipioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Município não encontrado."));
+
+        if (taxaNivel1 < 0 || taxaNivel2 < 0 || taxaNivel3 < 0 ||
+                taxaNivel4 < 0 || taxaNivel5 < 0 || taxaNivel6 < 0 || taxaNivel7 < 0) {
+            throw new IllegalArgumentException("Nenhuma taxa pode ser negativa.");
+        }
+
+        if (taxaNivel7 != 0) {
+            throw new IllegalArgumentException("O nível 7 deve ter taxa 0, pois corresponde a 0 g/km.");
+        }
+
+        municipio.setTaxaNivel1(taxaNivel1);
+        municipio.setTaxaNivel2(taxaNivel2);
+        municipio.setTaxaNivel3(taxaNivel3);
+        municipio.setTaxaNivel4(taxaNivel4);
+        municipio.setTaxaNivel5(taxaNivel5);
+        municipio.setTaxaNivel6(taxaNivel6);
+        municipio.setTaxaNivel7(taxaNivel7);
+
+        municipioRepository.save(municipio);
+    }
 }

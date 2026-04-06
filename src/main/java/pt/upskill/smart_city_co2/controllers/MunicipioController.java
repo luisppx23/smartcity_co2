@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
@@ -15,6 +17,7 @@ import pt.upskill.smart_city_co2.entities.RegistoKms;
 import pt.upskill.smart_city_co2.entities.User;
 import pt.upskill.smart_city_co2.entities.Veiculo;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
+import pt.upskill.smart_city_co2.repositories.MunicipioRepository;
 import pt.upskill.smart_city_co2.services.MunicipioService;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,6 +26,10 @@ import java.util.*;
 public class MunicipioController {
     @Autowired
     private MunicipioService municipioService;
+
+    @Autowired
+    private MunicipioRepository municipioRepository;
+
     @Autowired
     private CidadaoRepository cidadaoRepository;
 
@@ -62,11 +69,42 @@ public class MunicipioController {
         model.addAttribute("user", getAuthenticatedUser());
         return "municipio/homeMunicipio"; }
 
+    @GetMapping("/redefinirMeta")
+    public String redefinirMeta(Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        if (user == null) {
+            model.addAttribute("erro", "Sessão expirada. Faça login novamente.");
+            return "municipio/redefinirMeta";
+        }
+
+        Municipio municipio = municipioService.getUserM(user.getUsername());
+        model.addAttribute("municipio", municipio);
+
+        if (municipio == null) {
+            model.addAttribute("erro", "Município não encontrado.");
+        }
+
+        return "municipio/redefinirMeta";
+    }
+
     @GetMapping("/redefinirTaxa")
     public String redefinirTaxa(Model model) {
-        model.addAttribute("user", getAuthenticatedUser());
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        if (user == null) {
+            model.addAttribute("erro", "Sessão expirada. Faça login novamente.");
+            return "municipio/redefinirTaxa";
+        }
+
+        Municipio municipio = municipioService.getUserM(user.getUsername());
+        model.addAttribute("municipio", municipio);
+
         return "municipio/redefinirTaxa";
     }
+
 
     @GetMapping("/relatoriosMunicipio")
     @Transactional(readOnly = true)
@@ -122,6 +160,77 @@ public class MunicipioController {
         model.addAttribute("listaCidadaos", listaCidadaos);
         return "municipio/listaVeiculos";
     }
+
+    @PostMapping("/redefinirMetaAction")
+    public String redefinirMetaAction(
+            @RequestParam("novoObjetivo") double novoObjetivo,
+            Model model) {
+        User user = getAuthenticatedUser();
+        if (user == null) {
+            model.addAttribute("erro", "Sessão expirada. Faça login novamente.");
+            return "municipio/redefinirMeta";
+        }
+        try {
+            municipioService.atualizarObjetivoCo2(user.getUsername(), novoObjetivo);
+            Municipio municipioAtualizado = municipioService.getUserM(user.getUsername());
+            model.addAttribute("user", user);
+            model.addAttribute("municipio", municipioAtualizado);
+            model.addAttribute("mensagem", "Objectivo CO₂ actualizado com sucesso para "
+                    + novoObjetivo + " kg/habitante/mês.");
+        } catch (IllegalArgumentException e) {
+            Municipio municipio = municipioService.getUserM(user.getUsername());
+            model.addAttribute("user", user);
+            model.addAttribute("municipio", municipio);
+            model.addAttribute("erro", e.getMessage());
+        }
+        return "municipio/redefinirMeta";
+    }
+
+    @PostMapping("/redefinirTaxaAction")
+    public String redefinirTaxaAction(
+            @RequestParam("taxaNivel1") double taxaNivel1,
+            @RequestParam("taxaNivel2") double taxaNivel2,
+            @RequestParam("taxaNivel3") double taxaNivel3,
+            @RequestParam("taxaNivel4") double taxaNivel4,
+            @RequestParam("taxaNivel5") double taxaNivel5,
+            @RequestParam("taxaNivel6") double taxaNivel6,
+            @RequestParam("taxaNivel7") double taxaNivel7,
+            Model model) {
+
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        if (user == null) {
+            model.addAttribute("erro", "Sessão expirada. Faça login novamente.");
+            return "municipio/redefinirTaxa";
+        }
+
+        try {
+            municipioService.atualizarTaxas(
+                    user.getUsername(),
+                    taxaNivel1,
+                    taxaNivel2,
+                    taxaNivel3,
+                    taxaNivel4,
+                    taxaNivel5,
+                    taxaNivel6,
+                    taxaNivel7
+            );
+
+            Municipio municipio = municipioService.getUserM(user.getUsername());
+            model.addAttribute("municipio", municipio);
+            model.addAttribute("mensagem", "Tabela de taxas atualizada com sucesso.");
+        } catch (IllegalArgumentException e) {
+            Municipio municipio = municipioService.getUserM(user.getUsername());
+            model.addAttribute("municipio", municipio);
+            model.addAttribute("erro", e.getMessage());
+        }
+
+        return "municipio/redefinirTaxa";
+    }
+
+
+
     private void prepararDadosRelatorioMunicipio(Model model, Municipio municipio) {
         List<Cidadao> listaCidadaos =
                 cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
@@ -563,5 +672,54 @@ public class MunicipioController {
                 }
             }
         }
+    }
+
+    // ════════════════════════════════════════════
+    // GAMIFICAÇÃO DO MUNICÍPIO
+    // Regra: conta meses em que o objectivo CO₂ foi atingido
+    //   0        → Initial  (0% da barra)
+    //   1–3      → Bronze   (25%)
+    //   4–6      → Silver   (50%)
+    //   7–11     → Gold     (75%)
+    //   12+      → Platinum (100%)
+    // ════════════════════════════════════════════
+    private void calcularNivelMunicipio(Model model, Map<String, Boolean> objetivoAtingidoPorMes) {
+        int mesesAtingidos = 0;
+        if (objetivoAtingidoPorMes != null) {
+            for (Boolean atingido : objetivoAtingidoPorMes.values()) {
+                if (Boolean.TRUE.equals(atingido)) mesesAtingidos++;
+            }
+        }
+
+        String nivelMunicipio;
+        int nivelPct;
+        int nivelIndex; // 0=Initial, 1=Bronze, 2=Silver, 3=Gold, 4=Platinum
+
+        if (mesesAtingidos >= 12) {
+            nivelMunicipio = "Platinum";
+            nivelPct = 100;
+            nivelIndex = 4;
+        } else if (mesesAtingidos >= 7) {
+            nivelMunicipio = "Gold";
+            nivelPct = 75;
+            nivelIndex = 3;
+        } else if (mesesAtingidos >= 4) {
+            nivelMunicipio = "Silver";
+            nivelPct = 50;
+            nivelIndex = 2;
+        } else if (mesesAtingidos >= 1) {
+            nivelMunicipio = "Bronze";
+            nivelPct = 25;
+            nivelIndex = 1;
+        } else {
+            nivelMunicipio = "Initial";
+            nivelPct = 0;
+            nivelIndex = 0;
+        }
+
+        model.addAttribute("nivelMunicipio", nivelMunicipio);
+        model.addAttribute("nivelMunicipioPct", nivelPct);
+        model.addAttribute("nivelMunicipioIndex", nivelIndex);
+        model.addAttribute("mesesAtingidos", mesesAtingidos);
     }
 }

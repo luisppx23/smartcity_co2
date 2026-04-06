@@ -4,19 +4,96 @@
     box-sizing: border-box;
 }
 
-.dashboard-body {
-    margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: #f3f7f4;
-    min-height: 100vh;
-    color: #1f2937;
-}
+/*.dashboard-body {*/
+/*    margin: 0;*/
+/*    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+/*    background: #f3f7f4;*/
+/*    min-height: 100vh;*/
+/*    color: #1f2937;*/
+/*}*/
 
 .dashboard-wrapper {
     max-width: 1400px;
     margin: 0 auto;
     padding: 24px;
 }
+
+/* ── GAMIFICAÇÃO ── */
+.dashboard-gamif {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.dashboard-gamif-bar-wrap { flex: 1; }
+
+.dashboard-gamif-track {
+    height: 6px;
+    background: rgba(0, 0, 0, 0.10);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.dashboard-gamif-fill {
+    height: 100%;
+    width: 82%;
+    background: linear-gradient(90deg, var(--green-mid), var(--gold));
+    border-radius: 999px;
+}
+
+.dashboard-gamif-milestones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.dashboard-gamif-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: var(--font-main);
+}
+
+.dashboard-gamif-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-gamif-step.done .dashboard-gamif-dot  { background: var(--green-mid); }
+.dashboard-gamif-step.active .dashboard-gamif-dot {
+    background: var(--gold);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.55);
+}
+
+.dashboard-gamif-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.dashboard-gamif-tree   { width: 38px; height: 38px; }
+
+.dashboard-gamif-label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: var(--font-main);
+}
+
+.dashboard-gamif-count {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-family: var(--font-main);
+}
+
 
 /* HERO */
 .dashboard-hero {

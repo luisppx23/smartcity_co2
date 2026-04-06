@@ -1,0 +1,245 @@
+/* ═══════════════════════════════════════════════════════
+   SMART CITY CO₂ — base-cidadao.css
+   Norma Gráfica: Portal do Cidadão — Nano Banana
+   Minimalismo extremo · Precisão orgânica · Luxo tecnológico
+   Incluir PRIMEIRO em todos os JSP do cidadão.
+   ════════════════════════════════════════════════════════ */
+
+/* ── TOKENS DE DESIGN ── */
+:root {
+    --green-deep:       #04523B;
+    --green-mid:        #1f5a3d;
+    --green-light:      #2b6a49;
+    --gold:             #D4AF37;
+    --gold-light:       #e8cc6a;
+    --off-white:        #F7F4EE;
+    --text-dark:        #111111;
+    --text-muted:       #5f5f5f;
+    --card-bg:          rgba(255, 255, 255, 0.55);
+    --card-radius:      24px;
+    --card-shadow:      0 8px 32px rgba(0, 0, 0, 0.06);
+    --blur:             blur(16px);
+    --card-border:      1px solid rgba(255, 255, 255, 0.50);
+    --font-main:        'Outfit', sans-serif;
+    --font-hero-weight: 300;
+    --navbar-height:    74px;
+    --max-width:        1000px;
+    --page-padding:     0 20px;
+    --bg-cidadao:       url('/images/Background_cidadao.png');
+    --bg-color-cidadao: #ddd8c8;
+    --success:          #1A7A4A;
+    --danger:           #C0392B;
+    --info:             #1A5276;
+}
+
+/* ── RESET BASE ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── BODY ── */
+html, body {
+    min-height: 100vh;
+    font-family: var(--font-main);
+    color: var(--text-dark);
+}
+
+body {
+    background-color: var(--bg-color-cidadao);
+    background-image: var(--bg-cidadao);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    animation: pageIn 0.18s ease both;
+}
+
+/* ── FADE-IN DE PÁGINA — sensação de fluidez ── */
+@keyframes pageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ── ANIMAÇÃO DA BARRA DE GAMIFICAÇÃO ── */
+@keyframes fillBar {
+    from { width: 0%; }
+}
+
+.dashboard-gamif-fill,
+.emissoes-progress-fill,
+.mun-gamif-fill {
+    animation: fillBar 1s ease-out both;
+}
+
+/* ── CONTEÚDO PRINCIPAL ── */
+.page-content {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--page-padding);
+    padding-top: 28px;
+    padding-bottom: 60px;
+}
+
+/* ── TIPOGRAFIA GLOBAL ── */
+a {
+    color: var(--green-mid);
+    text-decoration: none;
+    transition: color 0.18s ease;
+}
+a:hover {
+    color: var(--green-deep);
+    text-decoration: underline;
+}
+
+/* ── BOTÃO PRIMÁRIO ── */
+.btn-primary-smart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--green-deep);
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    padding: 11px 22px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--font-main);
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.15s ease;
+}
+.btn-primary-smart:hover {
+    background: #033d2c;
+    color: #ffffff;
+    text-decoration: none;
+    transform: scale(1.02);
+}
+
+/* ── BOTÃO SECUNDÁRIO ── */
+.btn-secondary-smart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(31, 90, 61, 0.08);
+    color: var(--green-mid);
+    text-decoration: none;
+    border: 1px solid rgba(31, 90, 61, 0.20);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--font-main);
+    cursor: pointer;
+    transition: background 0.18s ease;
+}
+.btn-secondary-smart:hover {
+    background: rgba(31, 90, 61, 0.14);
+    color: var(--green-deep);
+    text-decoration: none;
+}
+
+/* ── CARD BASE ── */
+.smart-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    padding: 28px 26px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    border: var(--card-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.smart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+}
+
+/* ── INPUT CLEAN ── */
+.smart-input-clean {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid rgba(31, 90, 61, 0.28);
+    border-radius: 0;
+    background: transparent;
+    padding: 10px 4px;
+    font-size: 0.95rem;
+    font-family: var(--font-main);
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.18s ease;
+}
+.smart-input-clean:focus { border-bottom-color: var(--green-mid); }
+.smart-input-clean::placeholder { color: #bbbbbb; }
+.smart-input-uppercase { text-transform: uppercase; }
+
+/* ── ALERTAS GLOBAIS ── */
+.alert-smart {
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-family: var(--font-main);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+.alert-smart-success {
+    background: rgba(26, 122, 74, 0.08);
+    border: 1px solid rgba(26, 122, 74, 0.25);
+    color: var(--success);
+}
+.alert-smart-danger {
+    background: rgba(192, 57, 43, 0.08);
+    border: 1px solid rgba(192, 57, 43, 0.25);
+    color: var(--danger);
+}
+.alert-smart-info {
+    background: rgba(26, 82, 118, 0.06);
+    border: 1px solid rgba(26, 82, 118, 0.18);
+    color: var(--info);
+}
+
+/* ── BANNER DE ONBOARDING ── */
+.onboarding-banner {
+    background: linear-gradient(135deg, rgba(4, 82, 59, 0.08), rgba(212, 175, 55, 0.08));
+    border: 1.5px solid rgba(212, 175, 55, 0.30);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.onboarding-banner-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.onboarding-banner-body { flex: 1; }
+.onboarding-banner-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--green-deep);
+    margin-bottom: 4px;
+    font-family: var(--font-main);
+}
+.onboarding-banner-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-main);
+    line-height: 1.5;
+}
+
+/* ── UTILITÁRIOS ── */
+.dashboard-section { margin-bottom: 20px; }
+.mun-mt-20 { margin-top: 20px; }
+.mun-mt-16 { margin-top: 16px; }

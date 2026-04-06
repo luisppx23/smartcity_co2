@@ -10,6 +10,13 @@ public class Municipio extends User {
 
     private String nome;
     private double objetivo_co2_mes_hab;
+    private double taxaNivel1 = 0.10; // >250 g/km
+    private double taxaNivel2 = 0.08; // 200-250
+    private double taxaNivel3 = 0.06; // 150-200
+    private double taxaNivel4 = 0.04; // 100-150
+    private double taxaNivel5 = 0.02; // 50-100
+    private double taxaNivel6 = 0.01; // 0-50
+    private double taxaNivel7 = 0.00; // 0 g/km
 
     @OneToMany(mappedBy = "municipio")
     private List<Cidadao> listaDeCidadaos;
@@ -58,5 +65,61 @@ public class Municipio extends User {
 
     public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {
         this.relatoriosMensais = relatoriosMensais;
+    }
+
+    public double getTaxaNivel1() {
+        return taxaNivel1;
+    }
+
+    public void setTaxaNivel1(double taxaNivel1) {
+        this.taxaNivel1 = taxaNivel1;
+    }
+
+    public double getTaxaNivel2() {
+        return taxaNivel2;
+    }
+
+    public void setTaxaNivel2(double taxaNivel2) {
+        this.taxaNivel2 = taxaNivel2;
+    }
+
+    public double getTaxaNivel3() {
+        return taxaNivel3;
+    }
+
+    public void setTaxaNivel3(double taxaNivel3) {
+        this.taxaNivel3 = taxaNivel3;
+    }
+
+    public double getTaxaNivel4() {
+        return taxaNivel4;
+    }
+
+    public void setTaxaNivel4(double taxaNivel4) {
+        this.taxaNivel4 = taxaNivel4;
+    }
+
+    public double getTaxaNivel5() {
+        return taxaNivel5;
+    }
+
+    public void setTaxaNivel5(double taxaNivel5) {
+        this.taxaNivel5 = taxaNivel5;
+    }
+
+    public double getTaxaNivel6() {
+        return taxaNivel6;
+    }
+
+    public void setTaxaNivel6(double taxaNivel6) {
+        this.taxaNivel6 = taxaNivel6;
+    }
+
+    public double getTaxaNivel7() {
+        return taxaNivel7;
+    }
+
+    public void setTaxaNivel7(double taxaNivel7) {
+        this.taxaNivel7 = taxaNivel7;
     }
 }

@@ -1,153 +1,217 @@
-.smart-logout {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.18);
-    color: #ffffff;
-    text-decoration: none;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-weight: 700;
-    transition: 0.2s ease;
-    min-width: 76px;
-}
-
-.smart-logout:hover {
-    background: rgba(0, 0, 0, 0.28);
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.smart-navbar {
+.smart-navbar-v2 {
     position: relative;
-    z-index: 10;
-    background: linear-gradient(90deg, #ff7a18, #ff9f43);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.10);
+    z-index: 1000;
+    background: linear-gradient(90deg, #001F3F 0%, #002D5A 100%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
 }
 
-.smart-navbar-inner {
+.smart-navbar-v2-inner {
     width: min(1100px, calc(100% - 48px));
     margin: 0 auto;
     padding: 12px 28px;
-    display: grid;
-    grid-template-columns: 72px 1fr auto;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
 }
 
-.smart-navbar-left {
+.smart-navbar-v2-left {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 14px;
+    flex-shrink: 0;
 }
 
-.smart-nav-link {
-    color: #ffffff;
-    text-decoration: none;
+.smart-navbar-logo-wrap {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #F7F4EE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.smart-navbar-logo-v2 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.smart-navbar-brand {
+    color: rgba(255, 255, 255, 0.92);
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.smart-navbar-v2-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.smart-nav-link-v2 {
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 600;
     padding: 8px 14px;
     border-radius: 999px;
-    transition: all 0.2s ease;
+    transition: background 0.18s ease, color 0.18s ease;
 }
 
-.smart-nav-link:hover {
+.smart-nav-link-v2:hover,
+.smart-nav-link-v2.active {
+    background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.18);
 }
 
-.smart-navbar-logo {
-    width: 64px;
-    height: 64px;
-    object-fit: contain;
+.smart-navbar-v2-right {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.smart-navbar-avatar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 255, 255, 0.28);
+    transition: background 0.18s ease;
+}
+
+.smart-navbar-avatar:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.smart-avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(255, 255, 255, 0.40);
+}
+
+.smart-avatar-name {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.smart-avatar-chevron {
+    color: rgba(255, 255, 255, 0.70);
+    font-size: 0.72rem;
+    transition: transform 0.2s ease;
+}
+
+.smart-navbar-avatar.open .smart-avatar-chevron {
+    transform: rotate(180deg);
+}
+
+.smart-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 250px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.smart-dropdown.open {
     display: block;
 }
 
-.smart-navbar-center {
+.smart-dd-header {
+    padding: 16px 20px 12px;
+    background: rgba(0, 31, 63, 0.04);
+    border-bottom: 1px solid rgba(0, 31, 63, 0.08);
+}
+
+.smart-dd-greeting {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #001F3F;
+}
+
+.smart-dd-email {
+    font-size: 0.78rem;
+    color: #6B7A8D;
+    margin-top: 2px;
+}
+
+.smart-dd-item {
+    display: block;
+    padding: 12px 20px;
+    color: #1A2332;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: background 0.15s ease;
+}
+
+.smart-dd-item:hover {
+    background: rgba(0, 31, 63, 0.04);
+    color: #001F3F;
+    text-decoration: none;
+}
+
+.smart-dd-divider {
+    height: 1px;
+    background: rgba(0, 31, 63, 0.08);
+    margin: 4px 0;
+}
+
+.smart-dd-footer {
+    padding: 12px 20px 16px;
+}
+
+.smart-dd-logout {
     display: flex;
+    align-items: center;
     justify-content: center;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: nowrap;
-}
-
-.smart-navbar-role {
+    width: 100%;
+    background: #001F3F;
     color: #ffffff;
-    font-size: 1.15rem;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 0;
+    font-size: 0.88rem;
     font-weight: 600;
-    opacity: 0.92;
-    margin-right: 14px;
+    cursor: pointer;
+    transition: background 0.18s ease;
 }
 
-.smart-navbar-right {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    padding-right: 6px;
-}
-
-.smart-navbar-user {
-    color: rgba(255, 255, 255, 0.95);
-    font-size: 0.92rem;
-    font-weight: 600;
-    text-align: right;
+.smart-dd-logout:hover {
+    background: #00183A;
 }
 
 @media (max-width: 768px) {
-    .smart-navbar-inner {
-        display: flex;
+    .smart-navbar-v2-inner {
         flex-direction: column;
         text-align: center;
-        padding: 12px 14px;
-        gap: 12px;
     }
 
-    .smart-navbar-left,
-    .smart-navbar-center,
-    .smart-navbar-right {
-        justify-content: center;
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .smart-navbar-logo {
-        width: 56px;
-        height: 56px;
-    }
-
-    .smart-navbar-center {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .smart-nav-links {
-        display: flex;
+    .smart-navbar-v2-center {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
     }
 
-    .smart-nav-link {
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 0.92rem;
-        font-weight: 700;
-        padding: 8px 12px;
-        border-radius: 999px;
-        transition: all 0.2s ease;
-    }
-
-    .smart-navbar-right {
-        flex-direction: column;
-        gap: 14px;
-    }
-
-    .smart-navbar-user {
-        text-align: center;
+    .smart-avatar-name {
+        display: none;
     }
 }

@@ -9,6 +9,7 @@
     <title>Dashboard Município</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
 <body class="dashboard-body">
 

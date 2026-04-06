@@ -9,6 +9,7 @@
     <title>Relatórios Município</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/form-pagesm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
 <body class="form-page-body">
 
