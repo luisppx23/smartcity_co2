@@ -14,7 +14,6 @@
 <body class="dashboard-body">
 
 <jsp:include page="../navbarm.jsp"/>
-
 <div class="dashboard-wrapper">
 
     <div class="dashboard-hero">
@@ -75,6 +74,7 @@
                     </div>
                     <div class="card-subtext">Total registado</div>
                 </div>
+
 
                 <!-- 3 - Média por Veículo -->
                 <div class="info-card">
