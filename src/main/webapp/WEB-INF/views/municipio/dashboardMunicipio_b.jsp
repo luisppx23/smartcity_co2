@@ -96,8 +96,8 @@
     </div>
 
     <div class="dashboard-actions">
-        <a href="${pageContext.request.contextPath}/municipio/homeMunicipio" class="smart-btn smart-btn-secondary">
-            Voltar ao Home
+        <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
+            Voltar ao Dashboard
         </a>
     </div>
 </div>
