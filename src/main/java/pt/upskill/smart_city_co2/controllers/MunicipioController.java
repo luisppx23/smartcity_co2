@@ -722,4 +722,20 @@ public class MunicipioController {
         model.addAttribute("nivelMunicipioIndex", nivelIndex);
         model.addAttribute("mesesAtingidos", mesesAtingidos);
     }
+
+    @GetMapping("/dashboardMunicipio_b")
+    public String dashboardGraficos(Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
+
+        if (user == null) {
+            model.addAttribute("erro", "Não foi possível identificar o município autenticado.");
+            return "municipio/dashboardMunicipioGraficos";
+        }
+
+        Municipio municipio = municipioService.getUserM(user.getUsername());
+        model.addAttribute("municipio", municipio);
+
+        return "municipio/dashboardMunicipio_b";
+    }
 }

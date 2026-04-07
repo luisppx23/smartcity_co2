@@ -42,7 +42,7 @@
                 <span class="municipio-action-button">Abrir</span>
             </a>
 
-            <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio" class="municipio-action-card">
+            <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio_b" class="municipio-action-card">
                 <div class="municipio-action-icon">📊</div>
                 <h3>Dashboard Município</h3>
                 <p>Consultar estatísticas e indicadores gerais.</p>

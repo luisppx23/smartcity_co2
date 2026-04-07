@@ -125,7 +125,7 @@ public class RegistoKmsController {
             model.addAttribute("kmsMesAtual", 0.0);
             model.addAttribute("co2MesAtual", 0.0);
             model.addAttribute("co2MesmoMesAnoPassado", 0.0);
-            return "cidadao/dashboardCidadao";
+            return "cidadao/dashboardCidadao_b";
         }
 
         List<Ownership> ownerships = cidadao.getListaDeVeiculos();

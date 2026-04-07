@@ -182,5 +182,16 @@ public class CidadaoController {
         return "cidadao/listaVeiculos";
     }
 
+    // Direciona para pagina de charts do cidadão (NOVO MÉTODO)
+    @GetMapping("/dashboardCidadao_b")
+    public String chartsCidadao(Model model) {
+        User user = getAuthenticatedUser();
+        model.addAttribute("user", user);
 
+        // Carrega o cidadão completo com a lista de veículos
+        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        model.addAttribute("cidadao", cidadao);
+
+        return "cidadao/dashboardCidadao_b";  // ← NOME DO FICHEIRO
+    }
 }

@@ -32,4 +32,6 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
 
     Optional<Cidadao> findByEmail(String email);
 
+    List<Cidadao> findByMunicipioId(Long municipioId);
+
 }
