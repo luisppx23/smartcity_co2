@@ -99,8 +99,8 @@
                 <button type="submit" class="mun-btn-primary">
                     <i class="bi bi-check-circle"></i> Guardar Alteração
                 </button>
-                <a href="<c:url value='/municipio/dashboardMunicipio'/>" class="mun-btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Cancelar
+                <a href="<c:url value='/municipio/dashboardMunicipio_b'/>" class="mun-btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Consultar Dashboard
                 </a>
             </div>
 
@@ -130,7 +130,7 @@
 <div class="container">
     <div class="card mt-4">
         <div class="mt-3 text-center">
-            <a href="/municipio/homeMunicipio">Voltar ao Dashboard</a>
+            <a href="/municipio/homeMunicipio">Voltar ao Home</a>
         </div>
     </div>
 </div>

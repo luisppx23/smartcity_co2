@@ -150,8 +150,8 @@
         </div>
 
         <div class="smart-form-actions history-actions">
-            <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
-                Voltar ao Home
+            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao" class="smart-btn smart-btn-secondary">
+                Voltar ao Dashboard
             </a>
         </div>
     </div>
