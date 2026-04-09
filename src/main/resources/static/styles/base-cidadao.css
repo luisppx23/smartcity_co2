@@ -146,7 +146,7 @@ a:hover {
 
 /* ── CARD BASE ── */
 .smart-card {
-    background: var(--card-bg);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: var(--card-radius);
     padding: 28px 26px;
     box-shadow: var(--card-shadow);

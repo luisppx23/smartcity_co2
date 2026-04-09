@@ -7,10 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pt.upskill.smart_city_co2.entities.Cidadao;
-import pt.upskill.smart_city_co2.entities.Ownership;
-import pt.upskill.smart_city_co2.entities.User;
-import pt.upskill.smart_city_co2.entities.Veiculo;
+import pt.upskill.smart_city_co2.entities.*;
 import pt.upskill.smart_city_co2.services.CidadaoService;
 import pt.upskill.smart_city_co2.dto.DTODashboardCidadaoService;
 import pt.upskill.smart_city_co2.dto.DTODashboardCidadaoService.DashboardDataDTO;
@@ -237,63 +234,140 @@ public class CidadaoController {
 
     @GetMapping("/chartsCidadao")
     public String chartsCidadao(Authentication authentication, Model model) {
-        // Verificar autenticação
         if (authentication == null || !(authentication.getPrincipal() instanceof Cidadao)) {
             return "redirect:/auth/login";
         }
 
         Cidadao cidadao = (Cidadao) authentication.getPrincipal();
+        Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
 
-        try {
-            // Buscar o cidadão completo do banco de dados
-            Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+        // Dados principais do dashboard
+        DashboardDataDTO dados = dashboardService.prepararDadosCharts(cidadaoCompleto);
 
-            // Preparar os dados do dashboard usando o service
-            DashboardDataDTO dados = dashboardService.prepararDadosCharts(cidadaoCompleto);
+        // CALCULAR DADOS DO MÊS MAIS RECENTE POR VEÍCULO
+        Map<Long, Double> kmsUltimoMes = new HashMap<>();
+        Map<Long, Double> co2UltimoMes = new HashMap<>();
+        Map<Long, Double> taxaUltimoMes = new HashMap<>();
 
-            // Adicionar dados básicos ao modelo
-            model.addAttribute("totalKmsGeral", dados.getTotalKmsGeral());
-            model.addAttribute("totalCo2Geral", dados.getTotalCo2Geral());
-            model.addAttribute("listaRegistos", dados.getListaRegistos());
-            model.addAttribute("combustiveisData", dados.getCombustiveisData());
-            model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
-            model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
+        // Encontrar o mês mais recente com registos
+        java.time.LocalDate dataMaisRecente = null;
 
-            //inicio
-            // Preparar dados para gráfico de veículos
-            List<Map<String, Object>> veiculosData = new ArrayList<>();
-            for (Veiculo veiculo : dados.getListaVeiculos()) {
-                Map<String, Object> veiculoMap = new HashMap<>();
-                veiculoMap.put("marca", veiculo.getMarca());
-                veiculoMap.put("modelo", veiculo.getModelo());
-                veiculoMap.put("emissoes", dados.getTotalCo2PorVeiculo().get(veiculo.getId()));
-                veiculosData.add(veiculoMap);
+        if (cidadaoCompleto.getListaDeVeiculos() != null) {
+            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
+                if (ownership.getRegistosKms() != null) {
+                    for (RegistoKms registo : ownership.getRegistosKms()) {
+                        if (registo.getMes_ano() != null) {
+                            java.time.LocalDate dataRegisto = new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+                            if (dataMaisRecente == null || dataRegisto.isAfter(dataMaisRecente)) {
+                                dataMaisRecente = dataRegisto;
+                            }
+                        }
+                    }
+                }
             }
-            model.addAttribute("veiculosData", veiculosData);
+        }
 
-            // Preparar dados para gráfico de evolução (agrupar por mês)
-            Map<String, Double> emissoesPorMesMap = new LinkedHashMap<>();
+        // Se encontrou alguma data, usar essa data
+        if (dataMaisRecente != null) {
+            int mesRecente = dataMaisRecente.getMonthValue();
+            int anoRecente = dataMaisRecente.getYear();
+
+            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
+                Veiculo veiculo = ownership.getVeiculo();
+                if (veiculo == null) continue;
+
+                double kmsMes = 0.0;
+                double co2Mes = 0.0;
+
+                if (ownership.getRegistosKms() != null) {
+                    for (RegistoKms registo : ownership.getRegistosKms()) {
+                        if (registo.getMes_ano() != null) {
+                            java.time.LocalDate dataRegisto = new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+                            if (dataRegisto.getMonthValue() == mesRecente && dataRegisto.getYear() == anoRecente) {
+                                kmsMes += registo.getKms_mes();
+                                co2Mes += registo.getEmissaoEfetivaKg();
+                            }
+                        }
+                    }
+                }
+
+                kmsUltimoMes.put(veiculo.getId(), kmsMes);
+                co2UltimoMes.put(veiculo.getId(), co2Mes);
+                taxaUltimoMes.put(veiculo.getId(), co2Mes * 0.25);
+            }
+        } else {
+            // Se não houver registos, inicializar com zeros
+            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
+                Veiculo veiculo = ownership.getVeiculo();
+                if (veiculo != null) {
+                    kmsUltimoMes.put(veiculo.getId(), 0.0);
+                    co2UltimoMes.put(veiculo.getId(), 0.0);
+                    taxaUltimoMes.put(veiculo.getId(), 0.0);
+                }
+            }
+        }
+
+        model.addAttribute("listaVeiculos", dados.getListaVeiculos());
+        model.addAttribute("matriculaPorVeiculo", dados.getMatriculaPorVeiculo());
+        model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
+        model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
+        model.addAttribute("totalKmsGeral", dados.getTotalKmsGeral());
+        model.addAttribute("totalCo2Geral", dados.getTotalCo2Geral());
+        model.addAttribute("listaRegistos", dados.getListaRegistos());
+        model.addAttribute("combustiveisData", dados.getCombustiveisData());
+        model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
+        model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
+
+        // Adicionar dados do último mês
+        model.addAttribute("kmsUltimoMes", kmsUltimoMes);
+        model.addAttribute("co2UltimoMes", co2UltimoMes);
+        model.addAttribute("taxaUltimoMes", taxaUltimoMes);
+
+        // Dados para gráficos
+        Map<String, Double> emissoesPorMes = new LinkedHashMap<>();
+        if (dados.getListaRegistos() != null) {
             for (Map<String, Object> registo : dados.getListaRegistos()) {
                 String mes = (String) registo.get("mes");
                 Double emissoes = (Double) registo.get("emissoes");
-                emissoesPorMesMap.merge(mes, emissoes, Double::sum);
+                if (mes != null && emissoes != null) {
+                    emissoesPorMes.merge(mes, emissoes, Double::sum);
+                }
             }
-
-            List<String> meses = new ArrayList<>(emissoesPorMesMap.keySet());
-            List<Double> emissoesPorMes = new ArrayList<>(emissoesPorMesMap.values()); // fim
-
-            model.addAttribute("meses", meses);
-            model.addAttribute("emissoesPorMes", emissoesPorMes);
-
-            // Adicionar o user para a navbar
-            model.addAttribute("user", cidadaoCompleto);
-
-            return "cidadao/chartsCidadao";
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("erro", "Erro ao carregar dados: " + e.getMessage());
-            return "cidadao/homeCidadao";
         }
+
+        Map<String, Double> kmsPorMes = new LinkedHashMap<>();
+        if (dados.getListaRegistos() != null) {
+            for (Map<String, Object> registo : dados.getListaRegistos()) {
+                String mes = (String) registo.get("mes");
+                Double kms = (Double) registo.get("kms");
+                if (mes != null && kms != null) {
+                    kmsPorMes.merge(mes, kms, Double::sum);
+                }
+            }
+        }
+
+        model.addAttribute("meses", new ArrayList<>(emissoesPorMes.keySet()));
+        model.addAttribute("emissoesPorMes", new ArrayList<>(emissoesPorMes.values()));
+        model.addAttribute("kmsPorMes", new ArrayList<>(kmsPorMes.values()));
+
+        List<Map<String, Object>> veiculosData = new ArrayList<>();
+        for (Veiculo veiculo : dados.getListaVeiculos()) {
+            Map<String, Object> veiculoMap = new HashMap<>();
+            veiculoMap.put("id", veiculo.getId());
+            veiculoMap.put("marca", veiculo.getMarca());
+            veiculoMap.put("modelo", veiculo.getModelo());
+            veiculoMap.put("emissoes", dados.getTotalCo2PorVeiculo().getOrDefault(veiculo.getId(), 0.0));
+            veiculoMap.put("kms", dados.getTotalKmsPorVeiculo().getOrDefault(veiculo.getId(), 0.0));
+            veiculosData.add(veiculoMap);
+        }
+        model.addAttribute("veiculosData", veiculosData);
+
+        // Cores para os veículos
+        List<String> coresVeiculos = Arrays.asList("#04523B", "#D4AF37", "#1f5a3d", "#8B6914", "#2b6a49", "#c49b28");
+        model.addAttribute("coresVeiculos", coresVeiculos);
+
+        model.addAttribute("user", cidadaoCompleto);
+
+        return "cidadao/chartsCidadao";
     }
 }
