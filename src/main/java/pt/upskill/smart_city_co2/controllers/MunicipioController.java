@@ -184,6 +184,9 @@ public class MunicipioController {
             return "municipio/dashboardMunicipio_b";
         }
 
+        // Adicionar os dados do relatório ao model
+        adicionarRelatorioAoModel(model, municipio);
+
         return "municipio/dashboardMunicipio_b";
     }
 

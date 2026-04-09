@@ -6,202 +6,112 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Município - Monitorização CO2</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Município – Smart City</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/styles/base-municipio.css">
+    <link rel="stylesheet" href="/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="/styles/municipio/dashboardm.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chart-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .dashboard-section-title {
-            margin: 30px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        .dashboard-section-title h2 {
-            color: #333;
-            font-size: 1.5rem;
-        }
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -15px;
-            margin-left: -15px;
-        }
-        .col-md-6, .col-md-12 {
-            position: relative;
-            width: 100%;
-            padding-right: 15px;
-            padding-left: 15px;
-        }
-        @media (min-width: 768px) {
-            .col-md-6 { flex: 0 0 50%; max-width: 50%; }
-            .col-md-12 { flex: 0 0 100%; max-width: 100%; }
-        }
-        .loading-spinner {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        .stats-summary {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .stat-box {
-            flex: 1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-        }
-        .stat-box h3 {
-            font-size: 2rem;
-            margin: 10px 0;
-        }
-        .empty-state-box {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-size: 16px;
-        }
-    </style>
 </head>
-<body class="dashboard-body">
+<body>
 
 <jsp:include page="../navbarm.jsp"/>
 
-<div class="dashboard-wrapper">
+<main class="mun-page-content">
 
-    <div class="dashboard-hero">
-        <div>
-            <h1>Dashboard de Emissões do Município</h1>
-            <p>Análise gráfica das emissões e frota de veículos</p>
-        </div>
-        <div class="dashboard-hero-icon">📊</div>
-    </div>
+    <c:choose>
+        <c:when test="${empty totalCo2Geral and empty totalKmsGeral}">
+            <div class="mun-alert mun-alert-info">
+                <i class="bi bi-info-circle"></i>
+                Ainda não existem dados de emissões registados para este município.
+            </div>
+        </c:when>
+        <c:otherwise>
 
-    <div id="dashboardContent">
-        <div class="loading-spinner">
-            Carregando dados...
-        </div>
-    </div>
-
-    <div class="dashboard-actions">
-        <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
-            Voltar ao Dashboard
-        </a>
-    </div>
-</div>
-
-<script>
-    function carregarDadosDashboard() {
-        console.log("Carregando dados do município...");
-
-        fetch('/api/charts/municipio/dados-dashboard')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Dados recebidos:", data);
-                renderizarDashboard(data);
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados:', error);
-                document.getElementById('dashboardContent').innerHTML = `
-                    <div class="empty-state-box">
-                        Erro ao carregar os dados: ${error.message}<br>
-                        Verifique se está autenticado.
-                    </div>
-                `;
-            });
-    }
-
-    function renderizarDashboard(data) {
-        const container = document.getElementById('dashboardContent');
-
-        container.innerHTML = `
-            <!-- Cards Resumo -->
-            <div class="stats-summary">
-                <div class="stat-box">
-                    <h5>Total Veículos</h5>
-                    <h3 id="totalVeiculos">-</h3>
+            <!-- MÉTRICAS DE TOPO -->
+            <div class="emissoes-metrics">
+                <div class="emissoes-metric-card">
+                    <span class="emissoes-metric-icon"><i class="bi bi-car-front"></i></span>
+                    <span class="emissoes-metric-label">Total Veículos</span>
+                    <span class="emissoes-metric-value">${quantidadeVeiculosTotais}</span>
                 </div>
-                <div class="stat-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <h5>Total CO₂</h5>
-                    <h3 id="totalCO2">- kg</h3>
+                <div class="emissoes-metric-card">
+                    <span class="emissoes-metric-icon emissoes-metric-icon--gold"><i class="bi bi-cloud-haze2"></i></span>
+                    <span class="emissoes-metric-label">CO₂ Total</span>
+                    <span class="emissoes-metric-value">
+                        <fmt:formatNumber value="${totalCo2Geral}" pattern="#,##0.0"/> kg
+                    </span>
                 </div>
-                <div class="stat-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                    <h5>Total KMs</h5>
-                    <h3 id="totalKMs">- km</h3>
+                <div class="emissoes-metric-card">
+                    <span class="emissoes-metric-icon emissoes-metric-icon--rank"><i class="bi bi-speedometer2"></i></span>
+                    <span class="emissoes-metric-label">Total KMs</span>
+                    <span class="emissoes-metric-value">
+                        <fmt:formatNumber value="${totalKmsGeral}" pattern="#,##0.0"/> km
+                    </span>
                 </div>
             </div>
 
-            <!-- Gráfico 1: Evolução Anual das Emissões -->
+            <!-- GRÁFICO: Evolução Mensal das Emissões -->
+            <div class="mun-card">
+                <h3 class="mun-card-title">📈 Evolução Mensal das Emissões CO₂</h3>
+                <p class="mun-card-description">Evolução das emissões totais ao longo dos meses.</p>
+                <div class="emissoes-chart-wrap-lg">
+                    <canvas id="evolucaoMensalChart"></canvas>
+                </div>
+            </div>
+
+            <!-- GRÁFICOS: Frota por Tipo de Veículo -->
+            <div class="mun-grid-2">
+                <div class="mun-card">
+                    <h3 class="mun-card-title">🚗 Quantidade de Veículos</h3>
+                    <p class="mun-card-description">Distribuição da frota por tipo de combustível.</p>
+                    <div class="emissoes-chart-wrap-md">
+                        <canvas id="frotaPorTipoChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="mun-card">
+                    <h3 class="mun-card-title">📊 Emissões CO₂ por Combustível</h3>
+                    <p class="mun-card-description">Distribuição das emissões totais por tipo.</p>
+                    <div class="emissoes-chart-wrap-md">
+                        <canvas id="co2PorTipoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRÁFICO: Quilómetros por Tipo -->
+            <div class="mun-card">
+                <h3 class="mun-card-title">🛣️ Quilómetros Totais por Combustível</h3>
+                <p class="mun-card-description">Total de quilómetros percorridos por tipo de veículo.</p>
+                <div class="emissoes-chart-wrap-lg">
+                    <canvas id="kmsPorTipoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- CARDS POR TIPO DE COMBUSTÍVEL -->
             <div class="dashboard-section-title">
-                <h2>📈 Evolução Anual das Emissões CO₂</h2>
-            </div>
-            <div class="chart-container">
-                <canvas id="evolucaoAnualChart" height="200"></canvas>
-            </div>
-
-            <!-- Gráficos de Pizza -->
-            <div class="dashboard-section-title">
-                <h2>🚗 Análise da Frota por Tipo de Veículo</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3>Quantidade de Veículos</h3>
-                        <canvas id="frotaPorTipoChart" height="200"></canvas>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="chart-container">
-                        <h3>Emissões Totais de CO₂</h3>
-                        <canvas id="co2PorTipoChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="chart-container">
-                        <h3>Quilómetros Totais por Tipo</h3>
-                        <canvas id="kmsPorTipoChart" height="200"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cards por Tipo de Combustível -->
-            <div class="dashboard-section-title">
-                <h2>📊 Emissões Médias por Tipo de Combustível</h2>
+                <h2>📊 Estatísticas por Tipo de Combustível</h2>
             </div>
             <div class="dashboard-row row-5">
                 <!-- Gasolina -->
                 <div class="fuel-card fuel-gasolina">
                     <div class="fuel-title">Gasolina</div>
                     <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong id="gasolinaQtd">0</strong>
+                        <span>Veículos</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['GASOLINA'] != null ? quantidadeVeiculosPorCombustivel['GASOLINA'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Total KMs</span>
-                        <strong id="gasolinaKms">0 km</strong>
+                        <strong><fmt:formatNumber value="${totalKmsPorCombustivel['GASOLINA']}" pattern="#,##0.0"/> km</strong>
                     </div>
                     <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong id="gasolinaCo2">0 kg</strong>
+                        <span>Total CO₂</span>
+                        <strong><fmt:formatNumber value="${totalCo2PorCombustivel['GASOLINA']}" pattern="#,##0.0"/> kg</strong>
                     </div>
                 </div>
 
@@ -209,16 +119,16 @@
                 <div class="fuel-card fuel-diesel">
                     <div class="fuel-title">Diesel</div>
                     <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong id="dieselQtd">0</strong>
+                        <span>Veículos</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['DIESEL'] != null ? quantidadeVeiculosPorCombustivel['DIESEL'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Total KMs</span>
-                        <strong id="dieselKms">0 km</strong>
+                        <strong><fmt:formatNumber value="${totalKmsPorCombustivel['DIESEL']}" pattern="#,##0.0"/> km</strong>
                     </div>
                     <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong id="dieselCo2">0 kg</strong>
+                        <span>Total CO₂</span>
+                        <strong><fmt:formatNumber value="${totalCo2PorCombustivel['DIESEL']}" pattern="#,##0.0"/> kg</strong>
                     </div>
                 </div>
 
@@ -226,16 +136,16 @@
                 <div class="fuel-card fuel-hibrido">
                     <div class="fuel-title">Híbrido</div>
                     <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong id="hibridoQtd">0</strong>
+                        <span>Veículos</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['HIBRIDO'] != null ? quantidadeVeiculosPorCombustivel['HIBRIDO'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Total KMs</span>
-                        <strong id="hibridoKms">0 km</strong>
+                        <strong><fmt:formatNumber value="${totalKmsPorCombustivel['HIBRIDO']}" pattern="#,##0.0"/> km</strong>
                     </div>
                     <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong id="hibridoCo2">0 kg</strong>
+                        <span>Total CO₂</span>
+                        <strong><fmt:formatNumber value="${totalCo2PorCombustivel['HIBRIDO']}" pattern="#,##0.0"/> kg</strong>
                     </div>
                 </div>
 
@@ -243,16 +153,16 @@
                 <div class="fuel-card fuel-gpl">
                     <div class="fuel-title">GPL</div>
                     <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong id="gplQtd">0</strong>
+                        <span>Veículos</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['GPL'] != null ? quantidadeVeiculosPorCombustivel['GPL'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Total KMs</span>
-                        <strong id="gplKms">0 km</strong>
+                        <strong><fmt:formatNumber value="${totalKmsPorCombustivel['GPL']}" pattern="#,##0.0"/> km</strong>
                     </div>
                     <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong id="gplCo2">0 kg</strong>
+                        <span>Total CO₂</span>
+                        <strong><fmt:formatNumber value="${totalCo2PorCombustivel['GPL']}" pattern="#,##0.0"/> kg</strong>
                     </div>
                 </div>
 
@@ -260,96 +170,81 @@
                 <div class="fuel-card fuel-eletrico">
                     <div class="fuel-title">Elétrico</div>
                     <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong id="eletricoQtd">0</strong>
+                        <span>Veículos</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['ELETRICO'] != null ? quantidadeVeiculosPorCombustivel['ELETRICO'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Total KMs</span>
-                        <strong id="eletricoKms">0 km</strong>
+                        <strong><fmt:formatNumber value="${totalKmsPorCombustivel['ELETRICO']}" pattern="#,##0.0"/> km</strong>
                     </div>
                     <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong id="eletricoCo2">0 kg</strong>
+                        <span>Total CO₂</span>
+                        <strong><fmt:formatNumber value="${totalCo2PorCombustivel['ELETRICO']}" pattern="#,##0.0"/> kg</strong>
                     </div>
                 </div>
             </div>
-        </div>
-        `;
 
-        // Atualizar cards resumo
-        calcularTotais(data);
+            <!-- BOTÃO VOLTAR -->
+            <div class="dashboard-actions">
+                <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar ao Dashboard
+                </a>
+            </div>
 
-        // Criar gráficos
-        setTimeout(() => {
-            // Gráfico de evolução anual
-            if (data.anos && data.anos.length > 0 && data.emissoesAnuais && data.emissoesAnuais.length > 0) {
-                criarGraficoEvolucaoAnual(data.anos, data.emissoesAnuais);
-            }
+        </c:otherwise>
+    </c:choose>
 
-            // Gráficos de pizza e barra
-            if (data.frotaPorTipo && data.frotaPorTipo.length > 0) {
-                criarGraficoPizza('frotaPorTipoChart', 'Quantidade de Veículos', data.frotaPorTipo, 'quantidade');
-            }
-            if (data.co2PorTipo && data.co2PorTipo.length > 0) {
-                criarGraficoPizza('co2PorTipoChart', 'Emissões CO₂ (kg)', data.co2PorTipo, 'co2');
-            }
-            if (data.kmsPorTipo && data.kmsPorTipo.length > 0) {
-                criarGraficoBarra('kmsPorTipoChart', 'Quilómetros por Tipo de Veículo', data.kmsPorTipo, 'kms');
-            }
+</main>
 
-            // Preencher cards
-            preencherCards(data);
-        }, 100);
-    }
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Cores padrão para gráficos
+    const CORES = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
 
-    function calcularTotais(data) {
-        let totalVeiculos = 0;
-        let totalCO2 = 0;
-        let totalKMs = 0;
+    // Dados para gráficos
+    var tipos = [];
+    var quantidades = [];
+    var emissoes = [];
+    var kms = [];
 
-        if (data.frotaPorTipo) {
-            for (const item of data.frotaPorTipo) {
-                totalVeiculos += item.quantidade;
-            }
-        }
-        if (data.co2PorTipo) {
-            for (const item of data.co2PorTipo) {
-                totalCO2 += item.co2;
-            }
-        }
-        if (data.kmsPorTipo) {
-            for (const item of data.kmsPorTipo) {
-                totalKMs += item.kms;
-            }
-        }
+    <c:forEach var="entry" items="${quantidadeVeiculosPorCombustivel}">
+    tipos.push('${entry.key}');
+    quantidades.push(${entry.value});
+    </c:forEach>
 
-        document.getElementById('totalVeiculos').innerText = totalVeiculos;
-        document.getElementById('totalCO2').innerText = totalCO2.toFixed(2) + ' kg';
-        document.getElementById('totalKMs').innerText = totalKMs.toFixed(1) + ' km';
-    }
+    <c:forEach var="entry" items="${totalCo2PorCombustivel}">
+    emissoes.push(${entry.value});
+    </c:forEach>
 
-    let evolucaoAnualChart = null;
-    function criarGraficoEvolucaoAnual(anos, emissoes) {
-        const canvas = document.getElementById('evolucaoAnualChart');
-        if (!canvas) return;
+    <c:forEach var="entry" items="${totalKmsPorCombustivel}">
+    kms.push(${entry.value});
+    </c:forEach>
 
-        const ctx = canvas.getContext('2d');
-        if (evolucaoAnualChart) evolucaoAnualChart.destroy();
+    // Dados para evolução mensal
+    var meses = [];
+    var emissoesMensais = [];
 
-        evolucaoAnualChart = new Chart(ctx, {
+    <c:forEach var="entry" items="${totalCo2PorMes}">
+    meses.push('${entry.key}');
+    emissoesMensais.push(${entry.value});
+    </c:forEach>
+
+    // Gráfico de evolução mensal (linhas)
+    if (document.getElementById('evolucaoMensalChart') && meses.length > 0) {
+        new Chart(document.getElementById('evolucaoMensalChart'), {
             type: 'line',
             data: {
-                labels: anos,
+                labels: meses,
                 datasets: [{
-                    label: 'Emissões Totais CO₂ (kg)',
-                    data: emissoes,
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    label: 'Emissões CO₂ (kg)',
+                    data: emissoesMensais,
+                    borderColor: '#001F3F',
+                    backgroundColor: 'rgba(0, 31, 63, 0.1)',
                     tension: 0.4,
                     fill: true,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    pointBackgroundColor: 'rgb(75, 192, 192)'
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#001F3F'
                 }]
             },
             options: {
@@ -366,35 +261,94 @@
                 },
                 scales: {
                     y: {
-                        title: { display: true, text: 'Emissões (kg CO₂)' },
-                        beginAtZero: true
+                        title: { display: true, text: 'Emissões (kg CO₂)', font: { family: 'Outfit', size: 12 } },
+                        beginAtZero: true,
+                        ticks: { callback: function(v) { return v.toFixed(0); } }
                     },
                     x: {
-                        title: { display: true, text: 'Ano' }
+                        title: { display: true, text: 'Mês/Ano', font: { family: 'Outfit', size: 12 } }
                     }
                 }
             }
         });
     }
 
-    let pizzaCharts = {};
-    function criarGraficoPizza(canvasId, label, data, valueKey) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        if (pizzaCharts[canvasId]) pizzaCharts[canvasId].destroy();
-
-        const cores = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
-
-        pizzaCharts[canvasId] = new Chart(ctx, {
+    // Gráfico de quantidade por tipo (pizza)
+    if (document.getElementById('frotaPorTipoChart') && tipos.length > 0) {
+        new Chart(document.getElementById('frotaPorTipoChart'), {
             type: 'pie',
             data: {
-                labels: data.map(item => item.tipo),
+                labels: tipos,
                 datasets: [{
-                    data: data.map(item => item[valueKey]),
-                    backgroundColor: cores.slice(0, data.length),
-                    borderWidth: 1
+                    data: quantidades,
+                    backgroundColor: CORES.slice(0, tipos.length),
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 11, family: 'Outfit' }, boxWidth: 10, padding: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
+                                return `${context.label}: ${context.raw} veículos (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico de emissões por tipo (pizza)
+    if (document.getElementById('co2PorTipoChart') && tipos.length > 0) {
+        new Chart(document.getElementById('co2PorTipoChart'), {
+            type: 'pie',
+            data: {
+                labels: tipos,
+                datasets: [{
+                    data: emissoes,
+                    backgroundColor: CORES.slice(0, tipos.length),
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 11, family: 'Outfit' }, boxWidth: 10, padding: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
+                                return `${context.label}: ${context.raw.toFixed(2)} kg (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico de KMs por tipo (barras)
+    if (document.getElementById('kmsPorTipoChart') && tipos.length > 0) {
+        new Chart(document.getElementById('kmsPorTipoChart'), {
+            type: 'bar',
+            data: {
+                labels: tipos,
+                datasets: [{
+                    label: 'Quilómetros Totais (km)',
+                    data: kms,
+                    backgroundColor: 'rgba(0, 31, 63, 0.7)',
+                    borderRadius: 8,
+                    barPercentage: 0.65
                 }]
             },
             options: {
@@ -404,95 +358,200 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
-                                const value = valueKey === 'quantidade' ? context.raw : context.raw.toFixed(2);
-                                const unit = valueKey === 'quantidade' ? '' : (valueKey === 'co2' ? ' kg' : ' km');
-                                return `${context.label}: ${value}${unit} (${percentage}%)`;
+                                return context.raw.toFixed(2) + ' km';
                             }
                         }
                     }
-                }
-            }
-        });
-    }
-
-    let barChart = null;
-    function criarGraficoBarra(canvasId, label, data, valueKey) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        if (barChart) barChart.destroy();
-
-        barChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map(item => item.tipo),
-                datasets: [{
-                    label: label,
-                    data: data.map(item => item[valueKey]),
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: { display: true, text: 'Quilómetros (km)' }
+                        title: { display: true, text: 'Quilómetros (km)', font: { family: 'Outfit', size: 12 } },
+                        ticks: { callback: function(v) { return v.toFixed(0); } }
+                    },
+                    x: {
+                        title: { display: true, text: 'Tipo de Combustível', font: { family: 'Outfit', size: 12 } }
                     }
                 }
             }
         });
     }
+</script>
 
-    function preencherCards(data) {
-        // Gasolina
-        if (data.gasolinaData) {
-            document.getElementById('gasolinaQtd').innerText = data.gasolinaData.quantidade || 0;
-            document.getElementById('gasolinaKms').innerText = (data.gasolinaData.kms || 0).toFixed(1) + ' km';
-            document.getElementById('gasolinaCo2').innerText = (data.gasolinaData.co2 || 0).toFixed(2) + ' kg';
-        }
+<style>
+    /* Estilos adicionais para consistência com o template do cidadão */
+    .emissoes-metrics {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
 
-        // Diesel
-        if (data.dieselData) {
-            document.getElementById('dieselQtd').innerText = data.dieselData.quantidade || 0;
-            document.getElementById('dieselKms').innerText = (data.dieselData.kms || 0).toFixed(1) + ' km';
-            document.getElementById('dieselCo2').innerText = (data.dieselData.co2 || 0).toFixed(2) + ' kg';
-        }
+    .emissoes-metric-card {
+        background: var(--mun-card-bg);
+        backdrop-filter: var(--mun-card-blur);
+        border: var(--mun-card-border);
+        border-radius: var(--mun-card-radius);
+        padding: 1.5rem;
+        flex: 1;
+        min-width: 180px;
+        text-align: center;
+        transition: transform 0.2s;
+    }
 
-        // Híbrido
-        if (data.hibridoData) {
-            document.getElementById('hibridoQtd').innerText = data.hibridoData.quantidade || 0;
-            document.getElementById('hibridoKms').innerText = (data.hibridoData.kms || 0).toFixed(1) + ' km';
-            document.getElementById('hibridoCo2').innerText = (data.hibridoData.co2 || 0).toFixed(2) + ' kg';
-        }
+    .emissoes-metric-card:hover {
+        transform: translateY(-3px);
+    }
 
-        // GPL
-        if (data.gplData) {
-            document.getElementById('gplQtd').innerText = data.gplData.quantidade || 0;
-            document.getElementById('gplKms').innerText = (data.gplData.kms || 0).toFixed(1) + ' km';
-            document.getElementById('gplCo2').innerText = (data.gplData.co2 || 0).toFixed(2) + ' kg';
-        }
+    .emissoes-metric-icon {
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
 
-        // Elétrico
-        if (data.eletricoData) {
-            document.getElementById('eletricoQtd').innerText = data.eletricoData.quantidade || 0;
-            document.getElementById('eletricoKms').innerText = (data.eletricoData.kms || 0).toFixed(1) + ' km';
-            document.getElementById('eletricoCo2').innerText = '0 kg';
+    .emissoes-metric-icon--gold {
+        color: #D4AF37;
+    }
+
+    .emissoes-metric-icon--rank {
+        color: #f59e0b;
+    }
+
+    .emissoes-metric-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--mun-text-muted);
+        margin-bottom: 0.5rem;
+    }
+
+    .emissoes-metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--mun-navy);
+    }
+
+    .emissoes-chart-wrap-lg {
+        position: relative;
+        width: 100%;
+        min-height: 320px;
+    }
+
+    .emissoes-chart-wrap-md {
+        position: relative;
+        width: 100%;
+        min-height: 280px;
+    }
+
+    .dashboard-section-title {
+        margin: 2rem 0 1rem;
+    }
+
+    .dashboard-section-title h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--mun-navy);
+    }
+
+    .dashboard-row {
+        display: grid;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .row-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .fuel-card {
+        background: var(--mun-card-bg);
+        backdrop-filter: var(--mun-card-blur);
+        border: var(--mun-card-border);
+        border-radius: var(--mun-card-radius);
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.2s;
+        border-top: 4px solid;
+    }
+
+    .fuel-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .fuel-gasolina { border-top-color: #FF6384; }
+    .fuel-diesel { border-top-color: #36A2EB; }
+    .fuel-hibrido { border-top-color: #FFCE56; }
+    .fuel-gpl { border-top-color: #4BC0C0; }
+    .fuel-eletrico { border-top-color: #9966FF; }
+
+    .fuel-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .fuel-info {
+        margin: 0.75rem 0;
+    }
+
+    .fuel-info span {
+        font-size: 0.75rem;
+        color: var(--mun-text-muted);
+        display: block;
+    }
+
+    .fuel-info strong {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--mun-navy);
+    }
+
+    .dashboard-actions {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .smart-btn-secondary {
+        background: rgba(0, 31, 63, 0.08);
+        border: 1px solid rgba(0, 31, 63, 0.2);
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        color: var(--mun-navy);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .smart-btn-secondary:hover {
+        background: rgba(0, 31, 63, 0.15);
+        text-decoration: none;
+        color: var(--mun-navy);
+    }
+
+    @media (max-width: 1200px) {
+        .row-5 {
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 
-    // Inicializar
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("Página carregada, a carregar dados do município...");
-        carregarDadosDashboard();
-    });
-</script>
+    @media (max-width: 768px) {
+        .row-5 {
+            grid-template-columns: 1fr;
+        }
+
+        .emissoes-metrics {
+            flex-direction: column;
+        }
+
+        .mun-grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 
 </body>
 </html>
