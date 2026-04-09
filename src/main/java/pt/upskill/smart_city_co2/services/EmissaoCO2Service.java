@@ -29,10 +29,11 @@ public class EmissaoCO2Service {
         double degradacao= 1 - (fatorDegradacao * anosVeiculo);
 
         if (degradacao <= 0.7) { //Ter só em conta uma degradação até 40%
-            return 0.7;
+            degradacao = 0.7;
         }
 
-        double emissaoBase = (consumo * fatorEmissaogPorLitro ); //g/km
+        double consumoLporKm = ownership.getVeiculo().getConsumo(); // já em L/km
+        double emissaoBase = consumoLporKm * fatorEmissaogPorLitro;
 
         return emissaoBase/ degradacao; //g/km
     }

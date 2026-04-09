@@ -66,20 +66,32 @@ public class RegistoKmsController {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
         model.addAttribute("cidadao", cidadao);
 
-        if (cidadao != null && cidadao.getListaDeVeiculos() != null) {
-            List<RegistoKms> todosRegistos = new ArrayList<>();
-            Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
+        List<RegistoKms> todosRegistos = new ArrayList<>();
+        Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
+        double totalKms = 0.0;
+        double totalCo2 = 0.0;
 
+        if (cidadao != null && cidadao.getListaDeVeiculos() != null) {
             for (Ownership ownership : cidadao.getListaDeVeiculos()) {
-                matriculaPorVeiculo.put(ownership.getVeiculo().getId(), ownership.getMatricula());
+                Veiculo veiculo = ownership.getVeiculo();
+                if (veiculo != null) {
+                    matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
+                }
                 if (ownership.getRegistosKms() != null) {
-                    todosRegistos.addAll(ownership.getRegistosKms());
+                    for (RegistoKms r : ownership.getRegistosKms()) {
+                        todosRegistos.add(r);
+                        totalKms += r.getKms_mes();
+                        totalCo2 += r.getEmissaoEfetivaKg();
+                    }
                 }
             }
-
-            model.addAttribute("listaRegistos", todosRegistos);
-            model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
         }
+
+        model.addAttribute("listaRegistos", todosRegistos);
+        model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
+        model.addAttribute("totalKmsGeral", totalKms);
+        model.addAttribute("totalCo2Geral", totalCo2);
+
 
         return "cidadao/historicoKms";
     }
