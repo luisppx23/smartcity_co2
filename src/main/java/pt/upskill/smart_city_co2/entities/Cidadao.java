@@ -11,6 +11,7 @@ public class Cidadao extends User {
     private String lastName;
     private String contacto;
     private String morada;
+
     @Column(columnDefinition = "LONGTEXT") // Usamos LONGTEXT porque Base64 é uma String muito comprida
     private String fotoUrl;
 

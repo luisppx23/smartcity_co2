@@ -129,7 +129,7 @@
                 <span>Simular Taxa</span>
             </a>
 
-            <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao_b"
+            <a href="${pageContext.request.contextPath}/cidadao/chartsCidadao"
                class="smart-nav-link smart-nav-link--primary <%= isHome ? "active" : "" %>">
     <span class="smart-nav-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24">
