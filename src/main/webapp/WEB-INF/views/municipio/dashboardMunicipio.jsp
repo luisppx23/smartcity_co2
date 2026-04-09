@@ -13,7 +13,7 @@
 </head>
 <body class="dashboard-body">
 
-<jsp:include page="../navbarm.jsp"/>
+<jsp:include page="navbarm.jsp"/>
 <div class="dashboard-wrapper">
 
     <div class="dashboard-hero">

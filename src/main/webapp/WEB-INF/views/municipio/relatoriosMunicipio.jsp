@@ -14,262 +14,204 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/form-pagesm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/homem.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
-<body class="form-page-body">
 
-<jsp:include page="../navbarm.jsp"/>
+<jsp:include page="navbarm.jsp"/>
+<%-- HERO --%>
+<section class="mun-hero">
+    <h1 class="mun-hero-title">Relatórios do Município
+        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
+    </h1>
+    <p class="mun-hero-subtitle">Histórico agregado de emissões, KMs e tendências.</p>
+</section>
 
-<div class="form-page-wrapper">
-    <div class="form-page-background-shape"></div>
+<main class="mun-page-content">
 
-    <div class="form-card history-card">
-        <div class="form-card-header">
-            <div class="form-card-logo">
-                <span>🏙️</span>
-            </div>
-
-            <h1 class="form-card-title">Portal Smart City</h1>
-            <h2 class="form-card-subtitle">Histórico do Município</h2>
-
-            <c:choose>
-                <c:when test="${not empty municipio}">
-                    <p class="form-card-description">
-                        Consulte os dados agregados do município ${municipio.nome}.
-                    </p>
-                </c:when>
-                <c:otherwise>
-                    <p class="form-card-description">
-                        Consulte os dados agregados do município.
-                    </p>
-                </c:otherwise>
-            </c:choose>
-        </div>
-
-        <c:if test="${not empty erro}">
-            <div class="empty-state-box">
-                    ${erro}
-            </div>
-        </c:if>
-
-        <c:if test="${empty erro and empty listaRegistos}">
-            <div class="empty-state-box">
-                Ainda não existem registos associados a este município.
-            </div>
-        </c:if>
-
-        <c:if test="${empty erro and not empty listaRegistos}">
-
-            <div class="history-table-wrapper">
-                <h3 style="margin-bottom: 15px;">Resumo geral</h3>
-
-                <table class="history-table">
-                    <tbody>
-                    <tr>
-                        <th>Total de habitantes</th>
-                        <td>${numeroHabitantes}</td>
-                    </tr>
-                    <tr>
-                        <th>Quantidade total de veículos</th>
-                        <td>${quantidadeVeiculosTotais}</td>
-                    </tr>
-                    <tr>
-                        <th>Total global de quilómetros</th>
-                        <td>
-                            <fmt:formatNumber value="${totalKmsGeral}" minFractionDigits="1" maxFractionDigits="1"/> km
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total global de CO2</th>
-                        <td>
-                            <fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Média global de emissões mensais</th>
-                        <td>
-                            <fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="history-table-wrapper">
-                <h3 style="margin-bottom: 15px;">Resumo mensal</h3>
-
-                <table class="history-table">
-                    <thead>
-                    <tr>
-                        <th>Mês</th>
-                        <th>Total de Quilómetros</th>
-                        <th>Total de CO2</th>
-                        <th>Número de Habitantes</th>
-                        <th>Média CO2 por Habitante</th>
-                        <th>Objetivo CO2 por Habitante</th>
-                        <th>Estado do Objetivo</th>
-                        <th>Comparação com mês anterior</th>
-                        <th>Comparação com ano anterior</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="mesAno" items="${totalKmsPorMes.keySet()}">
-                        <tr>
-                            <td>${mesAno}</td>
-                            <td>
-                                <fmt:formatNumber value="${totalKmsPorMes[mesAno]}" minFractionDigits="1" maxFractionDigits="1"/> km
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${totalCo2PorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                            <td>${numeroHabitantes}</td>
-                            <td>
-                                <fmt:formatNumber value="${mediaCo2PorHabitantePorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                            <td>
+<%-- ── RESUMO MENSAL ── --%>
+<div class="mun-card mun-section">
+    <h3 class="mun-card-title">Resumo Mensal</h3>
+    <div class="table-responsive">
+        <table class="mun-table">
+            <thead>
+            <tr>
+                <th>Mês</th>
+                <th>Total KMs</th>
+                <th>Total CO₂</th>
+                <th>Habitantes</th>
+                <th>Média CO₂/Hab.</th>
+                <th>Objectivo</th>
+                <th>Estado</th>
+                <th>vs Mês Anterior</th>
+                <th>vs Ano Anterior</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="mesAno" items="${totalKmsPorMes.keySet()}">
+                <tr>
+                    <td><strong>${mesAno}</strong></td>
+                    <td><fmt:formatNumber value="${totalKmsPorMes[mesAno]}" minFractionDigits="1" maxFractionDigits="1"/> km</td>
+                    <td><fmt:formatNumber value="${totalCo2PorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                    <td>${numeroHabitantes}</td>
+                    <td><fmt:formatNumber value="${mediaCo2PorHabitantePorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                    <td><fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${objetivoAtingidoPorMes[mesAno]}">
+                                            <span class="mun-badge mun-badge-success">
+                                                <i class="bi bi-check-circle"></i> Atingido
+                                            </span>
+                            </c:when>
+                            <c:otherwise>
+                                            <span class="mun-badge mun-badge-danger">
+                                                <i class="bi bi-x-circle"></i> Não atingido
+                                            </span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty variacaoMesAnterior[mesAno]}">
                                 <c:choose>
-                                    <c:when test="${objetivoAtingidoPorMes[mesAno]}">
-                                        Objetivo atingido
+                                    <c:when test="${corComparacaoMesAnterior[mesAno] == 'green'}">
+                                                    <span class="mun-variacao-negativa">
+                                                        <i class="bi bi-arrow-down"></i>
+                                                        <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                                    </span>
+                                    </c:when>
+                                    <c:when test="${corComparacaoMesAnterior[mesAno] == 'red'}">
+                                                    <span class="mun-variacao-positiva">
+                                                        <i class="bi bi-arrow-up"></i>
+                                                        <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                                    </span>
                                     </c:when>
                                     <c:otherwise>
-                                        Objetivo não atingido
+                                        <span class="mun-variacao-neutra">—</span>
                                     </c:otherwise>
                                 </c:choose>
-                            </td>
-
-                            <td>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="mun-variacao-neutra">—</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty variacaoAnoAnteriorPorMes[mesAno]}">
                                 <c:choose>
-                                    <c:when test="${not empty variacaoMesAnterior[mesAno]}">
-                                        <span style="color:${corComparacaoMesAnterior[mesAno]}; font-weight:bold;">
-                                            <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                                        </span>
+                                    <c:when test="${corComparacaoAnoAnteriorPorMes[mesAno] == 'green'}">
+                                                    <span class="mun-variacao-negativa">
+                                                        <i class="bi bi-arrow-down"></i>
+                                                        <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                                    </span>
+                                    </c:when>
+                                    <c:when test="${corComparacaoAnoAnteriorPorMes[mesAno] == 'red'}">
+                                                    <span class="mun-variacao-positiva">
+                                                        <i class="bi bi-arrow-up"></i>
+                                                        <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                                    </span>
                                     </c:when>
                                     <c:otherwise>
-                                        -
+                                        <span class="mun-variacao-neutra">—</span>
                                     </c:otherwise>
                                 </c:choose>
-                            </td>
-
-                            <td>
-                                <c:choose>
-                                    <c:when test="${not empty variacaoAnoAnteriorPorMes[mesAno]}">
-                                        <span style="color:${corComparacaoAnoAnteriorPorMes[mesAno]}; font-weight:bold;">
-                                            <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                                        </span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        -
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="history-table-wrapper">
-                <h3 style="margin-bottom: 15px;">Evolução das emissões mensais</h3>
-
-                <table class="history-table">
-                    <thead>
-                    <tr>
-                        <th>Mês</th>
-                        <th>Emissões Totais</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="mesAno" items="${evolucaoEmissoesMensais.keySet()}">
-                        <tr>
-                            <td>${mesAno}</td>
-                            <td>
-                                <fmt:formatNumber value="${evolucaoEmissoesMensais[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="history-table-wrapper">
-                <h3 style="margin-bottom: 15px;">Percentagem por tipo de combustível</h3>
-
-                <table class="history-table">
-                    <thead>
-                    <tr>
-                        <th>Combustível</th>
-                        <th>Total Kms</th>
-                        <th>% dos Kms</th>
-                        <th>Total CO2 (kg)</th>
-                        <th>% do CO2</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="combustivel" items="${totalKmsPorCombustivel.keySet()}">
-                        <tr>
-                            <td>${combustivel}</td>
-                            <td>
-                                <fmt:formatNumber value="${totalKmsPorCombustivel[combustivel]}" minFractionDigits="1" maxFractionDigits="1"/> km
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${percentagemKmsPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${totalCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                            <td>
-                                <fmt:formatNumber value="${percentagemCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="history-table-wrapper">
-                <h3 style="margin-bottom: 15px;">Emissões médias por tipo de combustível</h3>
-
-                <table class="history-table">
-                    <thead>
-                    <tr>
-                        <th>Combustível</th>
-                        <th>Emissão média</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="combustivel" items="${emissaoMediaPorCombustivel.keySet()}">
-                        <tr>
-                            <td>${combustivel}</td>
-                            <td>
-                                <fmt:formatNumber value="${emissaoMediaPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-
-        </c:if>
-
-        <div class="smart-form-actions history-actions">
-            <a href="${pageContext.request.contextPath}/municipio/dashboardMunicipio" class="smart-btn smart-btn-secondary">
-                Voltar ao Dashboard
-            </a>
-        </div>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="mun-variacao-neutra">—</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
     </div>
 </div>
 
+<%-- ── EVOLUÇÃO MENSAL ── --%>
+<div class="mun-card mun-section">
+    <h3 class="mun-card-title">Evolução das Emissões Mensais</h3>
+    <div class="table-responsive">
+        <table class="mun-table">
+            <thead>
+            <tr>
+                <th>Mês</th>
+                <th>Emissões Totais</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="mesAno" items="${evolucaoEmissoesMensais.keySet()}">
+                <tr>
+                    <td>${mesAno}</td>
+                    <td><fmt:formatNumber value="${evolucaoEmissoesMensais[mesAno]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%-- ── COMBUSTÍVEL ── --%>
+<div class="mun-card mun-section">
+    <h3 class="mun-card-title">Percentagem por Tipo de Combustível</h3>
+    <div class="table-responsive">
+        <table class="mun-table">
+            <thead>
+            <tr>
+                <th>Combustível</th>
+                <th>Total KMs</th>
+                <th>% KMs</th>
+                <th>Total CO₂</th>
+                <th>% CO₂</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="combustivel" items="${totalKmsPorCombustivel.keySet()}">
+                <tr>
+                    <td>${combustivel}</td>
+                    <td><fmt:formatNumber value="${totalKmsPorCombustivel[combustivel]}" minFractionDigits="1" maxFractionDigits="1"/> km</td>
+                    <td><fmt:formatNumber value="${percentagemKmsPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%</td>
+                    <td><fmt:formatNumber value="${totalCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                    <td><fmt:formatNumber value="${percentagemCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%-- ── EMISSÕES MÉDIAS POR COMBUSTÍVEL ── --%>
+<div class="mun-card mun-section">
+    <h3 class="mun-card-title">Emissões Médias por Tipo de Combustível</h3>
+    <div class="table-responsive">
+        <table class="mun-table">
+            <thead>
+            <tr>
+                <th>Combustível</th>
+                <th>Emissão Média</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="combustivel" items="${emissaoMediaPorCombustivel.keySet()}">
+                <tr>
+                    <td>${combustivel}</td>
+                    <td><fmt:formatNumber value="${emissaoMediaPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<%-- VOLTAR --%>
+<div class="mun-card">
+    <a href="<c:url value='/municipio/homeMunicipio'/>" class="mun-btn-secondary">
+        <i class="bi bi-arrow-left"></i> Voltar ao Home
+    </a>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

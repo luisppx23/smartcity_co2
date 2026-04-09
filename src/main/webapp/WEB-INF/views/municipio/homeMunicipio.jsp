@@ -17,15 +17,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
 <body>
-<jsp:include page="../navbarm.jsp"/>
+<jsp:include page="navbarm.jsp"/>
 
 <%-- HERO --%>
 <section class="mun-hero">
     <h1 class="mun-hero-title">
-        Dashboard do Município
+        Home do Município
         <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
     </h1>
-    <p class="mun-hero-subtitle">Governação de dados em tempo real.</p>
+    <p class="mun-hero-subtitle">Gestão de dados em tempo real.</p>
 </section>
 
 <main class="mun-page-content">
@@ -49,6 +49,11 @@
             <div class="mun-quick-icon"><i class="bi bi-sliders"></i></div>
             <div class="mun-quick-title">Redefinir Taxa</div>
             <div class="mun-quick-desc">Ajuste os parâmetros de cálculo de taxas de emissão de CO₂.</div>
+        </a>
+        <a href="<c:url value='/municipio/redefinirMeta'/>" class="mun-quick-card">
+            <div class="mun-quick-icon"><i class="bi bi-sliders"></i></div>
+            <div class="mun-quick-title">Redefinir Metas</div>
+            <div class="mun-quick-desc">Ajuste os parâmetros de metas relativos às emissões de CO₂.</div>
         </a>
         <a href="<c:url value='/municipio/listaCidadaos'/>" class="mun-quick-card">
             <div class="mun-quick-icon"><i class="bi bi-people"></i></div>

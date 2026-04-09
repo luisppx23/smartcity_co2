@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<jsp:include page="../navbarm.jsp"/>
+<jsp:include page="navbarm.jsp"/>
 
 <main class="mun-page-content">
 

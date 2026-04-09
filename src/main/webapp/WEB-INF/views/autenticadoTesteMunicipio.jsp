@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-<jsp:include page="navbarm.jsp"/>
+<jsp:include page="municipio/navbarm.jsp"/>
 <div class="content-wrapper">
     <div class="container">
         <div class="card mt-4">

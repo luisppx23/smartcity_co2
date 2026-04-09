@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 </head>
 <body class="form-page-body">
-<jsp:include page="../navbarm.jsp"/>
+<jsp:include page="navbarm.jsp"/>
 <div class="form-page-wrapper">
     <div class="form-page-background-shape"></div>
 

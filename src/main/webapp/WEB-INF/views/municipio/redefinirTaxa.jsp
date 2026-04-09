@@ -6,32 +6,31 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redefinir Taxas – Portal do Município</title>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
     <link rel="stylesheet" href="/styles/base-municipio.css" />
+    <link rel="stylesheet" href="/styles/homem.css" />
     <link rel="stylesheet" href="/styles/municipio/navbarm.css" />
     <link rel="stylesheet" href="/styles/municipio/dashboardm.css" />
 </head>
 <body>
+<jsp:include page="navbarm.jsp"/>
 
-<jsp:include page="../navbarm.jsp"/>
-
+<%-- HERO --%>
+<section class="mun-hero">
+    <h1 class="mun-hero-title">Redefinir Taxas de CO₂
+        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
+    </h1>
+    <p class="mun-hero-subtitle">Configure a tabela de taxas por quilómetro para cada nível de emissão.
+        Estas taxas serão usadas para calcular o valor a pagar de acordo com a emissão do veículo..</p>
+</section>
 <main class="mun-page-content">
 
-    <div class="mun-card mun-section">
-        <h1 class="mun-card-title">Redefinir Taxas de CO₂</h1>
-        <p class="mun-card-description">
-            Configure a tabela de taxas por quilómetro para cada nível de emissão.
-            Estas taxas serão usadas para calcular o valor a pagar de acordo com a emissão do veículo.
-        </p>
-    </div>
 
     <c:if test="${not empty mensagem}">
         <div class="mun-alert mun-alert-success">
@@ -239,6 +238,6 @@
     </div>
 
 </main>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
