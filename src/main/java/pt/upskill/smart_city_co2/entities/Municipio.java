@@ -9,6 +9,8 @@ import java.util.List;
 public class Municipio extends User {
 
     private String nome;
+
+    // Taxas aplicadas de acordo com o nível de emissões do veículo.
     private double objetivo_co2_mes_hab;
     private double taxaNivel1 = 0.10; // >250 g/km
     private double taxaNivel2 = 0.08; // 200-250
@@ -18,15 +20,19 @@ public class Municipio extends User {
     private double taxaNivel6 = 0.01; // 0-50
     private double taxaNivel7 = 0.00; // 0 g/km
 
+    // Relação com os cidadãos pertencentes a este município
     @OneToMany(mappedBy = "municipio")
     private List<Cidadao> listaDeCidadaos;
 
+    // Relação com os relatórios mensais associados ao município.
     @OneToMany(mappedBy = "municipio")
     private List<RelatorioMensal> relatoriosMensais;
 
+    // Construtor vazio
     public Municipio() {
     }
 
+    // Construtor principal para criar um objeto município com os dados herdados de User e meta CO2
     public Municipio(String nome, double objetivo_co2_mes_hab, String username,
                      LocalDateTime data_registo, String email, String password,
                      int nif, String tipo, boolean ativo) {
@@ -35,6 +41,7 @@ public class Municipio extends User {
         this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;
     }
 
+    //Getters e Setters
     public String getNome() {
         return nome;
     }

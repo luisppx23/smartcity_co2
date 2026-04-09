@@ -1,28 +1,43 @@
-.smart-navbar-v2 {
-    position: relative;
+/* ═══════════════════════════════════════════════
+   SMART CITY CO₂ — navbarm.css
+   Caminho: src/main/resources/static/styles/municipio/navbarm.css
+   Scope: Portal do Município — navbar fixa
+   Azul Oxford · Dropdown institucional
+   Zero estilos inline nos JSPs.
+   ════════════════════════════════════════════════ */
+
+/* ── NAVBAR BASE ── */
+.mun-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     background: linear-gradient(90deg, #001F3F 0%, #002D5A 100%);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+    height: 72px;
 }
 
-.smart-navbar-v2-inner {
-    width: min(1100px, calc(100% - 48px));
+.mun-navbar-inner {
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 12px 28px;
+    padding: 0 28px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
 }
 
-.smart-navbar-v2-left {
+/* ── ESQUERDA: logo + brand ── */
+.mun-navbar-left {
     display: flex;
     align-items: center;
     gap: 14px;
     flex-shrink: 0;
 }
 
-.smart-navbar-logo-wrap {
+.mun-navbar-logo-wrap {
     width: 54px;
     height: 54px;
     border-radius: 50%;
@@ -30,67 +45,83 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-.smart-navbar-logo-v2 {
+.mun-navbar-logo {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 50%;
 }
 
-.smart-navbar-brand {
+.mun-navbar-brand {
     color: rgba(255, 255, 255, 0.92);
     font-size: 0.95rem;
     font-weight: 600;
     white-space: nowrap;
+    letter-spacing: 0.01em;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-navbar-v2-center {
+/* ── CENTRO: links ── */
+.mun-navbar-center {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
 }
 
-.smart-nav-link-v2 {
+.mun-nav-link {
     color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    padding: 8px 14px;
+    padding: 8px 15px;
     border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     transition: background 0.18s ease, color 0.18s ease;
+    white-space: nowrap;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-nav-link-v2:hover,
-.smart-nav-link-v2.active {
+.mun-nav-link:hover {
     background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
     text-decoration: none;
 }
 
-.smart-navbar-v2-right {
+.mun-nav-link.active {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+}
+
+/* ── DIREITA: avatar + dropdown ── */
+.mun-navbar-right {
     position: relative;
     flex-shrink: 0;
 }
 
-.smart-navbar-avatar {
+.mun-navbar-avatar {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     padding: 6px 10px;
     border-radius: 999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.28);
     transition: background 0.18s ease;
+    border: 1.5px solid rgba(255, 255, 255, 0.28);
 }
 
-.smart-navbar-avatar:hover {
+.mun-navbar-avatar:hover {
     background: rgba(255, 255, 255, 0.10);
 }
 
-.smart-avatar-circle {
+.mun-avatar-circle {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -101,89 +132,111 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Outfit', sans-serif;
     border: 1.5px solid rgba(255, 255, 255, 0.40);
+    flex-shrink: 0;
 }
 
-.smart-avatar-name {
+.mun-avatar-name {
     color: rgba(255, 255, 255, 0.92);
     font-size: 0.88rem;
     font-weight: 600;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-avatar-chevron {
-    color: rgba(255, 255, 255, 0.70);
-    font-size: 0.72rem;
+.mun-avatar-chevron {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.75rem;
     transition: transform 0.2s ease;
 }
 
-.smart-navbar-avatar.open .smart-avatar-chevron {
+.mun-navbar-avatar.open .mun-avatar-chevron {
     transform: rotate(180deg);
 }
 
-.smart-dropdown {
+/* ── DROPDOWN ── */
+.mun-dropdown {
     display: none;
     position: absolute;
     top: calc(100% + 12px);
     right: 0;
-    width: 250px;
+    width: 260px;
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
     overflow: hidden;
+    z-index: 2000;
+    animation: mun-drop-in 0.18s ease;
 }
 
-.smart-dropdown.open {
-    display: block;
+.mun-dropdown.open { display: block; }
+
+@keyframes mun-drop-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-.smart-dd-header {
+.mun-dd-header {
     padding: 16px 20px 12px;
     background: rgba(0, 31, 63, 0.04);
     border-bottom: 1px solid rgba(0, 31, 63, 0.08);
 }
 
-.smart-dd-greeting {
+.mun-dd-greeting {
     font-size: 1rem;
     font-weight: 700;
     color: #001F3F;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-dd-email {
+.mun-dd-email {
     font-size: 0.78rem;
     color: #6B7A8D;
     margin-top: 2px;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-dd-item {
-    display: block;
+.mun-dd-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 12px 20px;
     color: #1A2332;
     text-decoration: none;
     font-size: 0.88rem;
     font-weight: 500;
     transition: background 0.15s ease;
+    font-family: 'Outfit', sans-serif;
 }
 
-.smart-dd-item:hover {
+.mun-dd-item:hover {
     background: rgba(0, 31, 63, 0.04);
     color: #001F3F;
     text-decoration: none;
 }
 
-.smart-dd-divider {
+.mun-dd-item i {
+    font-size: 1rem;
+    color: #6B7A8D;
+    width: 18px;
+}
+
+.mun-dd-divider {
     height: 1px;
     background: rgba(0, 31, 63, 0.08);
     margin: 4px 0;
 }
 
-.smart-dd-footer {
+.mun-dd-footer {
     padding: 12px 20px 16px;
+    border-top: 1px solid rgba(0, 31, 63, 0.08);
 }
 
-.smart-dd-logout {
+.mun-dd-logout {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     width: 100%;
     background: #001F3F;
     color: #ffffff;
@@ -192,26 +245,112 @@
     padding: 10px 0;
     font-size: 0.88rem;
     font-weight: 600;
+    text-decoration: none;
     cursor: pointer;
     transition: background 0.18s ease;
+    font-family: 'Outfit', sans-serif;
+    margin-bottom: 8px;
 }
 
-.smart-dd-logout:hover {
+.mun-dd-logout:hover {
     background: #00183A;
+    color: #ffffff;
+    text-decoration: none;
 }
 
-@media (max-width: 768px) {
-    .smart-navbar-v2-inner {
-        flex-direction: column;
-        text-align: center;
-    }
+.mun-dd-forgot {
+    display: block;
+    text-align: center;
+    font-size: 0.76rem;
+    color: #6B7A8D;
+    text-decoration: none;
+    font-family: 'Outfit', sans-serif;
+}
 
-    .smart-navbar-v2-center {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+.mun-dd-forgot:hover {
+    text-decoration: underline;
+    color: #001F3F;
+}
 
-    .smart-avatar-name {
-        display: none;
-    }
+/* ── ESPAÇADOR ── */
+.mun-navbar-spacer { height: 72px; }
+
+/* ── RESPONSIVO ── */
+@media (max-width: 900px) {
+    .mun-navbar-center { display: none; }
+}
+
+@media (max-width: 480px) {
+    .mun-navbar-inner { padding: 0 14px; }
+    .mun-avatar-name  { display: none; }
+    .mun-navbar-logo-wrap { width: 44px; height: 44px; }
+    .mun-navbar-logo      { width: 38px; height: 38px; }
+}
+
+/* ── HAMBURGUER MOBILE — município ── */
+.mun-navbar-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.4rem;
+    line-height: 1;
+    margin-left: auto;
+}
+
+/* ── MENU MOBILE DRAWER — município ── */
+.mun-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 0; right: 0;
+    background: linear-gradient(180deg, #002D5A, #001F3F);
+    z-index: 999;
+    padding: 8px 0 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    animation: munMenuSlide 0.2s ease;
+}
+.mun-mobile-menu.open { display: block; }
+
+@keyframes munMenuSlide {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.mun-mobile-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 28px;
+    color: rgba(255,255,255,0.88);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-family: 'Outfit', sans-serif;
+    transition: background 0.15s ease;
+}
+.mun-mobile-menu a:hover,
+.mun-mobile-menu a.active {
+    background: rgba(255,255,255,0.08);
+    color: #ffffff;
+    text-decoration: none;
+}
+.mun-mobile-menu .mun-mobile-logout {
+    margin: 10px 20px 0;
+    background: rgba(255,255,255,0.10);
+    border-radius: 10px;
+    border-bottom: none;
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .mun-navbar-center { display: none; }
+    .mun-navbar-hamburger { display: flex; }
+}
+
+@media (max-width: 480px) {
+    .mun-avatar-name { display: none; }
 }

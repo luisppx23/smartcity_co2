@@ -31,6 +31,7 @@ public class MunicipioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Inicialização automática de municípios de teste quando a base de dados ainda não tem registos.
     @PostConstruct
     public void init() {
         if (municipioRepository.count() > 0) {
@@ -66,14 +67,18 @@ public class MunicipioService {
         );
     }
 
+    // Devolve todos os municípios registados no sistema.
     public List<Municipio> getNomes() {
         return municipioRepository.findAll();
     }
 
+    // Procura um município pelo username associado à autenticação.
     public Municipio getUserM(String username) {
         return municipioRepository.findByUsername(username).orElse(null);
     }
 
+    // Obtém a lista de cidadãos pertencentes ao município autenticado.
+    // A query usada no repositório já traz os veículos associados.
     @Transactional
     public List<Cidadao> buscarCidadaosDoMunicipio(Municipio municipio) {
         if (municipio == null) {
@@ -83,6 +88,8 @@ public class MunicipioService {
         return cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
     }
 
+    // Método principal responsável por gerar todos os dados do dashboard municipal.
+    // O processo é dividido em vários métodos auxiliares para separar responsabilidades
     @Transactional
     public DTODashboardMunicipioService gerarRelatorioMunicipio(Municipio municipio) {
         List<Cidadao> listaCidadaos = buscarCidadaosDoMunicipio(municipio);

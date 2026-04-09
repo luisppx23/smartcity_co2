@@ -86,7 +86,5 @@
 
 </div>
 
-<%--<p class="auth-page-footer">X Toneladas de CO₂ evitadas pelo seu município.</p>--%>
-
 </body>
 </html>

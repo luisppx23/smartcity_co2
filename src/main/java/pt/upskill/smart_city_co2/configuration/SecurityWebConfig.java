@@ -35,7 +35,14 @@ public class SecurityWebConfig {
             auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
 
             // Acesso público a rotas de autenticação e recursos estáticos
-            auth.requestMatchers("/auth/**", "/styles/**", "/WEB-INF/**", "/scripts", "/images/**", "/api/**").permitAll();
+            auth.requestMatchers(
+                    "/auth/**",
+                    "/styles/**",
+                    "/WEB-INF/**",
+                    "/scripts",
+                    "/images/**",
+                    "/api/**",
+            "/favicon.ico").permitAll();
             // Acesso mediante Role do User - endpoints reais dos controllers
             auth.requestMatchers("/auth/autenticado").authenticated();
             auth.requestMatchers("/auth/homeCidadao").hasRole("CIDADAO");
