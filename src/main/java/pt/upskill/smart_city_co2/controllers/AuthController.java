@@ -90,7 +90,9 @@ public class AuthController {
         return "recuperarPassword";
     }
 
-    // Verifica se o utilizador existe e direciona para a alteracao de password
+    // Adicione estes novos métodos ao AuthController existente
+
+    // Processa a verificação do usuário e envia código por email
     @PostMapping("/verificarUtilizadorAction")
     public String verificarUtilizadorAction(@RequestParam String username,
                                             @RequestParam String email,
@@ -99,19 +101,50 @@ public class AuthController {
         boolean existe = authService.verificarDadosRecuperacao(username, email);
 
         if (existe) {
-            // Se existir, levamos para a página de mudar a senha
-            model.addAttribute("username", username);
-            return "definirNovaPassword";
+            try {
+                // Gerar código e enviar email
+                authService.gerarCodigoRecuperacao(username, email);
+                model.addAttribute("username", username);
+                model.addAttribute("message", "Código de verificação enviado para o seu email.");
+                return "inserirCodigoRecuperacao";
+            } catch (Exception e) {
+                model.addAttribute("error", "Erro ao enviar código. Tente novamente.");
+                return "recuperarPassword";
+            }
         } else {
-            // Se não existir, volta para a página inicial de recuperação com erro
             model.addAttribute("error", "Os dados introduzidos não coincidem com os nossos registos.");
             return "recuperarPassword";
         }
     }
 
-    // Atualiza a password em caso de sucesso (as duas passwords correspondem) ou redireciona para o recuperar password em caso de erro.
+    // Exibe página para inserir o código
+    @GetMapping("/inserirCodigoRecuperacao")
+    public String inserirCodigoRecuperacaoPage(@RequestParam String username, Model model) {
+        model.addAttribute("username", username);
+        return "inserirCodigoRecuperacao";
+    }
+
+    // Processa a validação do código
+    @PostMapping("/validarCodigoAction")
+    public String validarCodigoAction(@RequestParam String username,
+                                      @RequestParam String codigo,
+                                      Model model) {
+        try {
+            authService.validarCodigoRecuperacao(username, codigo);
+            model.addAttribute("username", username);
+            model.addAttribute("codigo", codigo); // Passar código para o próximo passo
+            return "definirNovaPassword";
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("username", username);
+            return "inserirCodigoRecuperacao";
+        }
+    }
+
+    // Atualiza a password após validação do código
     @PostMapping("/atualizarPasswordAction")
     public String atualizarPasswordAction(@RequestParam String username,
+                                          @RequestParam String codigo,
                                           @RequestParam String novaPassword,
                                           @RequestParam String confirmarPassword,
                                           Model model) {
@@ -123,12 +156,14 @@ public class AuthController {
         }
 
         try {
-            authService.atualizarPassword(username, novaPassword);
+            authService.atualizarPasswordComCodigo(username, codigo, novaPassword);
             model.addAttribute("message", "Password alterada com sucesso! Faça login.");
             return "login";
         } catch (Exception e) {
-            model.addAttribute("error", "Erro ao atualizar a password. Tente novamente.");
-            return "recuperarPassword";
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("username", username);
+            return "inserirCodigoRecuperacao";
         }
     }
+
 }
