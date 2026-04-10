@@ -53,8 +53,16 @@
         </div>
 
         <div class="smart-form-actions">
-            <a href="${pageContext.request.contextPath}/cidadao/perfil/editar" class="smart-btn smart-btn-primary">Editar Perfil</a>
-            <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">Voltar</a>
+            <div class="smart-form-actions">
+                <a href="${pageContext.request.contextPath}/cidadao/perfil/editar" class="smart-btn smart-btn-primary">Editar Perfil</a>
+                <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">Voltar</a>
+
+                <!-- Botão apagar conta -->
+                <form action="${pageContext.request.contextPath}/cidadao/perfil/apagar" method="post" style="display: inline; margin-left: 10px;" onsubmit="return confirm('Tem a certeza que deseja apagar permanentemente a sua conta? Esta ação é irreversível.');">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <button type="submit" class="smart-btn" style="background-color:#c62828; color:white; border:none;">Apagar Conta</button>
+                </form>
+            </div>
         </div>
 
         <c:if test="${not empty param.sucesso}">

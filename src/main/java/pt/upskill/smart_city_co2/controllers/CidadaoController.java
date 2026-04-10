@@ -1,5 +1,7 @@
 package pt.upskill.smart_city_co2.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -102,6 +104,21 @@ public class CidadaoController {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         return "redirect:/cidadao/perfil?sucesso=true";
+    }
+
+    @PostMapping("/perfil/apagar")
+    public String apagarPerfil(HttpServletRequest request, HttpServletResponse response) {
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+
+        Long id = userLogado.getId();
+        cidadaoService.deleteCidadao(id);
+
+        // Fazer logout forçado
+        SecurityContextHolder.clearContext();
+        request.getSession().invalidate();
+
+        return "redirect:/auth/login?contaApagada=true";
     }
 
     // Direciona para pagina de home do cidadão
