@@ -18,14 +18,17 @@
         </div>
 
         <div class="smart-navbar-center">
-            <a href="<c:url value='/cidadao/dashboardCidadao'/>" class="smart-nav-link">
+            <a href="<c:url value='/cidadao/homeCidadao'/>" class="smart-nav-link">
                 <i class="bi bi-house"></i> Home
             </a>
-            <a href="<c:url value='/auth/cidadao/registoVeiculo'/>" class="smart-nav-link">
-                <i class="bi bi-car-front"></i> Registar Veículo
+            <a href="<c:url value='/cidadao/listaVeiculos'/>" class="smart-nav-link">
+                <i class="bi bi-car-front"></i> Lista de Veículos
             </a>
-            <a href="<c:url value='/cidadao/simularTaxa'/>" class="smart-nav-link">
-                <i class="bi bi-speedometer2"></i> Simular Taxa
+            <a href="<c:url value='/cidadao/registoKms'/>" class="smart-nav-link">
+                <i class="bi bi-speedometer2"></i> Registo de Kms
+            </a>
+            <a href="<c:url value='/cidadao/dashboardCidadao'/>" class="smart-nav-link">
+                <i class="bi bi-graph-up"></i> Dashboard
             </a>
         </div>
 
