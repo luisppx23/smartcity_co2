@@ -1,13 +1,17 @@
 package pt.upskill.smart_city_co2.controllers;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pt.upskill.smart_city_co2.dto.DTODashboardCidadaoService;
 import pt.upskill.smart_city_co2.entities.*;
 import pt.upskill.smart_city_co2.models.RegistarKmsModel;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
+import pt.upskill.smart_city_co2.services.CidadaoService;
 import pt.upskill.smart_city_co2.services.RegistoKmsService;
 
 import java.util.ArrayList;
@@ -24,6 +28,12 @@ public class RegistoKmsController {
 
     @Autowired
     private CidadaoRepository cidadaoRepository;
+
+    @Autowired
+    private CidadaoService cidadaoService;   // <-- para buscar o cidadão completo
+
+    @Autowired
+    private DTODashboardCidadaoService dashboardService;
 
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
@@ -62,36 +72,81 @@ public class RegistoKmsController {
     }
 
     @GetMapping("/verRegistosKms")
+    @Transactional(readOnly = true)
     public String verHistorico(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
-        model.addAttribute("cidadao", cidadao);
+        if (cidadao == null) return "redirect:/auth/login";
 
+        // Buscar o cidadão completo com veículos e registos (fora da transação? Já está dentro)
+        Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+
+        // 1. Recolher todos os registos de Kms (objetos RegistoKms) para a tabela de histórico
         List<RegistoKms> todosRegistos = new ArrayList<>();
         Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
-        double totalKms = 0.0;
-        double totalCo2 = 0.0;
+        double totalKmsGeral = 0.0;
+        double totalCo2Geral = 0.0;
 
-        if (cidadao != null && cidadao.getListaDeVeiculos() != null) {
-            for (Ownership ownership : cidadao.getListaDeVeiculos()) {
+        if (cidadaoCompleto.getListaDeVeiculos() != null) {
+            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
                 Veiculo veiculo = ownership.getVeiculo();
                 if (veiculo != null) {
                     matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
                 }
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms r : ownership.getRegistosKms()) {
+                        // Garantir que a taxa seja carregada (evita LazyInitialization)
+                        Hibernate.initialize(r.getTaxa());
                         todosRegistos.add(r);
-                        totalKms += r.getKms_mes();
-                        totalCo2 += r.getEmissaoEfetivaKg();
+                        totalKmsGeral += r.getKms_mes();
+                        totalCo2Geral += r.getEmissaoEfetivaKg();
                     }
+                }
+            }
+            todosRegistos.sort((a, b) -> b.getMes_ano().compareTo(a.getMes_ano()));
+        }
+
+        // 2. Obter os dados agregados (totais por veículo, percentagens, ranking) via DTO
+        DTODashboardCidadaoService.DashboardDataDTO dados = dashboardService.prepararDadosDashboard(cidadaoCompleto);
+
+        // 3. Preparar os mapas de combustível a partir do combustiveisData (pois o JSP espera mapas separados)
+        Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
+        Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
+
+        if (dados.getCombustiveisData() != null) {
+            for (Map<String, Object> item : dados.getCombustiveisData()) {
+                String tipo = (String) item.get("tipo");
+                Double kms = (Double) item.get("kms");
+                Double percKms = (Double) item.get("percentagemKms");
+                Double co2 = (Double) item.get("emissoes");
+                Double percCo2 = (Double) item.get("percentagemCo2");
+                if (tipo != null) {
+                    totalKmsPorCombustivel.put(tipo, kms != null ? kms : 0.0);
+                    percentagemKmsPorCombustivel.put(tipo, percKms != null ? percKms : 0.0);
+                    totalCo2PorCombustivel.put(tipo, co2 != null ? co2 : 0.0);
+                    percentagemCo2PorCombustivel.put(tipo, percCo2 != null ? percCo2 : 0.0);
                 }
             }
         }
 
+        // 4. Adicionar todos os atributos ao model
         model.addAttribute("listaRegistos", todosRegistos);
         model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
-        model.addAttribute("totalKmsGeral", totalKms);
-        model.addAttribute("totalCo2Geral", totalCo2);
-
+        model.addAttribute("listaVeiculos", dados.getListaVeiculos());
+        model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
+        model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
+        model.addAttribute("totalKmsGeral", totalKmsGeral);
+        model.addAttribute("totalCo2Geral", totalCo2Geral);
+        // Mapas de combustível (para a tabela de percentagens)
+        model.addAttribute("totalKmsPorCombustivel", totalKmsPorCombustivel);
+        model.addAttribute("percentagemKmsPorCombustivel", percentagemKmsPorCombustivel);
+        model.addAttribute("totalCo2PorCombustivel", totalCo2PorCombustivel);
+        model.addAttribute("percentagemCo2PorCombustivel", percentagemCo2PorCombustivel);
+        // Ranking
+        model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
+        model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
+        model.addAttribute("user", cidadaoCompleto);
 
         return "cidadao/historicoKms";
     }
