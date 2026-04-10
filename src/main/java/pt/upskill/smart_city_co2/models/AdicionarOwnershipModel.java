@@ -1,6 +1,5 @@
 package pt.upskill.smart_city_co2.models;
 
-import pt.upskill.smart_city_co2.TipoDeCombustivel;
 
 public class AdicionarOwnershipModel {
     private String matricula;

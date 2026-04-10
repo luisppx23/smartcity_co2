@@ -88,7 +88,7 @@ public class MunicipioService {
         return cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
     }
 
-    // Método principal responsável por gerar todos os dados do dashboard municipal.
+    // Principal responsável por gerar todos os dados do dashboard municipal.
     // O processo é dividido em vários métodos auxiliares para separar responsabilidades
     @Transactional
     public DTODashboardMunicipioService gerarRelatorioMunicipio(Municipio municipio) {
@@ -111,6 +111,7 @@ public class MunicipioService {
         return dados;
     }
 
+    // Inicializa o DTO que vai concentrar todos os indicadores necessários para a view.
     private DTODashboardMunicipioService inicializarDados(List<Cidadao> listaCidadaos) {
         DTODashboardMunicipioService dados = new DTODashboardMunicipioService();
         dados.setListaCidadaos(listaCidadaos != null ? listaCidadaos : new ArrayList<>());
@@ -118,6 +119,7 @@ public class MunicipioService {
         return dados;
     }
 
+    // Percorre todos os cidadãos do município e delega o processamento individual.
     private void processarCidadaos(List<Cidadao> listaCidadaos, DTODashboardMunicipioService dados) {
         if (listaCidadaos == null) {
             return;
@@ -127,9 +129,11 @@ public class MunicipioService {
             processarCidadao(cidadao, dados);
         }
 
+        // Usa um Set para contar apenas veículos únicos e evitar duplicados.
         dados.setQuantidadeVeiculosTotais(dados.getIdsVeiculosUnicos().size());
     }
 
+    // Processa todos os veículos associados a um cidadão.
     private void processarCidadao(Cidadao cidadao, DTODashboardMunicipioService dados) {
         if (cidadao == null || cidadao.getListaDeVeiculos() == null) {
             return;
@@ -140,6 +144,7 @@ public class MunicipioService {
         }
     }
 
+    // Processa um registo de posse (Ownership), que liga cidadão, veículo, matrícula e registos de kms.
     private void processarOwnership(Ownership ownership, DTODashboardMunicipioService dados) {
         if (ownership == null || ownership.getVeiculo() == null) {
             return;
@@ -148,6 +153,7 @@ public class MunicipioService {
         Veiculo veiculo = ownership.getVeiculo();
         Long veiculoId = veiculo.getId();
 
+        // Guarda o veículo e os seus identificadores para cálculo posterior.
         dados.getListaVeiculos().add(veiculo);
         dados.getIdsVeiculosUnicos().add(veiculoId);
         dados.getMatriculaPorVeiculo().put(veiculoId, ownership.getMatricula());
@@ -161,11 +167,15 @@ public class MunicipioService {
             return;
         }
 
+        // Cada registo mensal de quilómetros contribui para os totais por veículo,
+        // por combustível e por mês.
         for (RegistoKms registo : ownership.getRegistosKms()) {
             processarRegisto(registo, veiculoId, combustivel, dados);
         }
     }
 
+    // Garante que os mapas usados nos cálculos já possuem uma entrada inicial,
+    // evitando NullPointerException e simplificando os acumuladores.
     private void inicializarEstruturasVeiculoECombustivel(
             DTODashboardMunicipioService dados,
             Long veiculoId,
@@ -179,7 +189,8 @@ public class MunicipioService {
         dados.getNumeroRegistosPorCombustivel().putIfAbsent(combustivel, 0);
     }
 
-    private void processarRegisto(RegistoKms registo,Long veiculoId,String combustivel,DTODashboardMunicipioService dados) {
+    // Atualiza todos os acumuladores a partir de um registo mensal de quilómetros/emissões.
+    private void processarRegisto(RegistoKms registo, Long veiculoId, String combustivel, DTODashboardMunicipioService dados) {
         if (registo == null) {
             return;
         }
@@ -190,9 +201,11 @@ public class MunicipioService {
         double co2 = registo.getEmissaoEfetivaKg();
         String mesAno = formatarMesAno(registo.getMes_ano());
 
+        // Totais globais do município
         dados.setTotalKmsGeral(dados.getTotalKmsGeral() + kms);
         dados.setTotalCo2Geral(dados.getTotalCo2Geral() + co2);
 
+        // Totais por veículo
         dados.getTotalKmsPorVeiculo().put(
                 veiculoId,
                 dados.getTotalKmsPorVeiculo().getOrDefault(veiculoId, 0.0) + kms
@@ -203,6 +216,7 @@ public class MunicipioService {
                 dados.getTotalCo2PorVeiculo().getOrDefault(veiculoId, 0.0) + co2
         );
 
+        // Totais por combustível
         dados.getTotalKmsPorCombustivel().put(
                 combustivel,
                 dados.getTotalKmsPorCombustivel().getOrDefault(combustivel, 0.0) + kms
@@ -218,6 +232,7 @@ public class MunicipioService {
                 dados.getNumeroRegistosPorCombustivel().getOrDefault(combustivel, 0) + 1
         );
 
+        // Totais mensais usados para gráficos e comparação temporal
         dados.getTotalKmsPorMes().put(
                 mesAno,
                 dados.getTotalKmsPorMes().getOrDefault(mesAno, 0.0) + kms
@@ -229,6 +244,7 @@ public class MunicipioService {
         );
     }
 
+    // Calcula a percentagem de kms e emissões atribuída a cada tipo de combustível.
     private void calcularPercentagensPorCombustivel(DTODashboardMunicipioService dados) {
         for (String combustivel : dados.getTotalKmsPorCombustivel().keySet()) {
             double kmsCombustivel = dados.getTotalKmsPorCombustivel().getOrDefault(combustivel, 0.0);
@@ -247,6 +263,7 @@ public class MunicipioService {
         }
     }
 
+    // Calcula a emissão média por combustível com base no número de registos existentes.
     private void calcularMediasPorCombustivel(DTODashboardMunicipioService dados) {
         for (String combustivel : dados.getTotalCo2PorCombustivel().keySet()) {
             double totalCo2Combustivel = dados.getTotalCo2PorCombustivel().getOrDefault(combustivel, 0.0);
@@ -257,6 +274,10 @@ public class MunicipioService {
         }
     }
 
+    // Calcula os indicadores mensais:
+    // - emissões do mês
+    // - média de CO2 por habitante
+    // - verificação do cumprimento do objetivo definido pelo município
     private void calcularMetricasMensais(DTODashboardMunicipioService dados, Municipio municipio) {
         for (String mesAno : dados.getTotalCo2PorMes().keySet()) {
             double co2Mes = dados.getTotalCo2PorMes().get(mesAno);
@@ -279,9 +300,11 @@ public class MunicipioService {
                         : 0.0
         );
 
+        // Mantém a ordem cronológica correta para uso em gráficos e comparações
         dados.setMesesOrdenados(ordenarMeses(dados.getTotalCo2PorMes().keySet()));
     }
 
+    // Compara cada mês com o mês imediatamente anterior.
     private void calcularVariacaoMesAnterior(DTODashboardMunicipioService dados) {
         for (int i = 1; i < dados.getMesesOrdenados().size(); i++) {
             String mesAtual = dados.getMesesOrdenados().get(i);
@@ -296,6 +319,7 @@ public class MunicipioService {
         }
     }
 
+    // Compara o mesmo mês com o correspondente no ano anterior.
     private void calcularVariacaoAnoAnterior(DTODashboardMunicipioService dados) {
         for (String mesAno : dados.getTotalCo2PorMes().keySet()) {
             String[] partes = mesAno.split("/");
@@ -307,6 +331,7 @@ public class MunicipioService {
             double emissaoAtual = dados.getTotalCo2PorMes().getOrDefault(mesAno, 0.0);
             double emissaoAnoAnterior = dados.getTotalCo2PorMes().getOrDefault(mesAnoAnterior, -1.0);
 
+            // Só calcula se existirem dados para o mesmo mês do ano anterior
             if (emissaoAnoAnterior >= 0) {
                 double variacao = emissaoAtual - emissaoAnoAnterior;
                 dados.getVariacaoAnoAnteriorPorMes().put(mesAno, variacao);
@@ -315,6 +340,7 @@ public class MunicipioService {
         }
     }
 
+    // Prepara a estrutura de evolução mensal usada nos gráficos de tendência.
     private void calcularEvolucaoMensal(DTODashboardMunicipioService dados) {
         for (String mes : dados.getMesesOrdenados()) {
             dados.getEvolucaoEmissoesMensais().put(
@@ -324,6 +350,7 @@ public class MunicipioService {
         }
     }
 
+    // Calcula indicadores gerais visíveis no topo do dashboard.
     private void calcularIndicadoresGlobais(DTODashboardMunicipioService dados) {
         dados.setMediaPorVeiculo(
                 dados.getQuantidadeVeiculosTotais() > 0
@@ -344,6 +371,7 @@ public class MunicipioService {
         );
     }
 
+    // Calcula médias de emissões para o ano atual e para o ano anterior.
     private void calcularIndicadoresAnuais(DTODashboardMunicipioService dados) {
         int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
         int anoAnterior = anoAtual - 1;
@@ -375,6 +403,8 @@ public class MunicipioService {
         dados.setMediaAnoAnterior(countAnoAnterior > 0 ? somaAnoAnterior / countAnoAnterior : 0.0);
     }
 
+    // Atribui um nível ao município com base no número de meses em que o objetivo foi atingido.
+    // Esta classificação é usada como indicador visual de desempenho ambiental.
     private void calcularNivelMunicipio(DTODashboardMunicipioService dados) {
         int mesesAtingidos = 0;
 
@@ -411,6 +441,8 @@ public class MunicipioService {
         }
     }
 
+    // Conta quantos veículos únicos existem por tipo de combustível.
+    // É usado um Set para impedir dupla contagem do mesmo veículo.
     private Map<String, Integer> contarVeiculosPorCombustivel(List<Cidadao> listaCidadaos) {
         Map<String, Integer> quantidadeVeiculosPorCombustivel = new LinkedHashMap<>();
 
@@ -458,6 +490,8 @@ public class MunicipioService {
         return quantidadeVeiculosPorCombustivel;
     }
 
+    // Ordena strings no formato MM/yyyy cronologicamente.
+    // Isto é necessário porque a ordenação alfabética simples não garante ordem temporal correta.
     private List<String> ordenarMeses(Set<String> meses) {
         List<String> mesesOrdenados = new ArrayList<>(meses);
 
@@ -479,16 +513,22 @@ public class MunicipioService {
         return mesesOrdenados;
     }
 
+    // Devolve o tipo de combustível do veículo ou "DESCONHECIDO" caso não exista.
     private String obterCombustivel(Veiculo veiculo) {
         return veiculo.getTipoDeCombustivel() != null
                 ? veiculo.getTipoDeCombustivel().name()
                 : "DESCONHECIDO";
     }
 
+    // Converte uma Date para o formato MM/yyyy para agrupar os registos por mês.
     private String formatarMesAno(Date data) {
         return new SimpleDateFormat("MM/yyyy").format(data);
     }
 
+    // Define a cor da variação:
+    // - verde: redução de emissões,
+    // - vermelho: aumento,
+    // - cinzento: ausência de alteração.
     private String obterCorVariacao(double variacao) {
         if (variacao < 0) {
             return "green";
@@ -498,6 +538,8 @@ public class MunicipioService {
         return "gray";
     }
 
+    // Atualiza o objetivo mensal de CO2 do município autenticado.
+    // Inclui validação para impedir valores inválidos ou absurdos.
     @Transactional
     public void atualizarObjetivoCo2(String username, double novoValor) {
         if (novoValor <= 0) {
@@ -515,6 +557,8 @@ public class MunicipioService {
         municipioRepository.save(municipio);
     }
 
+    // Atualiza a tabela de taxas por nível de emissões.
+    // São aplicadas validações para garantir coerência dos dados.
     @Transactional
     public void atualizarTaxas(
             String username,

@@ -12,29 +12,51 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/*
+  DTO usado para transportar todos os dados agregados necessários ao dashboard do município.
+
+  Em vez de enviar apenas entidades isoladas para a view, esta classe concentra:
+  - listas base (cidadãos, veículos, registos)
+  - totais globais
+  - totais por veículo
+  - totais por combustível
+  - indicadores mensais
+  - comparações temporais
+  - métricas anuais
+  - classificação final do município
+
+  Desta forma, a camada de controller mantém-se simples e a lógica de agregação
+  fica centralizada no service. */
 
 public class DTODashboardMunicipioService {
 
+    // Dados base carregados do domínio
     private List<Cidadao> listaCidadaos = new ArrayList<>();
     private List<RegistoKms> listaRegistos = new ArrayList<>();
     private List<Veiculo> listaVeiculos = new ArrayList<>();
 
+    // Set usado para garantir contagem de veículos únicos
     private Set<Long> idsVeiculosUnicos = new LinkedHashSet<>();
 
+    // Informação de identificação por veículo
     private Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
     private Map<Long, String> combustivelPorVeiculo = new LinkedHashMap<>();
 
+    // Totais acumulados por veículo
     private Map<Long, Double> totalKmsPorVeiculo = new LinkedHashMap<>();
     private Map<Long, Double> totalCo2PorVeiculo = new LinkedHashMap<>();
 
+    // Totais e percentagens por tipo de combustível
     private Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
 
+    // Número de registos e média de emissões por combustível
     private Map<String, Integer> numeroRegistosPorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> emissaoMediaPorCombustivel = new LinkedHashMap<>();
 
+    // Métricas mensais
     private Map<String, Double> totalKmsPorMes = new LinkedHashMap<>();
     private Map<String, Double> totalCo2PorMes = new LinkedHashMap<>();
     private Map<String, Double> mediaCo2PorHabitantePorMes = new LinkedHashMap<>();
@@ -42,15 +64,19 @@ public class DTODashboardMunicipioService {
 
     private Map<String, Double> mediaEmissoesPorMes = new LinkedHashMap<>();
 
+    // Comparação com o mesmo mês do ano anterior
     private Map<String, Double> variacaoAnoAnteriorPorMes = new LinkedHashMap<>();
     private Map<String, String> corComparacaoAnoAnteriorPorMes = new LinkedHashMap<>();
 
+    // Comparação com o mês anterior
     private Map<String, Double> variacaoMesAnterior = new LinkedHashMap<>();
     private Map<String, String> corComparacaoMesAnterior = new LinkedHashMap<>();
 
+    // Estruturas usadas em gráficos e distribuição de veículos
     private Map<String, Double> evolucaoEmissoesMensais = new LinkedHashMap<>();
     private Map<String, Integer> quantidadeVeiculosPorCombustivel = new LinkedHashMap<>();
 
+    // Indicadores globais resumidos
     private double totalKmsGeral = 0.0;
     private double totalCo2Geral = 0.0;
     private double somaEmissoesMensais = 0.0;
@@ -60,6 +86,7 @@ public class DTODashboardMunicipioService {
     private double mediaAnoAnterior = 0.0;
     private double mediaAnoAtual = 0.0;
 
+    // Contadores e classificações
     private int numeroHabitantes = 0;
     private int quantidadeVeiculosTotais = 0;
     private int anoAnterior = 0;
@@ -68,11 +95,17 @@ public class DTODashboardMunicipioService {
     private int nivelMunicipioIndex = 0;
     private int mesesAtingidos = 0;
 
+    // Labels para apresentação na interface
     private String mesAtualLabel = "";
     private String nivelMunicipio = "Initial";
 
+    // Lista de meses ordenados cronologicamente
     private List<String> mesesOrdenados = new ArrayList<>();
 
+    /*
+     - Converte o DTO num mapa de atributos para a view.
+     - Este método permite fazer model.addAllAttributes(...)
+     - no controller, para reduzir código repetido.*/
     public Map<String, Object> toModelAttributes() {
         Map<String, Object> attrs = new HashMap<>();
 
@@ -132,6 +165,7 @@ public class DTODashboardMunicipioService {
         return attrs;
     }
 
+    // GETTERS E SETTERS
     public List<Cidadao> getListaCidadaos() {
         return listaCidadaos;
     }

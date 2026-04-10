@@ -25,6 +25,8 @@ public class MunicipioController {
     @Autowired
     private MunicipioService municipioService;
 
+    // Obtém o utilizador autenticado a partir do contexto de segurança do Spring Security.
+    // Neste caso, espera-se que o utilizador autenticado seja um município.
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof User) {
@@ -33,6 +35,7 @@ public class MunicipioController {
         return null;
     }
 
+    // Carrega o dashboard principal do município com os indicadores agregados.
     @GetMapping("/dashboardMunicipio")
     @Transactional(readOnly = true)
     public String dashboardMunicipio(Model model) {
@@ -45,12 +48,14 @@ public class MunicipioController {
         return "municipio/dashboardMunicipio";
     }
 
+    // Página inicial do município após autenticação.
     @GetMapping("/homeMunicipio")
     public String homeMunicipio(Model model) {
         model.addAttribute("user", getAuthenticatedUser());
         return "municipio/homeMunicipio";
     }
 
+    // Mostra o formulário para redefinir a meta mensal de CO2.
     @GetMapping("/redefinirMeta")
     public String redefinirMeta(Model model) {
         Municipio municipio = adicionarContextoMunicipio(model);
@@ -61,6 +66,7 @@ public class MunicipioController {
         return "municipio/redefinirMeta";
     }
 
+    // Mostra o formulário para redefinir as taxas por nível de emissões.
     @GetMapping("/redefinirTaxa")
     public String redefinirTaxa(Model model) {
         Municipio municipio = adicionarContextoMunicipio(model);
@@ -71,6 +77,7 @@ public class MunicipioController {
         return "municipio/redefinirTaxa";
     }
 
+    // Mostra a página de relatórios do município.
     @GetMapping("/relatoriosMunicipio")
     @Transactional(readOnly = true)
     public String relatoriosMunicipio(Model model) {
@@ -83,6 +90,7 @@ public class MunicipioController {
         return "municipio/relatoriosMunicipio";
     }
 
+    // Lista todos os cidadãos associados ao município autenticado.
     @GetMapping("/listaCidadaos")
     @Transactional(readOnly = true)
     public String listaDeCidadaos(Model model) {
@@ -96,6 +104,8 @@ public class MunicipioController {
         return "municipio/listaCidadaos";
     }
 
+    // Lista os veículos dos cidadãos do município.
+    // A view recebe a lista de cidadãos e percorre os respetivos veículos.
     @GetMapping("/listaVeiculos")
     @Transactional(readOnly = true)
     public String listaDeVeiculos(Model model) {
@@ -109,6 +119,7 @@ public class MunicipioController {
         return "municipio/listaVeiculos";
     }
 
+    // Processa o formulário de atualização do objetivo de CO2.
     @PostMapping("/redefinirMetaAction")
     public String redefinirMetaAction(
             @RequestParam("novoObjetivo") double novoObjetivo,
@@ -137,6 +148,7 @@ public class MunicipioController {
         return "municipio/redefinirMeta";
     }
 
+    // Processa o formulário de atualização das taxas por nível.
     @PostMapping("/redefinirTaxaAction")
     public String redefinirTaxaAction(
             @RequestParam("taxaNivel1") double taxaNivel1,
@@ -177,6 +189,7 @@ public class MunicipioController {
         return "municipio/redefinirTaxa";
     }
 
+    // Página alternativa do dashboard, possivelmente usada para gráficos separados.
     @GetMapping("/dashboardMunicipio_b")
     public String dashboardGraficos(Model model) {
         Municipio municipio = adicionarContextoMunicipio(model);
@@ -184,12 +197,11 @@ public class MunicipioController {
             return "municipio/dashboardMunicipio_b";
         }
 
-        // Adicionar os dados do relatório ao model
-        adicionarRelatorioAoModel(model, municipio);
-
         return "municipio/dashboardMunicipio_b";
     }
 
+    // Método auxiliar para colocar no model o utilizador autenticado e o município correspondente.
+    // Centraliza lógica repetida e garante consistência entre endpoints.
     private Municipio adicionarContextoMunicipio(Model model) {
         User user = getAuthenticatedUser();
         model.addAttribute("user", user);
@@ -210,6 +222,8 @@ public class MunicipioController {
         return municipio;
     }
 
+    // Adiciona ao model todos os atributos calculados no relatório municipal,
+    // para serem usados diretamente nas views Thymeleaf.
     private void adicionarRelatorioAoModel(Model model, Municipio municipio) {
         DTODashboardMunicipioService dados = municipioService.gerarRelatorioMunicipio(municipio);
         model.addAllAttributes(dados.toModelAttributes());

@@ -25,6 +25,9 @@ public class RegistoKmsController {
     @Autowired
     private CidadaoRepository cidadaoRepository;
 
+    /* Mostra o formulário onde o cidadão pode registar os quilómetros percorridos.
+    É também enviado para a view o cidadão autenticado, para permitir mostrar
+    os veículos associados e restante contexto do utilizador.*/
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
@@ -33,6 +36,9 @@ public class RegistoKmsController {
         return "cidadao/registoKms";
     }
 
+    // Processa o pedido de registo de kms submetido pelo cidadão.
+    // Valida se os dados recebidos são consistentes e confirma se o veículo
+    // pertence efetivamente ao utilizador autenticado.
     @PostMapping("/registoKmsAction")
     public String registarKms(@RequestParam double kms,
                               @RequestParam Long veiculoId,
@@ -40,11 +46,13 @@ public class RegistoKmsController {
                               Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
 
+        // Validação básica dos dados recebidos
         if (cidadao == null || kms <= 0) {
             model.addAttribute("erro", "Dados inválidos");
             return "redirect:/cidadao/registoKms";
         }
 
+        // Procura o veículo selecionado dentro da lista de veículos do cidadão
         Ownership ownership = encontrarOwnership(cidadao, veiculoId);
         if (ownership == null) {
             model.addAttribute("erro", "Veículo não encontrado");
@@ -52,6 +60,7 @@ public class RegistoKmsController {
         }
 
         try {
+            // Delegação da lógica de negócio para a camada de service
             registoKmsService.salvarRegisto(cidadao, ownership, kms);
             model.addAttribute("mensagem", "Registo guardado com sucesso!");
         } catch (Exception e) {
@@ -61,6 +70,8 @@ public class RegistoKmsController {
         return "redirect:/cidadao/registoKms?sucesso=true";
     }
 
+    // Mostra o histórico completo de registos de quilómetros do cidadão,
+    // juntamente com os totais acumulados de kms e emissões de CO2.
     @GetMapping("/verRegistosKms")
     public String verHistorico(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
@@ -71,12 +82,17 @@ public class RegistoKmsController {
         double totalKms = 0.0;
         double totalCo2 = 0.0;
 
+        // Percorre todos os veículos do cidadão e agrega os respetivos registos
         if (cidadao != null && cidadao.getListaDeVeiculos() != null) {
             for (Ownership ownership : cidadao.getListaDeVeiculos()) {
                 Veiculo veiculo = ownership.getVeiculo();
+
+                // Guarda associação entre id do veículo e matrícula para apresentação na view
                 if (veiculo != null) {
                     matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
                 }
+
+                // Acumula todos os registos e respetivos valores totais
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms r : ownership.getRegistosKms()) {
                         todosRegistos.add(r);
@@ -92,10 +108,11 @@ public class RegistoKmsController {
         model.addAttribute("totalKmsGeral", totalKms);
         model.addAttribute("totalCo2Geral", totalCo2);
 
-
         return "cidadao/historicoKms";
     }
 
+    // Obtém o cidadão autenticado com base no principal devolvido pelo Spring Security.
+    // É feita uma nova leitura da base de dados para garantir que a entidade vem atualizada.
     private Cidadao obterCidadaoAutenticado(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
             return cidadaoRepository.findById(((Cidadao) authentication.getPrincipal()).getId()).orElse(null);
@@ -103,6 +120,8 @@ public class RegistoKmsController {
         return null;
     }
 
+    // Procura a relação de ownership correspondente ao veículo selecionado.
+    // Isto permite garantir que o registo é feito sobre um veículo pertencente ao cidadão.
     private Ownership encontrarOwnership(Cidadao cidadao, Long veiculoId) {
         if (cidadao.getListaDeVeiculos() != null) {
             return cidadao.getListaDeVeiculos().stream()
