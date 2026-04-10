@@ -16,32 +16,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="dashboard-body">
 
 <jsp:include page="navbarm.jsp"/>
-
 <div class="dashboard-wrapper">
-
-    <div class="dashboard-hero">
-        <div>
-            <h1>Dashboard do Município</h1>
-            <c:choose>
-                <c:when test="${not empty municipio}">
-                    <p>Visão geral das emissões e veículos registados de ${municipio.nome}</p>
-                </c:when>
-                <c:otherwise>
-                    <p>Visão geral das emissões e veículos registados</p>
-                </c:otherwise>
-            </c:choose>
-        </div>
-        <div class="dashboard-hero-icon">📅</div>
-    </div>
+    <%-- HERO --%>
+    <section class="mun-hero">
+        <h1 class="mun-hero-title">
+            Dashboard do Município
+            <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
+        </h1>
+        <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
+    </section>
 
     <c:if test="${not empty erro}">
         <div class="empty-state-box">
@@ -53,9 +45,8 @@
         <div class="dashboard-sections">
 
             <!-- 1ª LINHA -->
-            <div class="dashboard-row row-3">
+            <div class="dashboard-row row-2">
 
-                <!-- 1 - Emissões Mensais -->
                 <div class="info-card">
                     <div class="card-label">Emissões Mensais</div>
                     <div class="card-value">
@@ -64,7 +55,6 @@
                     <div class="card-subtext">Média mensal de CO₂</div>
                 </div>
 
-                <!-- 2 - Nº de Veículos -->
                 <div class="info-card">
                     <div class="card-label">N.º de Veículos</div>
                     <div class="card-value">
@@ -73,21 +63,19 @@
                     <div class="card-subtext">Total registado</div>
                 </div>
 
-                <!-- 3 - Média por Veículo -->
-                <div class="info-card">
-                    <div class="card-label">Média por Veículo</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaPorVeiculo}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                    </div>
-                    <div class="card-subtext">CO₂ por veículo</div>
-                </div>
+<%--                <div class="info-card">--%>
+<%--                    <div class="card-label">Média por Veículo</div>--%>
+<%--                    <div class="card-value">--%>
+<%--                        <fmt:formatNumber value="${mediaPorVeiculo}" minFractionDigits="2" maxFractionDigits="2"/> kg--%>
+<%--                    </div>--%>
+<%--                    <div class="card-subtext">CO₂ médio por veículo</div>--%>
+<%--                </div>--%>
 
             </div>
 
             <!-- 2ª LINHA -->
             <div class="dashboard-row row-2">
 
-                <!-- 4 - Média Ano Anterior -->
                 <div class="info-card destaque-card destaque-azul">
                     <div class="card-label">Média Ano Anterior</div>
                     <div class="card-value">
@@ -103,7 +91,6 @@
                     </div>
                 </div>
 
-                <!-- 5 - Média Ano Atual -->
                 <c:set var="classeAnoAtual" value="destaque-laranja"/>
                 <c:if test="${mediaAnoAtual > mediaAnoAnterior}">
                     <c:set var="classeAnoAtual" value="destaque-vermelho"/>
@@ -126,38 +113,54 @@
 
             </div>
 
-            <!-- GRÁFICO: Evolução Mensal das Emissões -->
+            <!-- GRÁFICO EVOLUÇÃO -->
             <div class="mun-card">
-                <h3 class="mun-card-title">📈 Evolução Mensal das Emissões CO₂</h3>
-                <p class="mun-card-description">Evolução das emissões totais ao longo dos meses.</p>
+                <h3 class="mun-card-title">
+                    <i class="bi bi-graph-up-arrow"></i>Evolução Mensal das Emissões CO₂
+                </h3>
+                <p class="mun-card-description">
+                    Evolução das emissões totais ao longo dos meses.
+                </p>
                 <div class="emissoes-chart-wrap-lg">
                     <canvas id="evolucaoMensalChart"></canvas>
                 </div>
             </div>
 
-            <!-- GRÁFICOS: Frota por Tipo de Veículo -->
+            <!-- GRÁFICOS 2 COLUNAS -->
             <div class="mun-grid-2">
                 <div class="mun-card">
-                    <h3 class="mun-card-title">🚗 Quantidade de Veículos</h3>
-                    <p class="mun-card-description">Distribuição da frota por tipo de combustível.</p>
+                    <h3 class="mun-card-title">
+                        <i class="bi bi-car-front-fill"></i>Quantidade de Veículos
+                    </h3>
+                    <p class="mun-card-description">
+                        Distribuição da frota por tipo de combustível.
+                    </p>
                     <div class="emissoes-chart-wrap-md">
                         <canvas id="frotaPorTipoChart"></canvas>
                     </div>
                 </div>
 
                 <div class="mun-card">
-                    <h3 class="mun-card-title">📊 Emissões CO₂ por Combustível</h3>
-                    <p class="mun-card-description">Distribuição das emissões totais por tipo.</p>
+                    <h3 class="mun-card-title">
+                        <i class="bi bi-pie-chart-fill"></i>Emissões CO₂ por Combustível
+                    </h3>
+                    <p class="mun-card-description">
+                        Distribuição das emissões totais por tipo de combustível.
+                    </p>
                     <div class="emissoes-chart-wrap-md">
                         <canvas id="co2PorTipoChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- GRÁFICO: Quilómetros por Tipo -->
+            <!-- GRÁFICO KMS -->
             <div class="mun-card">
-                <h3 class="mun-card-title">🛣️ Quilómetros Totais por Combustível</h3>
-                <p class="mun-card-description">Total de quilómetros percorridos por tipo de veículo.</p>
+                <h3 class="mun-card-title">
+                    <i class="bi bi-signpost-2-fill"></i>Quilómetros Totais por Combustível
+                </h3>
+                <p class="mun-card-description">
+                    Total de quilómetros percorridos por tipo de veículo.
+                </p>
                 <div class="emissoes-chart-wrap-lg">
                     <canvas id="kmsPorTipoChart"></canvas>
                 </div>
@@ -166,7 +169,6 @@
             <!-- 3ª LINHA -->
             <div class="dashboard-row row-5">
 
-                <!-- Gasolina -->
                 <div class="fuel-card fuel-gasolina">
                     <div class="fuel-title">Gasolina</div>
                     <div class="fuel-info">
@@ -181,7 +183,6 @@
                     </div>
                 </div>
 
-                <!-- Híbrido -->
                 <div class="fuel-card fuel-hibrido">
                     <div class="fuel-title">Híbrido</div>
                     <div class="fuel-info">
@@ -196,7 +197,6 @@
                     </div>
                 </div>
 
-                <!-- GPL -->
                 <div class="fuel-card fuel-gpl">
                     <div class="fuel-title">GPL</div>
                     <div class="fuel-info">
@@ -211,7 +211,6 @@
                     </div>
                 </div>
 
-                <!-- Diesel -->
                 <div class="fuel-card fuel-diesel">
                     <div class="fuel-title">Diesel</div>
                     <div class="fuel-info">
@@ -226,7 +225,6 @@
                     </div>
                 </div>
 
-                <!-- Elétrico -->
                 <div class="fuel-card fuel-eletrico">
                     <div class="fuel-title">Elétrico</div>
                     <div class="fuel-info">
@@ -295,12 +293,42 @@
         ];
 
         const cores = [
-            "#FF6384", // gasolina
-            "#36A2EB", // diesel
-            "#FFCE56", // hibrido
-            "#4BC0C0", // gpl
-            "#9966FF"  // eletrico
+            '#D4A017', // gasolina
+            '#1A5276', // diesel
+            '#1A7A4A', // hibrido
+            '#6B5CA5', // gpl
+            '#0F766E'  // eletrico
         ];
+
+        Chart.defaults.font.family = 'Outfit, sans-serif';
+        Chart.defaults.color = '#6B7A8D';
+        Chart.defaults.plugins.legend.labels.usePointStyle = true;
+        Chart.defaults.plugins.legend.labels.boxWidth = 10;
+        Chart.defaults.plugins.legend.labels.boxHeight = 10;
+        Chart.defaults.plugins.legend.labels.padding = 18;
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(0, 31, 63, 0.92)';
+        Chart.defaults.plugins.tooltip.titleColor = '#FFFFFF';
+        Chart.defaults.plugins.tooltip.bodyColor = '#E8F0FB';
+        Chart.defaults.plugins.tooltip.padding = 12;
+        Chart.defaults.plugins.tooltip.cornerRadius = 12;
+        Chart.defaults.plugins.tooltip.displayColors = true;
+
+        const axisCommon = {
+            ticks: {
+                color: '#6B7A8D',
+                font: {
+                    family: 'Outfit, sans-serif',
+                    size: 12
+                }
+            },
+            grid: {
+                color: 'rgba(0, 31, 63, 0.08)',
+                drawBorder: false
+            },
+            border: {
+                display: false
+            }
+        };
 
         const ctxEvolucao = document.getElementById('evolucaoMensalChart');
         if (ctxEvolucao) {
@@ -311,15 +339,44 @@
                     datasets: [{
                         label: 'Emissões CO₂ (kg)',
                         data: evolucaoMensalValores,
-                        borderColor: '#1d4ed8',
-                        backgroundColor: 'rgba(29, 78, 216, 0.12)',
+                        borderColor: '#001F3F',
+                        backgroundColor: 'rgba(26, 82, 118, 0.10)',
+                        pointBackgroundColor: '#1A5276',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
                         fill: true,
-                        tension: 0.3
+                        tension: 0.35
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'start'
+                        }
+                    },
+                    scales: {
+                        x: axisCommon,
+                        y: {
+                            ...axisCommon,
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#6B7A8D',
+                                callback: function(value) {
+                                    return value + ' kg';
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
@@ -332,12 +389,21 @@
                     labels: combustivelLabels,
                     datasets: [{
                         data: frotaValores,
-                        backgroundColor: cores
+                        backgroundColor: cores,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 2,
+                        hoverOffset: 8
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
             });
         }
@@ -350,12 +416,20 @@
                     labels: combustivelLabels,
                     datasets: [{
                         data: co2PorTipoValores,
-                        backgroundColor: cores
+                        backgroundColor: cores,
+                        borderColor: '#FFFFFF',
+                        borderWidth: 2,
+                        hoverOffset: 6
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
             });
         }
@@ -369,21 +443,38 @@
                     datasets: [{
                         label: 'Km totais',
                         data: kmsPorTipoValores,
-                        backgroundColor: cores
+                        backgroundColor: cores,
+                        borderRadius: 10,
+                        borderSkipped: false,
+                        maxBarThickness: 48
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'start'
+                        }
+                    },
+                    scales: {
+                        x: axisCommon,
+                        y: {
+                            ...axisCommon,
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#6B7A8D',
+                                callback: function(value) {
+                                    return value + ' km';
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
-
-        console.log("mesesLabels:", mesesLabels);
-        console.log("evolucaoMensalValores:", evolucaoMensalValores);
-        console.log("frotaValores:", frotaValores);
-        console.log("co2PorTipoValores:", co2PorTipoValores);
-        console.log("kmsPorTipoValores:", kmsPorTipoValores);
     </script>
 </c:if>
 
