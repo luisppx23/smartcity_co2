@@ -14,6 +14,7 @@
 </head>
 <body class="form-page-body">
 <jsp:include page="../navbar.jsp"/>
+<div class="navbar-spacer"></div>
 <div class="form-page-wrapper">
     <div class="form-page-background-shape"></div>
 

@@ -38,8 +38,14 @@ public class RegistoKmsController {
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
+        if (cidadao == null) return "redirect:/auth/login";
+
+        // Buscar o Cidadao completo (com fotoUrl)
+        Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+
+        model.addAttribute("user", cidadaoCompleto);
         model.addAttribute("registoKmsModel", new RegistarKmsModel());
-        model.addAttribute("cidadao", cidadao);
+        model.addAttribute("cidadao", cidadaoCompleto);
         return "cidadao/registoKms";
     }
 
@@ -77,8 +83,8 @@ public class RegistoKmsController {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
         if (cidadao == null) return "redirect:/auth/login";
 
-        // Buscar o cidadão completo com veículos e registos (fora da transação? Já está dentro)
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+        model.addAttribute("user", cidadaoCompleto);
 
         // 1. Recolher todos os registos de Kms (objetos RegistoKms) para a tabela de histórico
         List<RegistoKms> todosRegistos = new ArrayList<>();
@@ -153,7 +159,7 @@ public class RegistoKmsController {
 
     private Cidadao obterCidadaoAutenticado(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
-            return cidadaoRepository.findById(((Cidadao) authentication.getPrincipal()).getId()).orElse(null);
+            return (Cidadao) authentication.getPrincipal();
         }
         return null;
     }

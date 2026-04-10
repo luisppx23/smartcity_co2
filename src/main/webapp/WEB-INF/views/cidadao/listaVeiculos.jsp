@@ -49,8 +49,8 @@
                     <c:forEach var="ownership" items="${cidadao.listaDeVeiculos}">
                         <tr>
                             <td>${ownership.matricula}</td>
-                            <td>${ownership.veiculo.marca}</td>    <!-- Acessa através do veiculo associado -->
-                            <td>${ownership.veiculo.modelo}</td>   <!-- Acessa através do veiculo associado -->
+                            <td>${ownership.veiculo.marca}</td>
+                            <td>${ownership.veiculo.modelo}</td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -59,6 +59,9 @@
         </c:if>
 
         <div class="smart-form-actions history-actions">
+            <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="smart-btn smart-btn-primary">
+                 Registar Veículo
+            </a>
             <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
                 Voltar à Home
             </a>

@@ -34,7 +34,7 @@ public class CidadaoService {
     }
 
     public Cidadao getUserC(Long id) {
-        return cidadaoRepository.getReferenceById(id);
+        return cidadaoRepository.findById(id).orElse(null);
     }
 
     public void salvarAlteracoes(Cidadao cidadao) {

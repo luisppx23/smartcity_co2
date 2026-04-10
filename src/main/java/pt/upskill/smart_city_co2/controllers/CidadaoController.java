@@ -107,32 +107,33 @@ public class CidadaoController {
     // Direciona para pagina de home do cidadão
     @GetMapping("/homeCidadao")
     public String homeCidadao(Model model) {
-        model.addAttribute("user", getAuthenticatedUser());
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
         return "cidadao/homeCidadao";
     }
 
     // Direciona para pagina de registar veículo
     @GetMapping("/registoVeiculo")
     public String registarVeiculo(Model model) {
-        model.addAttribute("user", getAuthenticatedUser());
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
         return "cidadao/registoVeiculo";
     }
 
     @GetMapping("/simularTaxa")
     public String simularTaxa(Model model) {
-        User user = getAuthenticatedUser();
-        if (user == null) return "redirect:/auth/login";
-
-        model.addAttribute("user", user);
-
-        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
         model.addAttribute("cidadao", cidadao);
-
-        // Adicionar objetos vazios para o formulário
         model.addAttribute("ownershipSelecionado", null);
         model.addAttribute("kmsSimulacao", 0);
         model.addAttribute("valorTaxa", null);
-
         return "cidadao/simularTaxa";
     }
 
@@ -140,12 +141,10 @@ public class CidadaoController {
     public String calcularTaxa(@RequestParam Long veiculoId,
                                @RequestParam double kms,
                                Model model) {
-        User user = getAuthenticatedUser();
-        if (user == null) return "redirect:/auth/login";
-
-        model.addAttribute("user", user);
-
-        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
         model.addAttribute("cidadao", cidadao);
 
         // Encontrar o ownership pelo veículo
@@ -182,15 +181,11 @@ public class CidadaoController {
 
     @GetMapping("/listaVeiculos")
     public String listaVeiculos(Model model) {
-        User user = getAuthenticatedUser();
-        if (user == null) return "redirect:/auth/login";
-
-        model.addAttribute("user", user);
-
-        // Carrega o cidadão completo com a lista de veículos
-        Cidadao cidadao = cidadaoService.getUserC(user.getId());
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) return "redirect:/auth/login";
+        Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
+        model.addAttribute("user", cidadao);
         model.addAttribute("cidadao", cidadao);
-
         return "cidadao/listaVeiculos";
     }
 
@@ -370,4 +365,6 @@ public class CidadaoController {
 
         return "cidadao/chartsCidadao";
     }
+
+
 }

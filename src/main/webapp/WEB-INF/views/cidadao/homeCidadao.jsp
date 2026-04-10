@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <title>Home Cidadão</title>
@@ -114,50 +115,7 @@
 </head>
 <body class="form-page-body">
 
-<nav class="smart-navbar">
-    <div class="smart-navbar-inner">
-        <div class="smart-navbar-left">
-            <div class="smart-navbar-logo-wrap">
-                <img src="/images/logo.jpeg" alt="Smart City CO₂" class="smart-navbar-logo" />
-            </div>
-            <span class="smart-navbar-role">Conta do cidadão</span>
-        </div>
-        <div class="smart-navbar-center">
-            <a href="<c:url value='/cidadao/homeCidadao'/>" class="smart-nav-link">
-                <i class="bi bi-house"></i> Home
-            </a>
-            <a href="<c:url value='/cidadao/listaVeiculos'/>" class="smart-nav-link">
-                <i class="bi bi-car-front"></i> Lista de Veículos
-            </a>
-            <a href="<c:url value='/cidadao/registoKms'/>" class="smart-nav-link">
-                <i class="bi bi-speedometer2"></i> Registo de Kms
-            </a>
-            <a href="<c:url value='/cidadao/dashboardCidadao'/>" class="smart-nav-link">
-                <i class="bi bi-graph-up"></i> Dashboard
-            </a>
-        </div>
-        <div class="smart-navbar-right">
-            <div class="smart-navbar-avatar" id="avatarBtn" title="Menu do utilizador">JC</div>
-            <div class="profile-dropdown" id="profileDropdown">
-                <div class="pd-email">${user.email}</div>
-                <div class="pd-body">
-                    <div class="pd-avatar-lg">JC</div>
-                    <div class="pd-greeting">Hi, ${user.firstName}! <i class="bi bi-chevron-down"></i></div>
-                </div>
-                <div class="pd-divider"></div>
-                <a href="<c:url value='/cidadao/perfil'/>" class="pd-menu-item">
-                    <i class="bi bi-person-circle"></i> Visualizar Perfil
-                </a>
-                <div class="pd-footer">
-                    <a href="<c:url value='/logout'/>" class="pd-logout">
-                        <i class="bi bi-box-arrow-right"></i> Log out
-                    </a>
-                    <a href="<c:url value='/auth/recuperarPassword'/>" class="pd-forgot">Forgot Password?</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<jsp:include page="../navbar.jsp"/>
 <div class="navbar-spacer"></div>
 
 <script>
