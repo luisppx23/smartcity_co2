@@ -303,3 +303,21 @@
         grid-template-columns: 1fr;
     }
 }
+
+.auth-alert-success {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.auth-helper {
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.auth-separator {
+    color: #ddd;
+    margin: 0 0.5rem;
+}
