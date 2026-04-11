@@ -76,7 +76,9 @@ public class RegistoKmsService {
 
                     RegistoKms registoSalvo = registoKmsRepository.save(registo);
 
-                    Taxa taxa = taxaService.criarTaxa(registoSalvo);
+                    Cidadao cidadao = ownership.getCidadao();
+                    Municipio municipio = (cidadao != null) ? cidadao.getMunicipio() : null;
+                    Taxa taxa = taxaService.criarTaxa(registoSalvo, municipio);
                     taxaRepository.save(taxa);
                 }
             }
@@ -101,7 +103,8 @@ public class RegistoKmsService {
 
         RegistoKms registoSalvo = registoKmsRepository.save(registo);
 
-        Taxa taxa = taxaService.criarTaxa(registoSalvo);
+        Municipio municipio = cidadao.getMunicipio();
+        Taxa taxa = taxaService.criarTaxa(registoSalvo, municipio);
         taxaRepository.save(taxa);
 
         if (ownership.getRegistosKms() == null) {
