@@ -84,7 +84,7 @@ public class RegistoKmsController {
         return "redirect:/cidadao/registoKms?sucesso=true";
     }
 
-    @GetMapping("/verRegistosKms")
+    @GetMapping("/historicoKms")
     @Transactional(readOnly = true)
     public String verHistorico(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);

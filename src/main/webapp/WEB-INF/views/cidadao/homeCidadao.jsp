@@ -24,7 +24,7 @@
 <div class="dashboard-container">
 
     <div class="home-grid">
-        <a href="${pageContext.request.contextPath}/cidadao/registoVeiculo" class="home-card municipality-style-card">
+        <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="home-card municipality-style-card">
             <div class="card-icon">
                 <i class="bi bi-car-front"></i>
             </div>
@@ -48,7 +48,7 @@
             <p>Introduza novos registos de quilometragem do seu veículo.</p>
         </a>
 
-        <a href="${pageContext.request.contextPath}/cidadao/verRegistosKms" class="home-card municipality-style-card">
+        <a href="${pageContext.request.contextPath}/cidadao/historicoKms" class="home-card municipality-style-card">
             <div class="card-icon">
                 <i class="bi bi-clock-history"></i>
             </div>
