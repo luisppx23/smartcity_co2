@@ -11,6 +11,43 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
 </head>
+
+<style>
+    /* Ajusta a tabela de histórico para não ter scroll horizontal */
+    .history-table-wrapper {
+        overflow-x: visible !important;
+    }
+    .history-table {
+        table-layout: fixed;
+        width: 100%;
+        font-size: 0.85rem;
+    }
+    .history-table th, .history-table td {
+        padding: 8px 6px;
+        word-break: break-word;
+        white-space: normal;
+    }
+    /* Definir larguras específicas para cada coluna (ajuste conforme necessário) */
+    .history-table th:nth-child(1), .history-table td:nth-child(1) { width: 9%; }  /* Data */
+    .history-table th:nth-child(2), .history-table td:nth-child(2) { width: 18%; } /* Veículo */
+    .history-table th:nth-child(3), .history-table td:nth-child(3) { width: 10%; } /* Matrícula */
+    .history-table th:nth-child(4), .history-table td:nth-child(4) { width: 10%; } /* Combustível */
+    .history-table th:nth-child(5), .history-table td:nth-child(5) { width: 8%; }  /* Kms */
+    .history-table th:nth-child(6), .history-table td:nth-child(6) { width: 10%; } /* Emissão g/km */
+    .history-table th:nth-child(7), .history-table td:nth-child(7) { width: 10%; } /* Emissão total (kg) */
+    .history-table th:nth-child(8), .history-table td:nth-child(8) { width: 8%; }  /* Taxa (€) */
+
+    /* Para ecrãs muito pequenos, reduzir ainda mais o tamanho da fonte */
+    @media (max-width: 768px) {
+        .history-table {
+            font-size: 0.7rem;
+        }
+        .history-table th, .history-table td {
+            padding: 4px 3px;
+        }
+    }
+</style>
+
 <body class="form-page-body">
 <jsp:include page="../navbar.jsp"/>
 
@@ -99,6 +136,7 @@
                         <th>Combustível</th>
                         <th>Total Kms</th>
                         <th>Total CO2 (kg)</th>
+                        <th>Total Taxa (€)</th>   <!-- NOVA COLUNA -->
                     </tr>
                     </thead>
                     <tbody>
@@ -109,6 +147,7 @@
                             <td>${veiculo.tipoDeCombustivel}</td>
                             <td><fmt:formatNumber value="${totalKmsPorVeiculo[veiculo.id]}" minFractionDigits="1" maxFractionDigits="1"/> km</td>
                             <td><fmt:formatNumber value="${totalCo2PorVeiculo[veiculo.id]}" minFractionDigits="2" maxFractionDigits="2"/> kg</td>
+                            <td><fmt:formatNumber value="${totalTaxaPorVeiculo[veiculo.id]}" minFractionDigits="2" maxFractionDigits="2"/> €</td>
                         </tr>
                     </c:forEach>
                     </tbody>

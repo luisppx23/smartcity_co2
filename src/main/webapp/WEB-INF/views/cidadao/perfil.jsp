@@ -9,6 +9,48 @@
     <title>O Meu Perfil</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
+    <style>
+        /* Ajustes na página de perfil */
+        .profile-info-list {
+            margin-bottom: 20px; /* reduz o espaço após a lista de informações */
+        }
+        .profile-info-row {
+            margin-bottom: 8px; /* espaçamento entre linhas, se necessário */
+        }
+        .smart-form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;  /* reduz o espaço superior */
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .smart-form-actions .smart-btn,
+        .smart-form-actions form button.smart-btn {
+            min-width: 140px;
+            text-align: center;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            line-height: 1.2;
+        }
+        /* Para o botão "Apagar Conta" que está dentro de um form */
+        .smart-form-actions form {
+            margin: 0;
+            display: inline-block;
+        }
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .smart-form-actions .smart-btn,
+            .smart-form-actions form button.smart-btn {
+                min-width: 120px;
+                white-space: normal;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body class="form-page-body">
 <jsp:include page="../navbar.jsp"/>
