@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/styles/cidadao/navbar.css" />
     <link rel="stylesheet" href="/styles/cidadao/forms-cidadao.css" />
     <link rel="stylesheet" href="/styles/cidadao/emissoes-cidadao.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
 

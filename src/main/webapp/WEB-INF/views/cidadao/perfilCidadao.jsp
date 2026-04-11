@@ -10,6 +10,7 @@
     <title>Perfil Cidadão</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/form-pages.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="form-page-body">
 <jsp:include page="../navbar.jsp"/>
