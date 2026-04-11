@@ -209,20 +209,16 @@ public class CidadaoController {
 
     @GetMapping("/dashboardCidadao")
     public String dashboardCompleto(Authentication authentication, Model model) {
-        // Verificar autenticação
         if (authentication == null || !(authentication.getPrincipal() instanceof Cidadao)) {
             return "redirect:/auth/login";
         }
 
         Cidadao cidadao = (Cidadao) authentication.getPrincipal();
-
-        // Buscar o cidadão completo do banco de dados para garantir dados atualizados
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
 
-        // Preparar os dados do dashboard usando o service com @Transactional
         DashboardDataDTO dados = dashboardService.prepararDadosDashboard(cidadaoCompleto);
 
-        // Adicionar todos os dados ao modelo
+        // Dados principais já existentes
         model.addAttribute("listaVeiculos", dados.getListaVeiculos());
         model.addAttribute("matriculaPorVeiculo", dados.getMatriculaPorVeiculo());
         model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
@@ -239,30 +235,13 @@ public class CidadaoController {
         model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
         model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
 
-        // Adicionar o user para a navbar
-        model.addAttribute("user", cidadaoCompleto);
-
-        return "cidadao/dashboardCidadao";
-    }
-
-    @GetMapping("/chartsCidadao")
-    public String chartsCidadao(Authentication authentication, Model model) {
-        if (authentication == null || !(authentication.getPrincipal() instanceof Cidadao)) {
-            return "redirect:/auth/login";
-        }
-
-        Cidadao cidadao = (Cidadao) authentication.getPrincipal();
-        Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
-
-        // Dados principais do dashboard
-        DashboardDataDTO dados = dashboardService.prepararDadosCharts(cidadaoCompleto);
-
-        // CALCULAR DADOS DO MÊS MAIS RECENTE POR VEÍCULO
+        // ==============================
+        // DADOS EXTRA PARA OS GRÁFICOS
+        // ==============================
         Map<Long, Double> kmsUltimoMes = new HashMap<>();
         Map<Long, Double> co2UltimoMes = new HashMap<>();
         Map<Long, Double> taxaUltimoMes = new HashMap<>();
 
-        // Encontrar o mês mais recente com registos
         java.time.LocalDate dataMaisRecente = null;
 
         if (cidadaoCompleto.getListaDeVeiculos() != null) {
@@ -270,7 +249,9 @@ public class CidadaoController {
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms registo : ownership.getRegistosKms()) {
                         if (registo.getMes_ano() != null) {
-                            java.time.LocalDate dataRegisto = new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+                            java.time.LocalDate dataRegisto =
+                                    new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+
                             if (dataMaisRecente == null || dataRegisto.isAfter(dataMaisRecente)) {
                                 dataMaisRecente = dataRegisto;
                             }
@@ -280,7 +261,6 @@ public class CidadaoController {
             }
         }
 
-        // Se encontrou alguma data, usar essa data
         if (dataMaisRecente != null) {
             int mesRecente = dataMaisRecente.getMonthValue();
             int anoRecente = dataMaisRecente.getYear();
@@ -295,8 +275,11 @@ public class CidadaoController {
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms registo : ownership.getRegistosKms()) {
                         if (registo.getMes_ano() != null) {
-                            java.time.LocalDate dataRegisto = new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
-                            if (dataRegisto.getMonthValue() == mesRecente && dataRegisto.getYear() == anoRecente) {
+                            java.time.LocalDate dataRegisto =
+                                    new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+
+                            if (dataRegisto.getMonthValue() == mesRecente &&
+                                    dataRegisto.getYear() == anoRecente) {
                                 kmsMes += registo.getKms_mes();
                                 co2Mes += registo.getEmissaoEfetivaKg();
                             }
@@ -309,34 +292,22 @@ public class CidadaoController {
                 taxaUltimoMes.put(veiculo.getId(), co2Mes * 0.25);
             }
         } else {
-            // Se não houver registos, inicializar com zeros
-            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
-                Veiculo veiculo = ownership.getVeiculo();
-                if (veiculo != null) {
-                    kmsUltimoMes.put(veiculo.getId(), 0.0);
-                    co2UltimoMes.put(veiculo.getId(), 0.0);
-                    taxaUltimoMes.put(veiculo.getId(), 0.0);
+            if (cidadaoCompleto.getListaDeVeiculos() != null) {
+                for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
+                    Veiculo veiculo = ownership.getVeiculo();
+                    if (veiculo != null) {
+                        kmsUltimoMes.put(veiculo.getId(), 0.0);
+                        co2UltimoMes.put(veiculo.getId(), 0.0);
+                        taxaUltimoMes.put(veiculo.getId(), 0.0);
+                    }
                 }
             }
         }
 
-        model.addAttribute("listaVeiculos", dados.getListaVeiculos());
-        model.addAttribute("matriculaPorVeiculo", dados.getMatriculaPorVeiculo());
-        model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
-        model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
-        model.addAttribute("totalKmsGeral", dados.getTotalKmsGeral());
-        model.addAttribute("totalCo2Geral", dados.getTotalCo2Geral());
-        model.addAttribute("listaRegistos", dados.getListaRegistos());
-        model.addAttribute("combustiveisData", dados.getCombustiveisData());
-        model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
-        model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
-
-        // Adicionar dados do último mês
         model.addAttribute("kmsUltimoMes", kmsUltimoMes);
         model.addAttribute("co2UltimoMes", co2UltimoMes);
         model.addAttribute("taxaUltimoMes", taxaUltimoMes);
 
-        // Dados para gráficos
         Map<String, Double> emissoesPorMes = new LinkedHashMap<>();
         if (dados.getListaRegistos() != null) {
             for (Map<String, Object> registo : dados.getListaRegistos()) {
@@ -363,26 +334,14 @@ public class CidadaoController {
         model.addAttribute("emissoesPorMes", new ArrayList<>(emissoesPorMes.values()));
         model.addAttribute("kmsPorMes", new ArrayList<>(kmsPorMes.values()));
 
-        List<Map<String, Object>> veiculosData = new ArrayList<>();
-        for (Veiculo veiculo : dados.getListaVeiculos()) {
-            Map<String, Object> veiculoMap = new HashMap<>();
-            veiculoMap.put("id", veiculo.getId());
-            veiculoMap.put("marca", veiculo.getMarca());
-            veiculoMap.put("modelo", veiculo.getModelo());
-            veiculoMap.put("emissoes", dados.getTotalCo2PorVeiculo().getOrDefault(veiculo.getId(), 0.0));
-            veiculoMap.put("kms", dados.getTotalKmsPorVeiculo().getOrDefault(veiculo.getId(), 0.0));
-            veiculosData.add(veiculoMap);
-        }
-        model.addAttribute("veiculosData", veiculosData);
-
-        // Cores para os veículos
-        List<String> coresVeiculos = Arrays.asList("#04523B", "#D4AF37", "#1f5a3d", "#8B6914", "#2b6a49", "#c49b28");
+        List<String> coresVeiculos = Arrays.asList(
+                "#04523B", "#D4AF37", "#1f5a3d", "#8B6914", "#2b6a49", "#c49b28"
+        );
         model.addAttribute("coresVeiculos", coresVeiculos);
 
         model.addAttribute("user", cidadaoCompleto);
 
-        return "cidadao/chartsCidadao";
+        return "cidadao/dashboardCidadao";
     }
-
 
 }

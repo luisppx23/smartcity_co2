@@ -1,0 +1,252 @@
+:root {
+    --em-border: #dde5df;
+    --em-shadow: 0 4px 12px rgba(44, 62, 52, 0.08);
+
+    --em-green: #166534;
+    --em-green-dark: #0f3d2e;
+    --em-gold: #d4af37;
+
+    --em-text-dark: #16324f;
+    --em-text-main: #425347;
+    --em-text-muted: #6b7a70;
+}
+
+/* MÉTRICAS */
+.emissoes-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 0;
+}
+
+.emissoes-metric-card {
+    background: #ffffff;
+    border: 1px solid var(--em-border);
+    box-shadow: var(--em-shadow);
+    border-radius: 16px;
+    padding: 12px;
+    min-height: 86px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.emissoes-metric-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(44, 62, 52, 0.10);
+}
+
+.emissoes-metric-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    line-height: 1;
+    color: var(--em-green-dark);
+    background: rgba(4, 82, 59, 0.08);
+}
+
+.emissoes-metric-icon--gold {
+    color: #8b6914;
+    background: rgba(212, 175, 55, 0.16);
+}
+
+.emissoes-metric-icon--rank {
+    color: var(--em-green);
+    background: rgba(22, 101, 52, 0.10);
+}
+
+.emissoes-metric-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: var(--em-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+}
+
+.emissoes-metric-value {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: var(--em-text-dark);
+    line-height: 1.1;
+}
+
+/* GRID DE 2 COLUNAS */
+.emissoes-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0;
+}
+
+/* LEGENDA */
+.emissoes-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.emissoes-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--em-text-main);
+    background: #ffffff;
+    border: 1px solid rgba(20, 83, 45, 0.08);
+    border-radius: 999px;
+    padding: 5px 8px;
+}
+
+.emissoes-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+/* RANKING */
+.emissoes-ranking-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+    font-size: 0.76rem;
+}
+
+.emissoes-ranking-row:last-of-type {
+    border-bottom: none;
+}
+
+.emissoes-ranking-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    color: var(--em-text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+}
+
+.emissoes-ranking-value {
+    font-weight: 700;
+    color: var(--em-text-dark);
+    text-align: right;
+    font-size: 0.78rem;
+}
+
+/* PROGRESSO */
+.emissoes-progress-track {
+    height: 8px;
+    background: #edf1ee;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.emissoes-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--em-green), var(--em-gold));
+    border-radius: 999px;
+    min-width: 6px;
+    transition: width 0.8s ease;
+}
+
+.emissoes-ranking-progress {
+    margin-top: 14px;
+    padding-top: 2px;
+}
+
+.emissoes-ranking-pct {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--em-green-dark);
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+/* GAMIFICAÇÃO */
+.emissoes-gamif-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(20, 83, 45, 0.08);
+}
+
+.emissoes-gamif-titulo {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 999px;
+    line-height: 1;
+}
+
+.emissoes-gamif-guardiao {
+    background: rgba(4, 82, 59, 0.10);
+    color: #04523B;
+    border: 1px solid rgba(4, 82, 59, 0.10);
+}
+
+.emissoes-gamif-ouro {
+    background: rgba(212, 175, 55, 0.15);
+    color: #8B6914;
+    border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.emissoes-gamif-prata {
+    background: rgba(140, 155, 170, 0.15);
+    color: #5A6A7A;
+    border: 1px solid rgba(140, 155, 170, 0.16);
+}
+
+.emissoes-gamif-bronze {
+    background: rgba(185, 115, 50, 0.12);
+    color: #7A4A20;
+    border: 1px solid rgba(185, 115, 50, 0.14);
+}
+
+.emissoes-gamif-iniciante {
+    background: rgba(0, 0, 0, 0.05);
+    color: #6B7A8D;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* WRAPPERS DE GRÁFICOS */
+.emissoes-chart-wrap-lg {
+    position: relative;
+    width: 100%;
+    height: 190px;
+}
+
+.emissoes-chart-wrap-md {
+    position: relative;
+    width: 100%;
+    height: 160px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .emissoes-metrics,
+    .emissoes-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .emissoes-metric-card {
+        min-height: 80px;
+    }
+
+    .emissoes-gamif-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -25,7 +26,7 @@ public class RegistoKmsService {
     private OwnershipRepository ownershipRepository;
 
     @Autowired
-    private EmissaoCO2Service emissaoCO2Service;  // ← MANTER ESTE
+    private EmissaoCO2Service emissaoCO2Service;
 
     @Autowired
     private TaxaService taxaService;
@@ -42,25 +43,22 @@ public class RegistoKmsService {
 
         Random random = new Random();
 
-        for (long i = 1; i <= 8; i++) {
-            Ownership ownership = ownershipRepository.findById(i).orElse(null);
+        List<Ownership> ownerships = ownershipRepository.findAll();
 
-            if (ownership == null) {
+        for (Ownership ownership : ownerships) {
+            if (ownership == null || ownership.getCidadao() == null) {
                 continue;
             }
 
             for (int ano = 2024; ano <= 2026; ano++) {
-
-                int ultimoMes = (ano == 2026) ? 3 : 11; // 2026 até abril
+                int ultimoMes = (ano == 2026) ? 3 : 11; // 2026 até abril inclusive
 
                 for (int mes = 0; mes <= ultimoMes; mes++) {
-
                     Calendar cal = Calendar.getInstance();
                     cal.set(ano, mes, 1, 0, 0, 0);
                     cal.set(Calendar.MILLISECOND, 0);
                     Date dataRegisto = cal.getTime();
 
-                    // Kms aleatórios entre 0 e 1000
                     double kmsGerados = random.nextInt(1001);
 
                     RegistoKms registo = new RegistoKms();
@@ -77,7 +75,8 @@ public class RegistoKmsService {
                     RegistoKms registoSalvo = registoKmsRepository.save(registo);
 
                     Cidadao cidadao = ownership.getCidadao();
-                    Municipio municipio = (cidadao != null) ? cidadao.getMunicipio() : null;
+                    Municipio municipio = cidadao.getMunicipio();
+
                     Taxa taxa = taxaService.criarTaxa(registoSalvo, municipio);
                     taxaRepository.save(taxa);
                 }
@@ -94,7 +93,6 @@ public class RegistoKmsService {
 
         int anoReferencia = LocalDate.now().getYear();
 
-        // USAR CÁLCULOS REAIS
         double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
         double emissaoEfetivaKg = emissaoCO2Service.calcularEmissaoEfetivaKg(ownership, kms, anoReferencia);
 
