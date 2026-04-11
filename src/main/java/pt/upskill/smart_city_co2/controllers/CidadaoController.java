@@ -185,7 +185,8 @@ public class CidadaoController {
         double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
 
         // Simular taxa
-        double valorTaxa = taxaService.simularTaxa(emissaoGPorKm, kms);
+        Municipio municipio = cidadao.getMunicipio();
+        double valorTaxa = taxaService.simularTaxa(emissaoGPorKm, kms, municipio);
 
         // Adicionar dados ao modelo
         model.addAttribute("ownershipSelecionado", ownership);
