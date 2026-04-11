@@ -38,20 +38,33 @@ public class RegistoKmsController {
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
+        if (cidadao == null) return "redirect:/auth/login";
+
+        // Buscar o Cidadao completo (com fotoUrl)
+        Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+
+        model.addAttribute("user", cidadaoCompleto);
         model.addAttribute("registoKmsModel", new RegistarKmsModel());
-        model.addAttribute("cidadao", cidadao);
+        model.addAttribute("cidadao", cidadaoCompleto);
         return "cidadao/registoKms";
     }
 
     @PostMapping("/registoKmsAction")
+    @Transactional
     public String registarKms(@RequestParam double kms,
                               @RequestParam Long veiculoId,
                               Authentication authentication,
                               Model model) {
-        Cidadao cidadao = obterCidadaoAutenticado(authentication);
-
-        if (cidadao == null || kms <= 0) {
+        Cidadao cidadaoProxy = obterCidadaoAutenticado(authentication);
+        if (cidadaoProxy == null || kms <= 0) {
             model.addAttribute("erro", "Dados inválidos");
+            return "redirect:/cidadao/registoKms";
+        }
+
+        // Carrega o cidadão completo (com a lista de veículos)
+        Cidadao cidadao = cidadaoService.getUserC(cidadaoProxy.getId());
+        if (cidadao == null) {
+            model.addAttribute("erro", "Cidadão não encontrado");
             return "redirect:/cidadao/registoKms";
         }
 
@@ -77,8 +90,8 @@ public class RegistoKmsController {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
         if (cidadao == null) return "redirect:/auth/login";
 
-        // Buscar o cidadão completo com veículos e registos (fora da transação? Já está dentro)
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
+        model.addAttribute("user", cidadaoCompleto);
 
         // 1. Recolher todos os registos de Kms (objetos RegistoKms) para a tabela de histórico
         List<RegistoKms> todosRegistos = new ArrayList<>();
@@ -130,6 +143,16 @@ public class RegistoKmsController {
             }
         }
 
+        Map<Long, Double> totalTaxaPorVeiculo = new LinkedHashMap<>();
+        for (RegistoKms registo : todosRegistos) {
+            if (registo.getTaxa() != null) {
+                Long veiculoId = registo.getOwnership().getVeiculo().getId();
+                double taxa = registo.getTaxa().getValor();
+                totalTaxaPorVeiculo.put(veiculoId, totalTaxaPorVeiculo.getOrDefault(veiculoId, 0.0) + taxa);
+            }
+        }
+        model.addAttribute("totalTaxaPorVeiculo", totalTaxaPorVeiculo);
+
         // 4. Adicionar todos os atributos ao model
         model.addAttribute("listaRegistos", todosRegistos);
         model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
@@ -153,7 +176,7 @@ public class RegistoKmsController {
 
     private Cidadao obterCidadaoAutenticado(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
-            return cidadaoRepository.findById(((Cidadao) authentication.getPrincipal()).getId()).orElse(null);
+            return (Cidadao) authentication.getPrincipal();
         }
         return null;
     }
