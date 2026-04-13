@@ -22,9 +22,7 @@
 
 <%-- HERO --%>
 <section class="mun-hero">
-    <h1 class="mun-hero-title">Redefinir Taxas de CO₂
-        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-    </h1>
+    <h1 class="mun-hero-title">Redefinir Taxas de CO₂</h1>
     <p class="mun-hero-subtitle">Configure a tabela de taxas por quilómetro para cada nível de emissão.</p>
 </section>
 <main class="mun-page-content">

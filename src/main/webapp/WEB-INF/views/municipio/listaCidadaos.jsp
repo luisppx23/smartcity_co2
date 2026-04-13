@@ -21,7 +21,7 @@
 <section class="mun-hero">
     <h1 class="mun-hero-title">Lista de Cidadãos</h1>
     <p class="mun-hero-subtitle">Cidadãos registados no município
-        <c:if test="${not empty municipio.nome}"><c:out value="${municipio.nome}"/></c:if>.
+        <c:if test="${not empty municipio.nome}"><c:out value="${municipio.nome}"/></c:if>
     </p>
 </section>
 
