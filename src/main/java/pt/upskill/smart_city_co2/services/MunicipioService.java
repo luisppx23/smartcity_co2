@@ -39,7 +39,7 @@ public class MunicipioService {
         municipioRepository.save(
                 new Municipio(
                         "Lisboa",
-                        165.0,
+                        890.0,
                         "lisboa",
                         LocalDateTime.now(),
                         "co2@cm-lisboa.pt",
@@ -53,7 +53,7 @@ public class MunicipioService {
         municipioRepository.save(
                 new Municipio(
                         "Vila Verde",
-                        170.0,
+                        860.0,
                         "vilaverde",
                         LocalDateTime.now(),
                         "co2@cm-vilaverde.pt",
