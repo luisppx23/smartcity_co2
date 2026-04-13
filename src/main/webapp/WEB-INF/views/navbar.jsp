@@ -71,9 +71,6 @@
                     <a href="<c:url value='/logout'/>" class="pd-logout">
                         <i class="bi bi-box-arrow-right"></i> Log out
                     </a>
-                    <a href="<c:url value='/auth/recuperarPassword'/>" class="pd-forgot">
-                        Forgot Password?
-                    </a>
                 </div>
             </div>
         </div>

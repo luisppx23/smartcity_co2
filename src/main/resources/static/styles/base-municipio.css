@@ -307,3 +307,63 @@ a:hover {
         padding: 16px 16px 40px;
     }
 }
+
+/* ── PAGINAÇÃO ── */
+.pagination-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-wrapper {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pag-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(0, 31, 63, 0.2);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--mun-navy);
+    border-radius: 8px;
+    font-family: var(--mun-font);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pag-btn:hover:not(:disabled) {
+    background: var(--mun-navy);
+    color: white;
+    border-color: var(--mun-navy);
+    transform: translateY(-2px);
+}
+
+.pag-btn.active {
+    background: var(--mun-navy);
+    color: white;
+    border-color: var(--mun-navy);
+}
+
+.pag-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── VARIAÇÕES ── */
+.mun-variacao-negativa {
+    color: var(--mun-success);
+}
+
+.mun-variacao-positiva {
+    color: var(--mun-danger);
+}
+
+.mun-variacao-neutra {
+    color: var(--mun-text-muted);
+}

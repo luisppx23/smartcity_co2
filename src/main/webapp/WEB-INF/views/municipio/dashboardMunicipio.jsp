@@ -123,8 +123,7 @@
                     </div>
                 </div>
 
-                <!-- NOVA CAIXA: Total em Taxas -->
-                <div class="info-card destaque-card destaque-azul">
+                <div class="info-card">
                     <div class="card-label">Total em Taxas</div>
                     <div class="card-value">
                         <fmt:formatNumber value="${totalTaxaGeral != null ? totalTaxaGeral : 0}" minFractionDigits="2" maxFractionDigits="2"/> €

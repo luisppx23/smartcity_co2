@@ -12,9 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/homem.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
 </head>
 <body class="form-page-body">
 <jsp:include page="navbarm.jsp"/>
@@ -80,12 +82,11 @@
                 </div>
             </c:otherwise>
         </c:choose>
-
-        <div class="mun-mt-20">
-            <a href="<c:url value='/municipio/homeMunicipio'/>" class="mun-btn-secondary">
-                <i class="bi bi-arrow-left"></i> Voltar ao Home
-            </a>
-        </div>
+    </div>
+    <div class="dashboard-actions">
+        <a href="${pageContext.request.contextPath}/municipio/homeMunicipio" class="smart-btn smart-btn-secondary">
+            Voltar ao Home
+        </a>
     </div>
 
 </main>

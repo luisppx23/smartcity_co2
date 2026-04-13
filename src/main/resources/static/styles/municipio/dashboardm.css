@@ -283,17 +283,52 @@
     border: none;
 }
 
+/* ACTIONS - BOTÃO SECUNDÁRIO ESTILIZADO COMO O DE RELATÓRIO */
 .smart-btn-secondary {
-    background: rgba(0, 31, 63, 0.07);
-    color: var(--mun-navy);
-    border: 1px solid rgba(0, 31, 63, 0.20);
+    background: #002D5A;
+    color: #ffffff;
+    border: 1px solid var(--mun-navy);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.smart-btn-secondary i {
+    color: #ffffff;
 }
 
 .smart-btn-secondary:hover {
-    background: rgba(0, 31, 63, 0.13);
-    transform: translateY(-1px);
+    background: var(--mun-navy);
+    border-color: var(--mun-navy);
+    transform: translateY(-2px);
     text-decoration: none;
-    color: var(--mun-navy);
+    color: #ffffff;
+}
+
+.smart-btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* Adicionar espaçamento inferior consistente às grids */
+.mun-grid-2 {
+    margin-bottom: 0;
+}
+
+.dashboard-row {
+    margin-bottom: 0;
+}
+
+/* Garantir que o gap do dashboard-sections é o único espaçamento */
+.dashboard-sections {
+    gap: 24px;
 }
 
 /* AJUSTE TÍTULOS DOS CARDS */

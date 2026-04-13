@@ -82,9 +82,6 @@
                     <a href="<c:url value='/logout'/>" class="mun-dd-logout">
                         <i class="bi bi-box-arrow-right"></i> Log out
                     </a>
-                    <a href="<c:url value='/auth/recuperarPassword'/>" class="mun-dd-forgot">
-                        Forgot Password?
-                    </a>
                 </div>
             </div>
         </div>
