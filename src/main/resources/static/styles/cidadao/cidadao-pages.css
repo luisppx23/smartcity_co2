@@ -1,0 +1,998 @@
+/* =========================================================
+   OVERRIDES GLOBAIS DE LAYOUT
+   Alinha páginas internas com a largura visual da navbar
+   ========================================================= */
+
+:root {
+    --cidadao-page-max-width: 1180px;
+    --cidadao-page-padding-x: 24px;
+    --cidadao-page-padding-x-mobile: 14px;
+    --cidadao-section-gap: 14px;
+}
+
+/* largura geral das páginas internas */
+.dashboard-wrapper.dashboard-wrapper-cidadao-style {
+    width: min(var(--cidadao-page-max-width), calc(100% - (var(--cidadao-page-padding-x) * 2)));
+    max-width: none;
+    margin: 0 auto;
+    padding: 14px 0 32px;
+}
+
+/* espaçamento uniforme */
+.dashboard-sections {
+    gap: var(--cidadao-section-gap);
+}
+
+/* garante que cards e blocos ocupam a largura correta */
+.dashboard-sections > *,
+.dashboard-row,
+.emissoes-grid-2,
+.history-summary-grid,
+.vehicle-summary-grid,
+.profile-layout {
+    width: 100%;
+}
+
+/* cards de formulário ficam mais largos e equilibrados */
+.kms-form-card,
+.vehicle-form-card,
+.simulacao-form-card,
+.profile-edit-card {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* perfil pode usar mais largura */
+.profile-layout {
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    align-items: stretch;
+}
+
+/* tabelas ocupam o espaço disponível */
+.smart-card .table-responsive,
+.history-table-wrapper {
+    width: 100%;
+}
+
+/* tabelas desktop com largura mínima confortável */
+.history-table {
+    min-width: 900px;
+}
+
+.vehicle-table {
+    min-width: 620px;
+}
+
+/* ajusta header da página */
+.dashboard-page-header {
+    margin: 8px 0 16px;
+    padding: 0 2px;
+}
+
+/* ações com melhor quebra em ecrãs médios */
+.dashboard-actions,
+.profile-actions,
+.kms-form-actions,
+.profile-edit-actions {
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- TÍTULOS DAS PÁGINAS INTERNAS ---------- */
+.page-internal-cidadao .dashboard-page-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-internal-cidadao .dashboard-page-header h1,
+.page-internal-cidadao .dashboard-page-header p {
+    width: 100%;
+    text-align: center;
+}
+
+/* ---------- REGISTO KMS ELEGANTE ---------- */
+.kms-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    gap: 14px;
+    align-items: start;
+}
+
+.kms-form-card {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.kms-side-card {
+    min-height: 100%;
+}
+
+.kms-intro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(4, 82, 59, 0.08);
+    color: var(--green-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.kms-form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.kms-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kms-form-group label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text-500);
+}
+
+.kms-field-help {
+    font-size: 0.72rem;
+    color: var(--text-400);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.kms-highlight-box {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.kms-highlight-item {
+    padding: 12px;
+    border: 1px solid rgba(22, 50, 79, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.kms-highlight-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+}
+
+.kms-highlight-value {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--blue-900);
+    line-height: 1.15;
+}
+
+.kms-form-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.kms-side-title {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--blue-900);
+}
+
+.kms-tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.kms-tip-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.kms-tip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(4, 82, 59, 0.08);
+    color: var(--green-deep);
+    flex-shrink: 0;
+    font-size: 0.82rem;
+}
+
+.kms-tip-text {
+    margin: 0;
+    font-size: 0.76rem;
+    color: #374151;
+    line-height: 1.5;
+}
+
+.kms-empty-state {
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(198, 40, 40, 0.06);
+    border: 1px solid rgba(198, 40, 40, 0.14);
+    color: #a52a2a;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+
+
+/* ---------- FORM REGISTO VEÍCULO ---------- */
+.vehicle-form-card {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.vehicle-form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.vehicle-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vehicle-form-group label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text-500);
+}
+
+.smart-help-text-dashboard {
+    font-size: 0.72rem;
+    color: var(--text-400);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.input-uppercase {
+    text-transform: uppercase;
+}
+
+/* ---------- SIMULAR TAXA ---------- */
+.simulacao-form-card {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.simulacao-result-card {
+    margin-top: 4px;
+    border-left: 4px solid #2e7d32;
+    background: rgba(26, 122, 74, 0.08);
+}
+
+.simulacao-result-title {
+    margin: 0 0 14px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+.simulacao-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.simulacao-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(46, 125, 50, 0.10);
+}
+
+.simulacao-result-row:last-child {
+    border-bottom: none;
+}
+
+.simulacao-result-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.simulacao-result-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--blue-900);
+    text-align: right;
+    word-break: break-word;
+}
+
+.simulacao-error-card {
+    margin-top: 4px;
+    border-left: 4px solid #c62828;
+    background: rgba(198, 40, 40, 0.08);
+}
+
+.simulacao-error-text {
+    margin: 0;
+    color: #c62828;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+/* ---------- PERFIL ---------- */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 12px;
+}
+
+.profile-avatar-card,
+.profile-info-card {
+    min-height: 100%;
+}
+
+.profile-image-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(4, 82, 59, 0.18);
+}
+
+.profile-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2ef;
+    color: var(--blue-900);
+    font-size: 2.7rem;
+    border: 1px solid var(--card-border);
+}
+
+.profile-user-name {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--blue-900);
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.profile-user-subtitle {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-400);
+    margin: 0;
+}
+
+.profile-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.profile-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(22, 50, 79, 0.06);
+}
+
+.profile-info-row:last-child {
+    border-bottom: none;
+}
+
+.profile-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 90px;
+}
+
+.profile-value {
+    font-size: 0.8rem;
+    color: var(--blue-900);
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.profile-actions {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.inline-form {
+    margin: 0;
+    display: inline-block;
+}
+
+.btn-smart-primary-custom {
+    background: #04523B;
+    color: #fff;
+}
+
+.btn-smart-primary-custom:hover {
+    background: #033d2c;
+    color: #fff;
+}
+
+.btn-danger-smart {
+    background-color: #c62828;
+    color: #fff;
+    border: none;
+}
+
+.btn-danger-smart:hover {
+    background-color: #b71c1c;
+    color: #fff;
+}
+
+.success-message {
+    text-align: center;
+    color: #1A7A4A;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* ---------- EDITAR PERFIL ---------- */
+.profile-edit-card {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.profile-edit-form {
+    display: grid;
+    gap: 16px;
+}
+
+.profile-edit-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-edit-group label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text-500);
+}
+
+.profile-file-input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d7ddd9;
+    background: #ffffff;
+    color: var(--blue-900);
+    font-size: 0.84rem;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.profile-file-input:focus {
+    border-color: #7ba787;
+    box-shadow: 0 0 0 3px rgba(123, 167, 135, 0.12);
+}
+
+.profile-edit-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- PAGINAÇÃO HISTÓRICO ---------- */
+.history-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.history-table-meta {
+    font-size: 0.74rem;
+    color: var(--text-400);
+    font-weight: 500;
+}
+
+.pagination-smart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.pagination-smart-link,
+.pagination-smart-current {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid rgba(22, 50, 79, 0.10);
+    background: #ffffff;
+    color: var(--blue-900);
+    transition: all 0.18s ease;
+}
+
+.pagination-smart-link:hover {
+    background: rgba(4, 82, 59, 0.06);
+    border-color: rgba(4, 82, 59, 0.16);
+    color: var(--green-deep);
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.pagination-smart-current {
+    background: #04523B;
+    color: #ffffff;
+    border-color: #04523B;
+}
+
+.pagination-smart-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+/* ---------- SIMULAR TAXA ELEGANTE ---------- */
+.simulacao-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    gap: 14px;
+    align-items: start;
+}
+
+.simulacao-form-card {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.simulacao-side-card {
+    min-height: 100%;
+}
+
+.simulacao-intro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.14);
+    color: #8b6914;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.simulacao-highlight-box {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.simulacao-highlight-item {
+    padding: 12px;
+    border: 1px solid rgba(22, 50, 79, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.simulacao-highlight-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+}
+
+.simulacao-highlight-value {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--blue-900);
+    line-height: 1.15;
+}
+
+.simulacao-side-title {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--blue-900);
+}
+
+.simulacao-tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.simulacao-tip-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.simulacao-tip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.14);
+    color: #8b6914;
+    flex-shrink: 0;
+    font-size: 0.82rem;
+}
+
+.simulacao-tip-text {
+    margin: 0;
+    font-size: 0.76rem;
+    color: #374151;
+    line-height: 1.5;
+}
+
+.simulacao-empty-state {
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(198, 40, 40, 0.06);
+    border: 1px solid rgba(198, 40, 40, 0.14);
+    color: #a52a2a;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.simulacao-result-card {
+    margin-top: 0;
+    border-left: 4px solid #2e7d32;
+    background: rgba(26, 122, 74, 0.08);
+}
+
+.simulacao-result-title {
+    margin: 0 0 14px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+.simulacao-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.simulacao-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(46, 125, 50, 0.10);
+}
+
+.simulacao-result-row:last-child {
+    border-bottom: none;
+}
+
+.simulacao-result-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.simulacao-result-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--blue-900);
+    text-align: right;
+    word-break: break-word;
+}
+
+.simulacao-result-main {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #166534;
+}
+
+.simulacao-error-card {
+    margin-top: 0;
+    border-left: 4px solid #c62828;
+    background: rgba(198, 40, 40, 0.08);
+}
+
+.simulacao-error-text {
+    margin: 0;
+    color: #c62828;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+/* ---------- REGISTO VEÍCULO ELEGANTE ---------- */
+.vehicle-register-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+    gap: 14px;
+    align-items: start;
+}
+
+.vehicle-form-card {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+.vehicle-side-card {
+    min-height: 100%;
+}
+
+.vehicle-intro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(4, 82, 59, 0.08);
+    color: var(--green-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.vehicle-highlight-box {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.vehicle-highlight-item {
+    padding: 12px;
+    border: 1px solid rgba(22, 50, 79, 0.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.vehicle-highlight-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+}
+
+.vehicle-highlight-value {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--blue-900);
+    line-height: 1.15;
+}
+
+.vehicle-form-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.vehicle-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vehicle-form-group label {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text-500);
+}
+
+.vehicle-field-help {
+    font-size: 0.72rem;
+    color: var(--text-400);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.vehicle-side-title {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--blue-900);
+}
+
+.vehicle-tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vehicle-tip-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.vehicle-tip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(4, 82, 59, 0.08);
+    color: var(--green-deep);
+    flex-shrink: 0;
+    font-size: 0.82rem;
+}
+
+.vehicle-tip-text {
+    margin: 0;
+    font-size: 0.76rem;
+    color: #374151;
+    line-height: 1.5;
+}
+
+.vehicle-form-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .vehicle-register-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-side-card {
+        order: 2;
+    }
+
+    .vehicle-form-card {
+        order: 1;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .history-table-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagination-smart {
+        gap: 6px;
+    }
+
+    .pagination-smart-link,
+    .pagination-smart-current {
+        min-width: 34px;
+        height: 34px;
+        font-size: 0.74rem;
+        padding: 0 10px;
+    }
+
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-info-row {
+        flex-direction: column;
+    }
+
+    .profile-value {
+        text-align: left;
+    }
+
+    .simulacao-result-row {
+        flex-direction: column;
+    }
+
+    .simulacao-result-value {
+        text-align: left;
+    }
+    .kms-highlight-box {
+        grid-template-columns: 1fr;
+    }
+
+    .kms-form-actions {
+        justify-content: stretch;
+    }
+    .simulacao-highlight-box {
+        grid-template-columns: 1fr;
+    }
+
+    .simulacao-result-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .simulacao-result-value {
+        text-align: left;
+    }
+
+    .vehicle-highlight-box {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-form-actions {
+        justify-content: stretch;
+    }
+
+    @media (max-width: 900px) {
+        .simulacao-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .simulacao-side-card {
+            order: 2;
+        }
+
+        .simulacao-form-card {
+            order: 1;
+        }
+    }
+}
