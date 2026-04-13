@@ -227,8 +227,10 @@ public class MunicipioController {
         model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
         model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
 
+        model.addAttribute("totalTaxaPorCombustivel", dados.getTotalTaxaPorCombustivel());
         model.addAttribute("totalKmsPorCombustivel", dados.getTotalKmsPorCombustivel());
         model.addAttribute("totalCo2PorCombustivel", dados.getTotalCo2PorCombustivel());
+        model.addAttribute("totalTaxaGeral", dados.getTotalTaxaGeral());
         model.addAttribute("percentagemKmsPorCombustivel", dados.getPercentagemKmsPorCombustivel());
         model.addAttribute("percentagemCo2PorCombustivel", dados.getPercentagemCo2PorCombustivel());
 

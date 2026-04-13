@@ -29,11 +29,13 @@ public class DashboardMunicipioDataDTO {
     private Map<Long, Double> totalKmsPorVeiculo = new LinkedHashMap<>();
     private Map<Long, Double> totalCo2PorVeiculo = new LinkedHashMap<>();
 
+
     // Totais e percentagens por combustível
     private Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
     private Map<String, Double> percentagemCo2PorCombustivel = new LinkedHashMap<>();
+    private Map<String, Double> totalTaxaPorCombustivel = new LinkedHashMap<>();
 
     // Médias e contagens por combustível
     private Map<String, Integer> numeroRegistosPorCombustivel = new LinkedHashMap<>();
@@ -59,6 +61,7 @@ public class DashboardMunicipioDataDTO {
     // Indicadores globais
     private double totalKmsGeral = 0.0;
     private double totalCo2Geral = 0.0;
+    private double totalTaxaGeral = 0.0;
     private double somaEmissoesMensais = 0.0;
     private double mediaGlobalEmissoesMensais = 0.0;
     private double mediaPorVeiculo = 0.0;
@@ -110,6 +113,8 @@ public class DashboardMunicipioDataDTO {
         dto.setCorComparacaoMesAnterior(new LinkedHashMap<>());
         dto.setEvolucaoEmissoesMensais(new LinkedHashMap<>());
         dto.setMesesOrdenados(new ArrayList<>());
+        dto.setTotalTaxaPorCombustivel(new LinkedHashMap<>());
+        dto.setTotalTaxaGeral(0.0);
         return dto;
     }
 
@@ -241,4 +246,10 @@ public class DashboardMunicipioDataDTO {
 
     public List<String> getMesesOrdenados() { return mesesOrdenados; }
     public void setMesesOrdenados(List<String> mesesOrdenados) { this.mesesOrdenados = mesesOrdenados; }
+
+    public Map<String, Double> getTotalTaxaPorCombustivel() { return totalTaxaPorCombustivel; }
+    public void setTotalTaxaPorCombustivel(Map<String, Double> totalTaxaPorCombustivel) { this.totalTaxaPorCombustivel = totalTaxaPorCombustivel; }
+
+    public double getTotalTaxaGeral() { return totalTaxaGeral; }
+    public void setTotalTaxaGeral(double totalTaxaGeral) { this.totalTaxaGeral = totalTaxaGeral; }
 }

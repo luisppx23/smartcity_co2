@@ -120,6 +120,7 @@ public class DashboardMunicipioAnalyticsService {
         dados.getTotalKmsPorCombustivel().putIfAbsent(combustivel, 0.0);
         dados.getTotalCo2PorCombustivel().putIfAbsent(combustivel, 0.0);
         dados.getNumeroRegistosPorCombustivel().putIfAbsent(combustivel, 0);
+        dados.getTotalTaxaPorCombustivel().putIfAbsent(combustivel, 0.0);
     }
 
     private void processarRegisto(
@@ -136,10 +137,23 @@ public class DashboardMunicipioAnalyticsService {
 
         double kms = registo.getKms_mes();
         double co2 = registo.getEmissaoEfetivaKg();
+
         String mesAno = formatarMesAno(registo.getMes_ano());
 
         dados.setTotalKmsGeral(dados.getTotalKmsGeral() + kms);
         dados.setTotalCo2Geral(dados.getTotalCo2Geral() + co2);
+
+
+
+        double taxa = 0.0;
+        if (registo.getTaxa() != null) {
+            taxa = registo.getTaxa().getValor();
+            dados.setTotalTaxaGeral(dados.getTotalTaxaGeral() + taxa);
+        }
+        dados.getTotalTaxaPorCombustivel().put(
+                combustivel,
+                dados.getTotalTaxaPorCombustivel().getOrDefault(combustivel, 0.0) + taxa
+        );
 
         dados.getTotalKmsPorVeiculo().put(
                 veiculoId,
