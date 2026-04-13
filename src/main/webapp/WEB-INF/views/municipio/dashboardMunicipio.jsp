@@ -172,29 +172,30 @@
                 </div>
             </div>
 
-            <!-- GRÁFICO KMS -->
-            <div class="mun-card">
-                <h3 class="mun-card-title">
-                    <i class="bi bi-signpost-2-fill"></i> Quilómetros Totais por Combustível
-                </h3>
-                <p class="mun-card-description">
-                    Total de quilómetros percorridos por tipo de veículo.
-                </p>
-                <div class="emissoes-chart-wrap-lg">
-                    <canvas id="kmsPorTipoChart"></canvas>
+            <!-- GRÁFICOS KMS E TAXAS LADO A LADO -->
+            <div class="mun-grid-2">
+                <div class="mun-card">
+                    <h3 class="mun-card-title">
+                        <i class="bi bi-signpost-2-fill"></i> Quilómetros Totais por Combustível
+                    </h3>
+                    <p class="mun-card-description">
+                        Total de quilómetros percorridos por tipo de veículo.
+                    </p>
+                    <div class="emissoes-chart-wrap-md">
+                        <canvas id="kmsPorTipoChart"></canvas>
+                    </div>
                 </div>
-            </div>
 
-            <!-- NOVO GRÁFICO: TAXAS TOTAIS POR COMBUSTÍVEL -->
-            <div class="mun-card">
-                <h3 class="mun-card-title">
-                    <i class="bi bi-currency-euro"></i> Taxas Totais por Combustível
-                </h3>
-                <p class="mun-card-description">
-                    Total de taxas arrecadadas por tipo de veículo (€).
-                </p>
-                <div class="emissoes-chart-wrap-lg">
-                    <canvas id="taxaPorTipoChart"></canvas>
+                <div class="mun-card">
+                    <h3 class="mun-card-title">
+                        <i class="bi bi-currency-euro"></i> Taxas Totais por Combustível
+                    </h3>
+                    <p class="mun-card-description">
+                        Total de taxas arrecadadas por tipo de veículo (€).
+                    </p>
+                    <div class="emissoes-chart-wrap-md">
+                        <canvas id="taxaPorTipoChart"></canvas>
+                    </div>
                 </div>
             </div>
 
