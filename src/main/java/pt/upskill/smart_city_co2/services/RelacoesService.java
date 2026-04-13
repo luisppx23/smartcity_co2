@@ -29,19 +29,28 @@ public class RelacoesService {
 
     @Transactional
     public void popularRelacionamentosMunicipioCidadao() {
-        // Buscar municípios
         Municipio lisboa = municipioRepository.findById(1L).orElse(null);
         Municipio vilaVerde = municipioRepository.findById(2L).orElse(null);
 
-        // Buscar cidadãos
-        Cidadao cidadao3 = cidadaoRepository.findById(3L).orElse(null);
-        Cidadao cidadao4 = cidadaoRepository.findById(4L).orElse(null);
-        Cidadao cidadao5 = cidadaoRepository.findById(5L).orElse(null);
-        Cidadao cidadao6 = cidadaoRepository.findById(6L).orElse(null);
+        List<Cidadao> cidadaosLisboa = new ArrayList<>();
+        List<Cidadao> cidadaosVilaVerde = new ArrayList<>();
 
-        // Verificar se já está populado (verificando se algum cidadão já tem município)
+        for (long i = 3L; i <= 12L; i++) {
+            Cidadao cidadao = cidadaoRepository.findById(i).orElse(null);
+            if (cidadao != null) {
+                cidadaosLisboa.add(cidadao);
+            }
+        }
+
+        for (long i = 13L; i <= 22L; i++) {
+            Cidadao cidadao = cidadaoRepository.findById(i).orElse(null);
+            if (cidadao != null) {
+                cidadaosVilaVerde.add(cidadao);
+            }
+        }
+
         boolean jaPopulado = false;
-        if (cidadao3 != null && cidadao3.getMunicipio() != null) {
+        if (!cidadaosLisboa.isEmpty() && cidadaosLisboa.get(0).getMunicipio() != null) {
             jaPopulado = true;
         }
 
@@ -49,51 +58,27 @@ public class RelacoesService {
             return;
         }
 
-        // Lisboa com cidadãos 3 e 4
         if (lisboa != null) {
-            List<Cidadao> cidadaosLisboa = new ArrayList<>();
-            if (cidadao3 != null) {
-                cidadaosLisboa.add(cidadao3);
-                cidadao3.setMunicipio(lisboa);
+            for (Cidadao cidadao : cidadaosLisboa) {
+                cidadao.setMunicipio(lisboa);
             }
-            if (cidadao4 != null) {
-                cidadaosLisboa.add(cidadao4);
-                cidadao4.setMunicipio(lisboa);
-            }
-
             lisboa.setListaDeCidadaos(cidadaosLisboa);
             municipioRepository.save(lisboa);
 
-            // Salvar os cidadãos com o município atualizado
-            if (cidadao3 != null) {
-                cidadaoRepository.save(cidadao3);
-            }
-            if (cidadao4 != null) {
-                cidadaoRepository.save(cidadao4);
+            for (Cidadao cidadao : cidadaosLisboa) {
+                cidadaoRepository.save(cidadao);
             }
         }
 
-        // Vila Verde com cidadãos 5 e 6
         if (vilaVerde != null) {
-            List<Cidadao> cidadaosVilaVerde = new ArrayList<>();
-            if (cidadao5 != null) {
-                cidadaosVilaVerde.add(cidadao5);
-                cidadao5.setMunicipio(vilaVerde);
+            for (Cidadao cidadao : cidadaosVilaVerde) {
+                cidadao.setMunicipio(vilaVerde);
             }
-            if (cidadao6 != null) {
-                cidadaosVilaVerde.add(cidadao6);
-                cidadao6.setMunicipio(vilaVerde);
-            }
-
             vilaVerde.setListaDeCidadaos(cidadaosVilaVerde);
             municipioRepository.save(vilaVerde);
 
-            // Salvar os cidadãos com o município atualizado
-            if (cidadao5 != null) {
-                cidadaoRepository.save(cidadao5);
-            }
-            if (cidadao6 != null) {
-                cidadaoRepository.save(cidadao6);
+            for (Cidadao cidadao : cidadaosVilaVerde) {
+                cidadaoRepository.save(cidadao);
             }
         }
     }
