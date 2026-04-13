@@ -16,10 +16,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/homem.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -27,231 +25,277 @@
 <body class="dashboard-body">
 
 <jsp:include page="navbarm.jsp"/>
-
-
-    <section class="mun-hero" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
-        <div>
-            <h1 class="mun-hero-title" >
-                Dashboard do Município
-                <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-            </h1>
-            <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
-        </div>
-        <div>
-            <button onclick="window.print()" class="btn-print-report">
-                <i class="bi bi-printer"></i>
-                <span>Gerar Relatório</span>
-            </button>
-        </div>
+<div class="dashboard-wrapper">
+    <%-- HERO --%>
+    <section class="mun-hero">
+        <h1 class="mun-hero-title">
+            Dashboard do Município
+            <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
+        </h1>
+        <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
     </section>
 
-<div class="dashboard-wrapper">
     <c:if test="${not empty erro}">
-        <div class="empty-state-box">
-                ${erro}
-        </div>
+    <div class="empty-state-box">
+            ${erro}
+    </div>
     </c:if>
 
     <c:if test="${empty erro}">
-        <div class="dashboard-sections">
+    <div class="dashboard-sections">
 
-            <!-- 1ª LINHA -->
-            <div class="dashboard-row row-2">
+        <!-- 1ª LINHA -->
+        <div class="dashboard-row row-2">
 
-                <div class="info-card">
-                    <div class="card-label">Emissões Mensais</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                    </div>
-                    <div class="card-subtext">Média mensal de CO₂</div>
+            <div class="info-card">
+                <div class="card-label">Emissões Mensais</div>
+                <div class="card-value">
+                    <fmt:formatNumber value="${mediaGlobalEmissoesMensais != null ? mediaGlobalEmissoesMensais : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
                 </div>
-
-                <div class="info-card">
-                    <div class="card-label">N.º de Veículos</div>
-                    <div class="card-value">
-                            ${quantidadeVeiculosTotais}
-                    </div>
-                    <div class="card-subtext">Total registado</div>
-                </div>
-
-<%--                <div class="info-card">--%>
-<%--                    <div class="card-label">Média por Veículo</div>--%>
-<%--                    <div class="card-value">--%>
-<%--                        <fmt:formatNumber value="${mediaPorVeiculo}" minFractionDigits="2" maxFractionDigits="2"/> kg--%>
-<%--                    </div>--%>
-<%--                    <div class="card-subtext">CO₂ médio por veículo</div>--%>
-<%--                </div>--%>
-
+                <div class="card-subtext">Média mensal de CO₂</div>
             </div>
 
-            <!-- 2ª LINHA -->
-            <div class="dashboard-row row-2">
-
-                <div class="info-card">
-                    <div class="card-label">Média Ano Anterior</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaAnoAnterior}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                    </div>
-                    <div class="card-subtext">
-                        <c:choose>
-                            <c:when test="${anoAnterior > 0}">
-                                ${anoAnterior}
-                            </c:when>
-                            <c:otherwise>-</c:otherwise>
-                        </c:choose>
-                    </div>
+            <div class="info-card">
+                <div class="card-label">N.º de Veículos</div>
+                <div class="card-value">
+                        ${quantidadeVeiculosTotais != null ? quantidadeVeiculosTotais : 0}
                 </div>
-
-                <c:set var="classeAnoAtual"/>
-                <c:if test="${mediaAnoAtual > mediaAnoAnterior}">
-                    <c:set var="classeAnoAtual"/>
-                </c:if>
-
-                <div class="info-card ${classeAnoAtual}">
-                    <div class="card-label">Média Ano Atual</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaAnoAtual}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                    </div>
-                    <div class="card-subtext">
-                        <c:choose>
-                            <c:when test="${anoAtual > 0}">
-                                ${anoAtual}
-                            </c:when>
-                            <c:otherwise>-</c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-
+                <div class="card-subtext">Total registado</div>
             </div>
 
-            <!-- GRÁFICO EVOLUÇÃO -->
-            <div class="mun-card">
-                <h3 class="mun-card-title">
-                    <i class="bi bi-graph-up-arrow"></i>Evolução Mensal das Emissões CO₂
-                </h3>
-                <p class="mun-card-description">
-                    Evolução das emissões totais ao longo dos meses.
-                </p>
-                <div class="emissoes-chart-wrap-lg">
-                    <canvas id="evolucaoMensalChart"></canvas>
+        </div>
+
+        <!-- 2ª LINHA -->
+        <div class="dashboard-row row-3">
+
+            <!-- Média Ano Anterior -->
+            <div class="info-card destaque-card destaque-azul">
+                <div class="card-label">Média Ano Anterior</div>
+                <div class="card-value">
+                    <fmt:formatNumber value="${mediaAnoAnterior != null ? mediaAnoAnterior : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                </div>
+                <div class="card-subtext">
+                    <c:choose>
+                        <c:when test="${anoAnterior > 0}">${anoAnterior}</c:when>
+                        <c:otherwise>-</c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
-            <!-- GRÁFICOS 2 COLUNAS -->
-            <div class="mun-grid-2">
-                <div class="mun-card">
-                    <h3 class="mun-card-title">
-                        <i class="bi bi-car-front-fill"></i>Quantidade de Veículos
-                    </h3>
-                    <p class="mun-card-description">
-                        Distribuição da frota por tipo de combustível.
-                    </p>
-                    <div class="emissoes-chart-wrap-md">
-                        <canvas id="frotaPorTipoChart"></canvas>
-                    </div>
+            <!-- Média Ano Atual -->
+            <c:set var="classeAnoAtual" value="destaque-laranja"/>
+            <c:if test="${mediaAnoAtual > mediaAnoAnterior}">
+                <c:set var="classeAnoAtual" value="destaque-vermelho"/>
+            </c:if>
+            <div class="info-card destaque-card ${classeAnoAtual}">
+                <div class="card-label">Média Ano Atual</div>
+                <div class="card-value">
+                    <fmt:formatNumber value="${mediaAnoAtual != null ? mediaAnoAtual : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
                 </div>
-
-                <div class="mun-card">
-                    <h3 class="mun-card-title">
-                        <i class="bi bi-pie-chart-fill"></i>Emissões CO₂ por Combustível
-                    </h3>
-                    <p class="mun-card-description">
-                        Distribuição das emissões totais por tipo de combustível.
-                    </p>
-                    <div class="emissoes-chart-wrap-md">
-                        <canvas id="co2PorTipoChart"></canvas>
-                    </div>
+                <div class="card-subtext">
+                    <c:choose>
+                        <c:when test="${anoAtual > 0}">${anoAtual}</c:when>
+                        <c:otherwise>-</c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
-            <!-- GRÁFICO KMS -->
-            <div class="mun-card">
-                <h3 class="mun-card-title">
-                    <i class="bi bi-signpost-2-fill"></i>Quilómetros Totais por Combustível
-                </h3>
-                <p class="mun-card-description">
-                    Total de quilómetros percorridos por tipo de veículo.
-                </p>
-                <div class="emissoes-chart-wrap-lg">
-                    <canvas id="kmsPorTipoChart"></canvas>
+            <!-- Total em Taxas -->
+            <div class="info-card destaque-card destaque-azul">
+                <div class="card-label">Total em Taxas</div>
+                <div class="card-value">
+                    <fmt:formatNumber value="${totalTaxaGeral != null ? totalTaxaGeral : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
                 </div>
+                <div class="card-subtext">Taxas arrecadadas (todos os períodos)</div>
             </div>
 
-            <!-- 3ª LINHA - CARDS POR TIPO DE COMBUSTÍVEL -->
-            <div class="dashboard-row row-5">
+        </div>
 
-                <div class="fuel-card fuel-gasolina">
-                    <div class="fuel-title">Gasolina</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['GASOLINA'] != null ? quantidadeVeiculosPorCombustivel['GASOLINA'] : 0}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-diesel">
-                    <div class="fuel-title">Diesel</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['DIESEL'] != null ? quantidadeVeiculosPorCombustivel['DIESEL'] : 0}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-hibrido">
-                    <div class="fuel-title">Híbrido</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['HIBRIDO'] != null ? quantidadeVeiculosPorCombustivel['HIBRIDO'] : 0}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-gpl">
-                    <div class="fuel-title">GPL</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['GPL'] != null ? quantidadeVeiculosPorCombustivel['GPL'] : 0}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-eletrico">
-                    <div class="fuel-title">Elétrico</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['ELETRICO'] != null ? quantidadeVeiculosPorCombustivel['ELETRICO'] : 0}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
-                    </div>
-                </div>
-
+        <!-- GRÁFICO EVOLUÇÃO -->
+        <div class="mun-card">
+            <h3 class="mun-card-title">
+                <i class="bi bi-graph-up-arrow"></i>Evolução Mensal das Emissões CO₂
+            </h3>
+            <p class="mun-card-description">
+                Evolução das emissões totais ao longo dos meses.
+            </p>
+            <div class="emissoes-chart-wrap-lg">
+                <canvas id="evolucaoMensalChart"></canvas>
             </div>
         </div>
-    </c:if>
 
-    <div class="dashboard-actions">
-        <a href="${pageContext.request.contextPath}/municipio/homeMunicipio" class="smart-btn smart-btn-secondary">
-            Voltar ao Home
-        </a>
+        <!-- GRÁFICOS 2 COLUNAS -->
+        <div class="mun-grid-2">
+            <div class="mun-card">
+                <h3 class="mun-card-title">
+                    <i class="bi bi-car-front-fill"></i>Quantidade de Veículos
+                </h3>
+                <p class="mun-card-description">
+                    Distribuição da frota por tipo de combustível.
+                </p>
+                <div class="emissoes-chart-wrap-md">
+                    <canvas id="frotaPorTipoChart"></canvas>
+                </div>
+            </div>
+
+            <div class="mun-card">
+                <h3 class="mun-card-title">
+                    <i class="bi bi-pie-chart-fill"></i>Emissões CO₂ por Combustível
+                </h3>
+                <p class="mun-card-description">
+                    Distribuição das emissões totais por tipo de combustível.
+                </p>
+                <div class="emissoes-chart-wrap-md">
+                    <canvas id="co2PorTipoChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRÁFICO KMS POR COMBUSTÍVEL -->
+        <div class="mun-card">
+            <h3 class="mun-card-title">
+                <i class="bi bi-signpost-2-fill"></i>Quilómetros Totais por Combustível
+            </h3>
+            <p class="mun-card-description">
+                Total de quilómetros percorridos por tipo de veículo.
+            </p>
+            <div class="emissoes-chart-wrap-lg">
+                <canvas id="kmsPorTipoChart"></canvas>
+            </div>
+        </div>
+
+        <!-- NOVO GRÁFICO: TAXAS POR COMBUSTÍVEL -->
+        <div class="mun-card">
+            <h3 class="mun-card-title">
+                <i class="bi bi-currency-euro"></i> Taxas Totais por Combustível
+            </h3>
+            <p class="mun-card-description">
+                Total de taxas arrecadadas por tipo de veículo (€).
+            </p>
+            <div class="emissoes-chart-wrap-lg">
+                <canvas id="taxaPorTipoChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 3ª LINHA -->
+        <div class="dashboard-row row-5">
+
+            <!-- Gasolina -->
+            <div class="fuel-card fuel-gasolina">
+                <div class="fuel-title">Gasolina</div>
+                <div class="fuel-info">
+                    <span>Veículos registados</span>
+                    <strong>${quantidadeVeiculosPorCombustivel['GASOLINA'] != null ? quantidadeVeiculosPorCombustivel['GASOLINA'] : 0}</strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Emissão média</span>
+                    <strong>
+                        <fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA'] != null ? emissaoMediaPorCombustivel['GASOLINA'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                    </strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Total em Taxa</span>
+                    <strong>
+                        <fmt:formatNumber value="${totalTaxaPorCombustivel['GASOLINA'] != null ? totalTaxaPorCombustivel['GASOLINA'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </strong>
+                </div>
+            </div>
+
+            <!-- Híbrido -->
+            <div class="fuel-card fuel-hibrido">
+                <div class="fuel-title">Híbrido</div>
+                <div class="fuel-info">
+                    <span>Veículos registados</span>
+                    <strong>${quantidadeVeiculosPorCombustivel['HIBRIDO'] != null ? quantidadeVeiculosPorCombustivel['HIBRIDO'] : 0}</strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Emissão média</span>
+                    <strong>
+                        <fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO'] != null ? emissaoMediaPorCombustivel['HIBRIDO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                    </strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Total em Taxa</span>
+                    <strong>
+                        <fmt:formatNumber value="${totalTaxaPorCombustivel['HIBRIDO'] != null ? totalTaxaPorCombustivel['HIBRIDO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </strong>
+                </div>
+            </div>
+
+            <!-- GPL -->
+            <div class="fuel-card fuel-gpl">
+                <div class="fuel-title">GPL</div>
+                <div class="fuel-info">
+                    <span>Veículos registados</span>
+                    <strong>${quantidadeVeiculosPorCombustivel['GPL'] != null ? quantidadeVeiculosPorCombustivel['GPL'] : 0}</strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Emissão média</span>
+                    <strong>
+                        <fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL'] != null ? emissaoMediaPorCombustivel['GPL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                    </strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Total em Taxa</span>
+                    <strong>
+                        <fmt:formatNumber value="${totalTaxaPorCombustivel['GPL'] != null ? totalTaxaPorCombustivel['GPL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </strong>
+                </div>
+            </div>
+
+            <!-- Diesel -->
+            <div class="fuel-card fuel-diesel">
+                <div class="fuel-title">Diesel</div>
+                <div class="fuel-info">
+                    <span>Veículos registados</span>
+                    <strong>${quantidadeVeiculosPorCombustivel['DIESEL'] != null ? quantidadeVeiculosPorCombustivel['DIESEL'] : 0}</strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Emissão média</span>
+                    <strong>
+                        <fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL'] != null ? emissaoMediaPorCombustivel['DIESEL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                    </strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Total em Taxa</span>
+                    <strong>
+                        <fmt:formatNumber value="${totalTaxaPorCombustivel['DIESEL'] != null ? totalTaxaPorCombustivel['DIESEL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </strong>
+                </div>
+            </div>
+
+            <!-- Elétrico -->
+            <div class="fuel-card fuel-eletrico">
+                <div class="fuel-title">Elétrico</div>
+                <div class="fuel-info">
+                    <span>Veículos registados</span>
+                    <strong>${quantidadeVeiculosPorCombustivel['ELETRICO'] != null ? quantidadeVeiculosPorCombustivel['ELETRICO'] : 0}</strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Emissão média</span>
+                    <strong>
+                        <fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO'] != null ? emissaoMediaPorCombustivel['ELETRICO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                    </strong>
+                </div>
+                <div class="fuel-info">
+                    <span>Total em Taxa</span>
+                    <strong>
+                        <fmt:formatNumber value="${totalTaxaPorCombustivel['ELETRICO'] != null ? totalTaxaPorCombustivel['ELETRICO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </strong>
+                </div>
+            </div>
+
+        </div>
+        </c:if>
+
+        <div class="dashboard-actions">
+            <a href="${pageContext.request.contextPath}/municipio/homeMunicipio" class="smart-btn smart-btn-secondary">
+                Voltar ao Home
+            </a>
+        </div>
     </div>
-</div>
 
-<c:if test="${empty erro}">
+    <c:if test="${empty erro}">
     <script>
         const mesesLabels = [
             <c:forEach var="mes" items="${mesesOrdenados}" varStatus="status">
@@ -291,6 +335,14 @@
             ${totalKmsPorCombustivel['HIBRIDO'] != null ? totalKmsPorCombustivel['HIBRIDO'] : 0},
             ${totalKmsPorCombustivel['GPL'] != null ? totalKmsPorCombustivel['GPL'] : 0},
             ${totalKmsPorCombustivel['ELETRICO'] != null ? totalKmsPorCombustivel['ELETRICO'] : 0}
+        ];
+
+        const taxaPorTipoValores = [
+            ${totalTaxaPorCombustivel['GASOLINA'] != null ? totalTaxaPorCombustivel['GASOLINA'] : 0},
+            ${totalTaxaPorCombustivel['DIESEL'] != null ? totalTaxaPorCombustivel['DIESEL'] : 0},
+            ${totalTaxaPorCombustivel['HIBRIDO'] != null ? totalTaxaPorCombustivel['HIBRIDO'] : 0},
+            ${totalTaxaPorCombustivel['GPL'] != null ? totalTaxaPorCombustivel['GPL'] : 0},
+            ${totalTaxaPorCombustivel['ELETRICO'] != null ? totalTaxaPorCombustivel['ELETRICO'] : 0}
         ];
 
         const cores = [
@@ -466,7 +518,6 @@
                             ...axisCommon,
                             beginAtZero: true,
                             ticks: {
-                                color: '#6B7A8D',
                                 callback: function(value) {
                                     return value + ' km';
                                 }
@@ -476,8 +527,50 @@
                 }
             });
         }
+
+        // NOVO: gráfico de taxas por combustível (barras)
+        const ctxTaxa = document.getElementById('taxaPorTipoChart');
+        if (ctxTaxa) {
+            new Chart(ctxTaxa, {
+                type: 'bar',
+                data: {
+                    labels: combustivelLabels,
+                    datasets: [{
+                        label: 'Taxa total (€)',
+                        data: taxaPorTipoValores,
+                        backgroundColor: cores,
+                        borderRadius: 10,
+                        borderSkipped: false,
+                        maxBarThickness: 48
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'start'
+                        }
+                    },
+                    scales: {
+                        x: axisCommon,
+                        y: {
+                            ...axisCommon,
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' €';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     </script>
-</c:if>
+    </c:if>
 
 </body>
 </html>
