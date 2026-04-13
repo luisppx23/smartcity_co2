@@ -14,49 +14,59 @@
     padding: 24px;
 }
 
-/* HERO */
-.dashboard-hero {
-    background: linear-gradient(135deg, rgba(0, 31, 63, 0.96), rgba(0, 45, 90, 0.90));
-    color: var(--mun-text-light);
-    border-radius: var(--mun-card-radius);
-    padding: 30px 32px;
+/* HERO - SEM ESTILIZAÇÃO EXTRA */
+.mun-hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
+    flex-wrap: wrap;
     margin-bottom: 28px;
-    box-shadow: var(--mun-card-shadow);
-    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.dashboard-hero h1 {
+.mun-hero-title {
     margin: 0 0 8px;
     font-size: clamp(1.8rem, 3vw, 2.4rem);
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--mun-navy);
 }
 
-.dashboard-hero p {
+.mun-hero-subtitle {
     margin: 0;
     font-size: 0.98rem;
-    color: rgba(255, 255, 255, 0.84);
+    color: var(--mun-text-muted);
     font-weight: 400;
     max-width: 720px;
 }
 
-.dashboard-hero-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    display: flex;
+/* BOTÃO DE RELATÓRIO */
+.btn-print-report {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    font-size: 1.7rem;
-    color: #ffffff;
-    flex-shrink: 0;
+    gap: 8px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--mun-navy);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--mun-navy);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-print-report i {
+    font-size: 1rem;
+}
+
+.btn-print-report:hover {
+    background: rgba(255,255,255,0.6);
+}
+
+.btn-print-report:active {
+    transform: scale(0.98);
 }
 
 /* SECTIONS */
@@ -84,15 +94,12 @@
     grid-template-columns: repeat(5, minmax(180px, 1fr));
 }
 
-/* CARDS */
+/* CARDS - TODOS COM FUNDO BRANCO E OPACIDADE */
 .info-card,
 .fuel-card {
-    background: var(--mun-card-bg);
+    background: rgba(255, 255, 255, 0.9) !important;
     border-radius: var(--mun-card-radius);
     padding: 24px 22px;
-    box-shadow: var(--mun-card-shadow);
-    backdrop-filter: var(--mun-card-blur);
-    -webkit-backdrop-filter: var(--mun-card-blur);
     border: var(--mun-card-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -127,21 +134,22 @@
     font-weight: 400;
 }
 
-/* CARDS DE DESTAQUE */
+/* CARDS DE DESTAQUE - MESMO FUNDO BRANCO, APENAS COM BORDA COLORIDA */
 .destaque-card {
     border: 1px solid rgba(0, 31, 63, 0.08);
+    background: rgba(255, 255, 255, 0.9) !important;
 }
 
 .destaque-azul {
-    background: linear-gradient(180deg, rgba(232, 240, 251, 0.95), rgba(255, 255, 255, 0.92));
+    border-left: 4px solid #1A5276;
 }
 
 .destaque-azul .card-value {
-    color: var(--mun-navy);
+    color: #1A5276;
 }
 
 .destaque-laranja {
-    background: linear-gradient(180deg, rgba(212, 160, 23, 0.12), rgba(255, 255, 255, 0.92));
+    border-left: 4px solid #D4A017;
 }
 
 .destaque-laranja .card-value {
@@ -149,11 +157,11 @@
 }
 
 .destaque-vermelho {
-    background: linear-gradient(180deg, rgba(192, 57, 43, 0.10), rgba(255, 255, 255, 0.92));
+    border-left: 4px solid #C0392B;
 }
 
 .destaque-vermelho .card-value {
-    color: var(--mun-danger);
+    color: #C0392B;
 }
 
 /* WRAPPERS DOS GRÁFICOS */
@@ -171,7 +179,7 @@
     min-height: 280px;
 }
 
-/* FUEL CARDS */
+/* FUEL CARDS - FUNDO BRANCO, BORDA SUPERIOR COLORIDA */
 .fuel-card {
     display: flex;
     flex-direction: column;
@@ -180,6 +188,7 @@
     position: relative;
     overflow: hidden;
     text-align: left;
+    background: rgba(255, 255, 255, 0.9) !important;
 }
 
 .fuel-card::before {
@@ -218,30 +227,25 @@
     color: inherit;
 }
 
-/* PALETA DOS COMBUSTÍVEIS */
+/* PALETA DOS COMBUSTÍVEIS - APENAS A COR DO TEXTO E BORDA SUPERIOR */
 .fuel-gasolina {
     color: #9a6b00;
-    background: linear-gradient(180deg, rgba(212, 160, 23, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 .fuel-diesel {
     color: #1A5276;
-    background: linear-gradient(180deg, rgba(26, 82, 118, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 .fuel-hibrido {
     color: #1A7A4A;
-    background: linear-gradient(180deg, rgba(26, 122, 74, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 .fuel-gpl {
     color: #6B5CA5;
-    background: linear-gradient(180deg, rgba(107, 92, 165, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 .fuel-eletrico {
     color: #0F766E;
-    background: linear-gradient(180deg, rgba(15, 118, 110, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 /* EMPTY STATE */
@@ -297,6 +301,30 @@
     color: var(--mun-blue-accent);
 }
 
+/* ESTILOS PARA IMPRESSÃO */
+@media print {
+    .btn-print-report {
+        display: none !important;
+    }
+
+    .dashboard-actions {
+        display: none !important;
+    }
+
+    .navbar, .navbarm {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .info-card, .fuel-card, .mun-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}
+
 /* RESPONSIVO */
 @media (max-width: 1250px) {
     .row-5 {
@@ -323,24 +351,22 @@
         padding: 14px;
     }
 
-    .dashboard-hero {
-        padding: 22px 18px;
+    .mun-hero {
         flex-direction: column;
-        align-items: flex-start;
+        text-align: center;
     }
 
-    .dashboard-hero h1 {
+    .btn-print-report {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mun-hero-title {
         font-size: 1.7rem;
     }
 
-    .dashboard-hero p {
+    .mun-hero-subtitle {
         font-size: 0.92rem;
-    }
-
-    .dashboard-hero-icon {
-        width: 52px;
-        height: 52px;
-        font-size: 1.3rem;
     }
 
     .row-2,

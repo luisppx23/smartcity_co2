@@ -26,13 +26,21 @@
 
 <jsp:include page="navbarm.jsp"/>
 <div class="dashboard-wrapper">
-    <%-- HERO --%>
-    <section class="mun-hero">
-        <h1 class="mun-hero-title">
-            Dashboard do Município
-            <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-        </h1>
-        <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
+
+    <section class="mun-hero" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
+        <div>
+            <h1 class="mun-hero-title">
+                Dashboard do Município
+                <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
+            </h1>
+            <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
+        </div>
+        <div>
+            <button onclick="window.print()" class="btn-print-report">
+                <i class="bi bi-printer"></i>
+                <span>Gerar Relatório</span>
+            </button>
+        </div>
     </section>
 
     <c:if test="${not empty erro}">
@@ -76,7 +84,7 @@
             <!-- 2ª LINHA -->
             <div class="dashboard-row row-2">
 
-                <div class="info-card destaque-card destaque-azul">
+                <div class="info-card">
                     <div class="card-label">Média Ano Anterior</div>
                     <div class="card-value">
                         <fmt:formatNumber value="${mediaAnoAnterior}" minFractionDigits="2" maxFractionDigits="2"/> kg
@@ -91,12 +99,12 @@
                     </div>
                 </div>
 
-                <c:set var="classeAnoAtual" value="destaque-laranja"/>
+                <c:set var="classeAnoAtual"/>
                 <c:if test="${mediaAnoAtual > mediaAnoAnterior}">
-                    <c:set var="classeAnoAtual" value="destaque-vermelho"/>
+                    <c:set var="classeAnoAtual"/>
                 </c:if>
 
-                <div class="info-card destaque-card ${classeAnoAtual}">
+                <div class="info-card ${classeAnoAtual}">
                     <div class="card-label">Média Ano Atual</div>
                     <div class="card-value">
                         <fmt:formatNumber value="${mediaAnoAtual}" minFractionDigits="2" maxFractionDigits="2"/> kg
@@ -166,48 +174,18 @@
                 </div>
             </div>
 
-            <!-- 3ª LINHA -->
+            <!-- 3ª LINHA - CARDS POR TIPO DE COMBUSTÍVEL -->
             <div class="dashboard-row row-5">
 
                 <div class="fuel-card fuel-gasolina">
                     <div class="fuel-title">Gasolina</div>
                     <div class="fuel-info">
                         <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['GASOLINA']}</strong>
+                        <strong>${quantidadeVeiculosPorCombustivel['GASOLINA'] != null ? quantidadeVeiculosPorCombustivel['GASOLINA'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong>
-                            <fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA']}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-hibrido">
-                    <div class="fuel-title">Híbrido</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['HIBRIDO']}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong>
-                            <fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO']}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </strong>
-                    </div>
-                </div>
-
-                <div class="fuel-card fuel-gpl">
-                    <div class="fuel-title">GPL</div>
-                    <div class="fuel-info">
-                        <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['GPL']}</strong>
-                    </div>
-                    <div class="fuel-info">
-                        <span>Emissão média</span>
-                        <strong>
-                            <fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL']}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
                     </div>
                 </div>
 
@@ -215,13 +193,35 @@
                     <div class="fuel-title">Diesel</div>
                     <div class="fuel-info">
                         <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['DIESEL']}</strong>
+                        <strong>${quantidadeVeiculosPorCombustivel['DIESEL'] != null ? quantidadeVeiculosPorCombustivel['DIESEL'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong>
-                            <fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL']}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                </div>
+
+                <div class="fuel-card fuel-hibrido">
+                    <div class="fuel-title">Híbrido</div>
+                    <div class="fuel-info">
+                        <span>Veículos registados</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['HIBRIDO'] != null ? quantidadeVeiculosPorCombustivel['HIBRIDO'] : 0}</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Emissão média</span>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                </div>
+
+                <div class="fuel-card fuel-gpl">
+                    <div class="fuel-title">GPL</div>
+                    <div class="fuel-info">
+                        <span>Veículos registados</span>
+                        <strong>${quantidadeVeiculosPorCombustivel['GPL'] != null ? quantidadeVeiculosPorCombustivel['GPL'] : 0}</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Emissão média</span>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
                     </div>
                 </div>
 
@@ -229,13 +229,11 @@
                     <div class="fuel-title">Elétrico</div>
                     <div class="fuel-info">
                         <span>Veículos registados</span>
-                        <strong>${quantidadeVeiculosPorCombustivel['ELETRICO']}</strong>
+                        <strong>${quantidadeVeiculosPorCombustivel['ELETRICO'] != null ? quantidadeVeiculosPorCombustivel['ELETRICO'] : 0}</strong>
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong>
-                            <fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO']}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                        </strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
                     </div>
                 </div>
 
