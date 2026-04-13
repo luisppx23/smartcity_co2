@@ -49,9 +49,11 @@ body.dashboard-body {
 }
 
 .dashboard-wrapper-cidadao-style {
-    max-width: 760px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 8px 14px 28px;
+    padding: 8px 28px 28px;   /* mesmo padding lateral da navbar */
+    box-sizing: border-box;
+    width: 100%;
 }
 
 /* HEADER */

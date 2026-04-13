@@ -996,3 +996,24 @@
         }
     }
 }
+/* Força qualquer elemento que seja filho direto do body após a navbar a alinhar-se com a navbar */
+.smart-navbar-inner,
+.smart-navbar-inner + * > :first-child:not(script):not(style),
+.dashboard-wrapper,
+.form-page-wrapper,
+.dashboard-container,
+.page-content {
+    max-width: 1000px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    box-sizing: border-box !important;
+}
+
+/* Garante que a navbar interna tem a mesma largura */
+.smart-navbar-inner {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
