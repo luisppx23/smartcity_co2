@@ -55,7 +55,6 @@
         <p>A média mensal de emissões verificada no município situa-se nos <strong><fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>, enquanto a meta ambiental definida para o concelho é de <strong><fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2" maxFractionDigits="2"/> kg por habitante por mês</strong>. Os dados apresentados nas secções seguintes permitem uma consulta aprofundada da distribuição por tipo de combustível e da evolução temporal das emissões.</p>
     </div>
 
-
     <c:if test="${not empty erro}">
         <div class="empty-state-box">
                 ${erro}
@@ -67,16 +66,13 @@
 
             <!-- 1ª LINHA -->
             <div class="dashboard-row row-2">
-
                 <div class="info-card">
                     <div class="card-label">Emissões Mensais</div>
                     <div class="card-value">
-                        <fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2"
-                                          maxFractionDigits="2"/> kg
+                        <fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg
                     </div>
                     <div class="card-subtext">Média mensal de CO₂</div>
                 </div>
-
                 <div class="info-card">
                     <div class="card-label">N.º de Veículos</div>
                     <div class="card-value">
@@ -84,12 +80,10 @@
                     </div>
                     <div class="card-subtext">Total registado</div>
                 </div>
-
             </div>
 
-            <!-- 2ª LINHA -->
-            <div class="dashboard-row row-2">
-
+            <!-- 2ª LINHA - agora com 3 colunas (incluindo Total em Taxas) -->
+            <div class="dashboard-row row-3">
                 <div class="info-card">
                     <div class="card-label">Média Ano Anterior</div>
                     <div class="card-value">
@@ -97,9 +91,7 @@
                     </div>
                     <div class="card-subtext">
                         <c:choose>
-                            <c:when test="${anoAnterior > 0}">
-                                ${anoAnterior}
-                            </c:when>
+                            <c:when test="${anoAnterior > 0}">${anoAnterior}</c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
                     </div>
@@ -108,11 +100,11 @@
                 <div class="info-card">
                     <div class="card-label">Média Ano Atual</div>
                     <div class="card-value
-        <c:choose>
-            <c:when test="${mediaAnoAtual <= mediaAnoAnterior}">media-melhor</c:when>
-            <c:otherwise>media-pior</c:otherwise>
-        </c:choose>
-    ">
+                        <c:choose>
+                            <c:when test="${mediaAnoAtual <= mediaAnoAnterior}">media-melber</c:when>
+                            <c:otherwise>media-pior</c:otherwise>
+                        </c:choose>
+                    ">
                         <c:choose>
                             <c:when test="${mediaAnoAtual <= mediaAnoAnterior}">
                                 <i class="bi bi-arrow-down-short" style="font-size: 1.5rem;"></i>
@@ -125,14 +117,20 @@
                     </div>
                     <div class="card-subtext">
                         <c:choose>
-                            <c:when test="${anoAtual > 0}">
-                                ${anoAtual}
-                            </c:when>
+                            <c:when test="${anoAtual > 0}">${anoAtual}</c:when>
                             <c:otherwise>-</c:otherwise>
                         </c:choose>
                     </div>
                 </div>
 
+                <!-- NOVA CAIXA: Total em Taxas -->
+                <div class="info-card destaque-card destaque-azul">
+                    <div class="card-label">Total em Taxas</div>
+                    <div class="card-value">
+                        <fmt:formatNumber value="${totalTaxaGeral != null ? totalTaxaGeral : 0}" minFractionDigits="2" maxFractionDigits="2"/> €
+                    </div>
+                    <div class="card-subtext">Taxas arrecadadas (todos os períodos)</div>
+                </div>
             </div>
 
             <!-- GRÁFICO EVOLUÇÃO -->
@@ -188,7 +186,20 @@
                 </div>
             </div>
 
-            <!-- 3ª LINHA - CARDS POR TIPO DE COMBUSTÍVEL -->
+            <!-- NOVO GRÁFICO: TAXAS TOTAIS POR COMBUSTÍVEL -->
+            <div class="mun-card">
+                <h3 class="mun-card-title">
+                    <i class="bi bi-currency-euro"></i> Taxas Totais por Combustível
+                </h3>
+                <p class="mun-card-description">
+                    Total de taxas arrecadadas por tipo de veículo (€).
+                </p>
+                <div class="emissoes-chart-wrap-lg">
+                    <canvas id="taxaPorTipoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 3ª LINHA - CARDS POR TIPO DE COMBUSTÍVEL (com Total em Taxa adicionado) -->
             <div class="dashboard-row row-5">
 
                 <div class="fuel-card fuel-gasolina">
@@ -199,8 +210,11 @@
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA']}"
-                                                  minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GASOLINA']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Total em Taxa</span>
+                        <strong><fmt:formatNumber value="${totalTaxaPorCombustivel['GASOLINA'] != null ? totalTaxaPorCombustivel['GASOLINA'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €</strong>
                     </div>
                 </div>
 
@@ -212,8 +226,11 @@
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL']}" minFractionDigits="2"
-                                                  maxFractionDigits="2"/> kg</strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['DIESEL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Total em Taxa</span>
+                        <strong><fmt:formatNumber value="${totalTaxaPorCombustivel['DIESEL'] != null ? totalTaxaPorCombustivel['DIESEL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €</strong>
                     </div>
                 </div>
 
@@ -225,8 +242,11 @@
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO']}" minFractionDigits="2"
-                                                  maxFractionDigits="2"/> kg</strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['HIBRIDO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Total em Taxa</span>
+                        <strong><fmt:formatNumber value="${totalTaxaPorCombustivel['HIBRIDO'] != null ? totalTaxaPorCombustivel['HIBRIDO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €</strong>
                     </div>
                 </div>
 
@@ -238,8 +258,11 @@
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL']}" minFractionDigits="2"
-                                                  maxFractionDigits="2"/> kg</strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['GPL']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Total em Taxa</span>
+                        <strong><fmt:formatNumber value="${totalTaxaPorCombustivel['GPL'] != null ? totalTaxaPorCombustivel['GPL'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €</strong>
                     </div>
                 </div>
 
@@ -251,8 +274,11 @@
                     </div>
                     <div class="fuel-info">
                         <span>Emissão média</span>
-                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO']}"
-                                                  minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                        <strong><fmt:formatNumber value="${emissaoMediaPorCombustivel['ELETRICO']}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>
+                    </div>
+                    <div class="fuel-info">
+                        <span>Total em Taxa</span>
+                        <strong><fmt:formatNumber value="${totalTaxaPorCombustivel['ELETRICO'] != null ? totalTaxaPorCombustivel['ELETRICO'] : 0}" minFractionDigits="2" maxFractionDigits="2"/> €</strong>
                     </div>
                 </div>
 
@@ -315,6 +341,15 @@
             ${totalKmsPorCombustivel['ELETRICO'] != null ? totalKmsPorCombustivel['ELETRICO'] : 0}
         ];
 
+        // Valores para o gráfico de taxas
+        const taxaPorTipoValores = [
+            ${totalTaxaPorCombustivel['GASOLINA'] != null ? totalTaxaPorCombustivel['GASOLINA'] : 0},
+            ${totalTaxaPorCombustivel['DIESEL'] != null ? totalTaxaPorCombustivel['DIESEL'] : 0},
+            ${totalTaxaPorCombustivel['HIBRIDO'] != null ? totalTaxaPorCombustivel['HIBRIDO'] : 0},
+            ${totalTaxaPorCombustivel['GPL'] != null ? totalTaxaPorCombustivel['GPL'] : 0},
+            ${totalTaxaPorCombustivel['ELETRICO'] != null ? totalTaxaPorCombustivel['ELETRICO'] : 0}
+        ];
+
         const cores = [
             '#D4A017', // gasolina
             '#1A5276', // diesel
@@ -339,28 +374,20 @@
         const axisCommon = {
             ticks: {
                 color: '#6B7A8D',
-                font: {
-                    family: 'Outfit, sans-serif',
-                    size: 12
-                }
+                font: { family: 'Outfit, sans-serif', size: 12 }
             },
             grid: {
                 color: 'rgba(0, 31, 63, 0.08)',
                 drawBorder: false
             },
-            border: {
-                display: false
-            }
+            border: { display: false }
         };
 
+        // Gráfico de evolução
         const ctxEvolucao = document.getElementById('evolucaoMensalChart');
         if (ctxEvolucao) {
-            // Calcular a média total de emissões (linha reta)
             const mediaTotalEmissoes = evolucaoMensalValores.reduce((a, b) => a + b, 0) / evolucaoMensalValores.length;
-
-            // Calcular a meta total
             const metaTotal = ${municipio.objetivo_co2_mes_hab};
-
             new Chart(ctxEvolucao, {
                 type: 'line',
                 data: {
@@ -404,157 +431,74 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'start'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return context.dataset.label + ': ' + context.raw.toFixed(2) + ' kg';
-                                }
-                            }
-                        }
+                        legend: { display: true, position: 'top', align: 'start' },
+                        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.raw.toFixed(2) + ' kg'; } } }
                     },
                     scales: {
                         x: axisCommon,
-                        y: {
-                            ...axisCommon,
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Emissões Totais (kg)',
-                                color: '#001F3F'
-                            },
-                            ticks: {
-                                color: '#6B7A8D',
-                                callback: function (value) {
-                                    return value.toFixed(0) + ' kg';
-                                }
-                            }
-                        }
+                        y: { ...axisCommon, beginAtZero: true, title: { display: true, text: 'Emissões Totais (kg)', color: '#001F3F' }, ticks: { callback: (v) => v.toFixed(0) + ' kg' } }
                     }
                 }
             });
         }
 
+        // Gráfico de quantidade de veículos (doughnut)
         const ctxFrota = document.getElementById('frotaPorTipoChart');
         if (ctxFrota) {
             new Chart(ctxFrota, {
                 type: 'doughnut',
-                data: {
-                    labels: combustivelLabels,
-                    datasets: [{
-                        data: frotaValores,
-                        backgroundColor: cores,
-                        borderColor: '#FFFFFF',
-                        borderWidth: 2,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '62%',
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
+                data: { labels: combustivelLabels, datasets: [{ data: frotaValores, backgroundColor: cores, borderColor: '#FFFFFF', borderWidth: 2, hoverOffset: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom' } } }
             });
         }
 
+        // Gráfico de emissões CO₂ por combustível (pie)
         const ctxCo2 = document.getElementById('co2PorTipoChart');
         if (ctxCo2) {
             new Chart(ctxCo2, {
                 type: 'pie',
-                data: {
-                    labels: combustivelLabels,
-                    datasets: [{
-                        data: co2PorTipoValores,
-                        backgroundColor: cores,
-                        borderColor: '#FFFFFF',
-                        borderWidth: 2,
-                        hoverOffset: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
+                data: { labels: combustivelLabels, datasets: [{ data: co2PorTipoValores, backgroundColor: cores, borderColor: '#FFFFFF', borderWidth: 2, hoverOffset: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
         }
 
+        // Gráfico de KMs por combustível (bar)
         const ctxKms = document.getElementById('kmsPorTipoChart');
         if (ctxKms) {
             new Chart(ctxKms, {
                 type: 'bar',
-                data: {
-                    labels: combustivelLabels,
-                    datasets: [{
-                        label: 'Km totais',
-                        data: kmsPorTipoValores,
-                        backgroundColor: cores,
-                        borderRadius: 10,
-                        borderSkipped: false,
-                        maxBarThickness: 48
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                            align: 'start'
-                        }
-                    },
-                    scales: {
-                        x: axisCommon,
-                        y: {
-                            ...axisCommon,
-                            beginAtZero: true,
-                            ticks: {
-                                color: '#6B7A8D',
-                                callback: function (value) {
-                                    return value + ' km';
-                                }
-                            }
-                        }
-                    }
-                }
+                data: { labels: combustivelLabels, datasets: [{ label: 'Km totais', data: kmsPorTipoValores, backgroundColor: cores, borderRadius: 10, borderSkipped: false, maxBarThickness: 48 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'top', align: 'start' } }, scales: { x: axisCommon, y: { ...axisCommon, beginAtZero: true, ticks: { callback: (v) => v + ' km' } } } }
+            });
+        }
+
+        // NOVO: Gráfico de taxas por combustível (bar)
+        const ctxTaxa = document.getElementById('taxaPorTipoChart');
+        if (ctxTaxa) {
+            new Chart(ctxTaxa, {
+                type: 'bar',
+                data: { labels: combustivelLabels, datasets: [{ label: 'Taxa total (€)', data: taxaPorTipoValores, backgroundColor: cores, borderRadius: 10, borderSkipped: false, maxBarThickness: 48 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'top', align: 'start' } }, scales: { x: axisCommon, y: { ...axisCommon, beginAtZero: true, ticks: { callback: (v) => v + ' €' } } } }
             });
         }
     </script>
 </c:if>
+
 <script>
     // Alterar o título da página para o nome desejado no PDF
     document.title = "Relatório Municipal de Emissões - ${municipio.nome} - <fmt:formatDate value="<%= new java.util.Date() %>" pattern="dd-MM-yyyy"/>";
 
-    // Opcional: alterar também quando clica no botão de imprimir
     const btnPrint = document.querySelector('.btn-print-report');
     if (btnPrint) {
         btnPrint.addEventListener('click', function() {
             const originalTitle = document.title;
             document.title = "Relatório Municipal de Emissões - ${municipio.nome} - <fmt:formatDate value="<%= new java.util.Date() %>" pattern="dd-MM-yyyy"/>";
-            setTimeout(function() {
-                document.title = originalTitle;
-            }, 100);
+            setTimeout(function() { document.title = originalTitle; }, 100);
         });
     }
 </script>
+
 </body>
 </html>
