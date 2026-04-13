@@ -48,7 +48,7 @@ body {
 /* ── HERO ── */
 .mun-hero {
     text-align: left;
-    padding: 48px 24px 24px;
+    padding: 24px 24px 12px;  /* antes: 48px 24px 24px */
     max-width: 1080px;
     margin: 0 auto;
 }

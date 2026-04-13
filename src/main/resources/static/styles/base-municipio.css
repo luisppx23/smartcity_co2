@@ -86,7 +86,7 @@ body {
     max-width: var(--mun-max-width);
     margin: 0 auto;
     padding: var(--mun-page-padding);
-    padding-top: 32px;
+    padding-top: 0px;
     padding-bottom: 60px;
 }
 

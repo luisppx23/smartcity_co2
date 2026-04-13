@@ -14,29 +14,43 @@
     padding: 24px;
 }
 
-/* BOTÃO DE RELATÓRIO */
+/* CONTAINER DO BOTÃO DE RELATÓRIO */
+.report-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -60px;
+    margin-bottom: 20px;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* BOTÃO DE RELATÓRIO - CORES INVERTIDAS */
 .btn-print-report {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255,255,255,0.9);
+    background: #002D5A;
     border: 1px solid var(--mun-navy);
     border-radius: 8px;
     padding: 8px 16px;
     font-family: 'Outfit', sans-serif;
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--mun-navy);
+    color: #ffffff;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .btn-print-report i {
     font-size: 1rem;
+    color: #ffffff;
 }
 
 .btn-print-report:hover {
-    background: rgba(255,255,255,0.6);
+    background: var(--mun-navy);
+    border-color: var(--mun-navy);
+    transform: translateY(-2px);
 }
 
 .btn-print-report:active {
@@ -285,6 +299,10 @@
         display: none !important;
     }
 
+    .report-actions {
+        display: none !important;
+    }
+
     .dashboard-actions {
         display: none !important;
     }
@@ -327,6 +345,12 @@
 @media (max-width: 768px) {
     .dashboard-wrapper {
         padding: 14px;
+    }
+
+    .report-actions {
+        justify-content: center;
+        margin-top: 0;
+        margin-bottom: 16px;
     }
 
     .mun-hero {
