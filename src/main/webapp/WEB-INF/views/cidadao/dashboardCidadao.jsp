@@ -22,6 +22,20 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/emissoes-cidadao.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+    <style>
+        .chart-toolbar-top {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            margin-top: -0.25rem;
+        }
+
+        .chart-toolbar-top .dashboard-select {
+            min-width: 220px;
+        }
+    </style>
 </head>
 <body class="dashboard-body">
 <jsp:include page="../navbar.jsp"/>
@@ -44,7 +58,7 @@
         <c:if test="${not empty listaVeiculos}">
 
             <div class="dashboard-row row-2 dashboard-top-summary">
-                <div class="info-card destaque-card destaque-verde">
+                <div class="info-card">
                     <div class="card-label">Km médios mensais</div>
                     <div class="card-value">
                         <fmt:formatNumber value="${mediaKmsMensalCidadao}" minFractionDigits="1" maxFractionDigits="1"/> km
@@ -52,7 +66,7 @@
                     <div class="card-subtext">Média mensal de quilómetros</div>
                 </div>
 
-                <div class="info-card destaque-card destaque-verde-escuro">
+                <div class="info-card">
                     <div class="card-label">CO₂ médio mensal</div>
                     <div class="card-value">
                         <fmt:formatNumber value="${mediaCo2MensalCidadao}" minFractionDigits="2" maxFractionDigits="2"/> kg
@@ -85,40 +99,6 @@
                     </div>
                     <div class="card-subtext">Comparação com o período homólogo</div>
                 </div>
-            </div>
-
-            <div class="dashboard-row row-vehicles">
-                <c:forEach var="veiculo" items="${listaVeiculos}">
-                    <div class="fuel-card fuel-cidadao">
-                        <div class="fuel-title">
-                                ${veiculo.marca} ${veiculo.modelo}
-                        </div>
-
-                        <div class="fuel-info">
-                            <span>Matrícula</span>
-                            <strong>${matriculaPorVeiculo[veiculo.id]}</strong>
-                        </div>
-
-                        <div class="fuel-info">
-                            <span>Combustível</span>
-                            <strong>${veiculo.tipoDeCombustivel}</strong>
-                        </div>
-
-                        <div class="fuel-info">
-                            <span>Km total</span>
-                            <strong>
-                                <fmt:formatNumber value="${totalKmsPorVeiculo[veiculo.id]}" minFractionDigits="1" maxFractionDigits="1"/> km
-                            </strong>
-                        </div>
-
-                        <div class="fuel-info">
-                            <span>CO₂ total</span>
-                            <strong>
-                                <fmt:formatNumber value="${totalCo2PorVeiculo[veiculo.id]}" minFractionDigits="2" maxFractionDigits="2"/> kg
-                            </strong>
-                        </div>
-                    </div>
-                </c:forEach>
             </div>
 
             <div class="emissoes-metrics">
@@ -177,8 +157,15 @@
 
             <div class="dashboard-row row-2 dashboard-charts-row">
                 <div class="info-card chart-panel">
-                    <div class="card-label">CO₂ por Veículo</div>
-                    <div class="card-subtext">Total de emissões acumuladas por veículo</div>
+                    <div class="chart-toolbar-top">
+                        <select id="tipoGraficoBarras" class="dashboard-select">
+                            <option value="km">KMs por Veículo</option>
+                            <option value="taxa">Taxa por Veículo</option>
+                        </select>
+                    </div>
+
+                    <div class="card-label" id="tituloGraficoBarras">KMs por Veículo</div>
+                    <div class="card-subtext" id="descricaoGraficoBarras">Total de quilómetros acumulados por veículo</div>
 
                     <div class="vehicle-legend-list">
                         <c:forEach var="veiculo" items="${listaVeiculos}" varStatus="st">
@@ -195,8 +182,8 @@
                 </div>
 
                 <div class="info-card chart-panel">
-                    <div class="card-label">CO₂ por Combustível</div>
-                    <div class="card-subtext">Distribuição de emissões por tipo de combustível</div>
+                    <div class="card-label" id="tituloGraficoCircular">CO₂ por Veículo</div>
+                    <div class="card-subtext" id="descricaoGraficoCircular">Distribuição das emissões acumuladas pelos seus veículos</div>
 
                     <div class="chart-box chart-box-md">
                         <canvas id="chartCombustivel"></canvas>
@@ -207,12 +194,13 @@
             <div class="dashboard-row dashboard-evolution-row">
                 <div class="info-card evolution-panel">
                     <div class="card-label">Evolução Mensal</div>
-                    <div class="card-subtext">Emissões CO₂ ou quilómetros ao longo do tempo</div>
+                    <div class="card-subtext">Emissões CO₂, quilómetros ou taxa ao longo do tempo</div>
 
                     <div class="evolution-toolbar">
                         <select id="tipoEvolucao" class="dashboard-select">
                             <option value="co2">Emissões CO₂</option>
                             <option value="km">Quilómetros</option>
+                            <option value="taxa">Taxa</option>
                         </select>
 
                         <select id="veiculoEvolucao" class="dashboard-select">
@@ -388,26 +376,42 @@
 </div>
 
 <script>
-    var CORES = ['#04523B','#D4AF37','#1f5a3d','#8B6914','#2b6a49','#c49b28'];
+    var CORES = ['#04523B', '#D4AF37', '#2F7D32', '#8B6914', '#2b6a49', '#c49b28'];
 
     var idsVeiculos = [];
     var labelsVeiculos = [];
     var valoresCo2Veiculos = [];
     var totalKmsPorVeiculoValores = [];
+    var totalTaxaPorVeiculoValores = [];
+
+    var co2MensalPorVeiculo = {};
+    var kmsMensalPorVeiculo = {};
+    var taxaMensalPorVeiculo = {};
 
     <c:forEach var="veiculo" items="${listaVeiculos}">
     idsVeiculos.push('${veiculo.id}'.toString());
     labelsVeiculos.push('${matriculaPorVeiculo[veiculo.id]}');
     valoresCo2Veiculos.push(parseFloat('${totalCo2PorVeiculo[veiculo.id]}') || 0);
     totalKmsPorVeiculoValores.push(parseFloat('${totalKmsPorVeiculo[veiculo.id]}') || 0);
-    </c:forEach>
+    totalTaxaPorVeiculoValores.push(parseFloat('${totalTaxaPorVeiculo[veiculo.id]}') || 0);
 
-    var labelsCombustivel = [];
-    var valoresCombustivel = [];
+    co2MensalPorVeiculo['${veiculo.id}'] = [
+        <c:forEach var="valor" items="${co2MensalPorVeiculo[veiculo.id]}" varStatus="status">
+        ${valor}${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
 
-    <c:forEach var="combustivel" items="${combustiveisData}">
-    labelsCombustivel.push('${combustivel.tipo}');
-    valoresCombustivel.push(parseFloat('${combustivel.emissoes}') || 0);
+    kmsMensalPorVeiculo['${veiculo.id}'] = [
+        <c:forEach var="valor" items="${kmsMensalPorVeiculo[veiculo.id]}" varStatus="status">
+        ${valor}${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
+
+    taxaMensalPorVeiculo['${veiculo.id}'] = [
+        <c:forEach var="valor" items="${taxaMensalPorVeiculo[veiculo.id]}" varStatus="status">
+        ${valor}${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
     </c:forEach>
 
     var meses = [
@@ -428,14 +432,65 @@
         </c:forEach>
     ];
 
-    if (document.getElementById('chartVeiculos') && labelsVeiculos.length > 0) {
-        new Chart(document.getElementById('chartVeiculos'), {
+    var taxasPorMes = [
+        <c:forEach var="taxa" items="${taxaPorMes}" varStatus="status">
+        ${taxa}${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
+
+    function getDadosBarrasPorTipo(tipo) {
+        if (tipo === 'taxa') {
+            return {
+                label: 'Taxa por Veículo',
+                descricao: 'Total de taxa acumulada por veículo',
+                data: totalTaxaPorVeiculoValores,
+                sufixo: ' €',
+                casas: 0,
+                tickFormatter: function(v) { return '€' + v.toFixed(0); }
+            };
+        }
+
+        return {
+            label: 'KMs por Veículo',
+            descricao: 'Total de quilómetros acumulados por veículo',
+            data: totalKmsPorVeiculoValores,
+            sufixo: ' km',
+            casas: 0,
+            tickFormatter: function(v) { return v.toFixed(0) + ' km'; }
+        };
+    }
+
+    var chartVeiculos = null;
+    var chartCircularVeiculos = null;
+
+    function atualizarTextoGraficoBarras(info) {
+        var titulo = document.getElementById('tituloGraficoBarras');
+        var descricao = document.getElementById('descricaoGraficoBarras');
+
+        if (titulo) titulo.textContent = info.label;
+        if (descricao) descricao.textContent = info.descricao;
+    }
+
+    function renderChartBarras() {
+        var tipo = document.getElementById('tipoGraficoBarras')?.value || 'km';
+        var info = getDadosBarrasPorTipo(tipo);
+        var canvas = document.getElementById('chartVeiculos');
+
+        if (!canvas) return;
+
+        atualizarTextoGraficoBarras(info);
+
+        if (chartVeiculos) {
+            chartVeiculos.destroy();
+        }
+
+        chartVeiculos = new Chart(canvas, {
             type: 'bar',
             data: {
                 labels: labelsVeiculos,
                 datasets: [{
-                    label: 'CO₂ (kg)',
-                    data: valoresCo2Veiculos,
+                    label: info.label,
+                    data: info.data,
                     backgroundColor: labelsVeiculos.map(function(_, i) {
                         return CORES[i % CORES.length];
                     }),
@@ -454,7 +509,12 @@
                         titleColor: '#fff',
                         bodyColor: '#fff',
                         cornerRadius: 8,
-                        padding: 8
+                        padding: 8,
+                        callbacks: {
+                            label: function(ctx) {
+                                return ' ' + info.label + ': ' + Number(ctx.raw).toFixed(info.casas) + info.sufixo;
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -466,15 +526,14 @@
                         }
                     },
                     y: {
+                        beginAtZero: true,
                         grid: {
                             color: 'rgba(22, 50, 79, 0.06)'
                         },
                         ticks: {
                             color: '#6b7c70',
                             font: { size: 10 },
-                            callback: function(v) {
-                                return v.toFixed(1) + ' kg';
-                            }
+                            callback: info.tickFormatter
                         }
                     }
                 }
@@ -482,18 +541,25 @@
         });
     }
 
-    if (document.getElementById('chartCombustivel') && labelsCombustivel.length > 0) {
-        new Chart(document.getElementById('chartCombustivel'), {
+    function renderChartCircular() {
+        var canvas = document.getElementById('chartCombustivel');
+        if (!canvas) return;
+
+        if (chartCircularVeiculos) {
+            chartCircularVeiculos.destroy();
+        }
+
+        chartCircularVeiculos = new Chart(canvas, {
             type: 'doughnut',
             data: {
-                labels: labelsCombustivel,
+                labels: labelsVeiculos,
                 datasets: [{
-                    data: valoresCombustivel,
-                    backgroundColor: labelsCombustivel.map(function(_, i) {
+                    data: valoresCo2Veiculos,
+                    backgroundColor: labelsVeiculos.map(function(_, i) {
                         return CORES[i % CORES.length];
                     }),
                     borderWidth: 0,
-                    hoverOffset: 2
+                    hoverOffset: 3
                 }]
             },
             options: {
@@ -508,7 +574,26 @@
                             usePointStyle: true,
                             pointStyle: 'circle',
                             padding: 10,
-                            font: { size: 10 }
+                            font: { size: 10 },
+                            generateLabels: function(chart) {
+                                var data = chart.data;
+                                if (!data.labels.length || !data.datasets.length) return [];
+
+                                return data.labels.map(function(label, i) {
+                                    var meta = chart.getDatasetMeta(0);
+                                    var style = meta.controller.getStyle(i);
+
+                                    return {
+                                        text: label,
+                                        fillStyle: style.backgroundColor,
+                                        strokeStyle: style.backgroundColor,
+                                        lineWidth: 0,
+                                        hidden: isNaN(data.datasets[0].data[i]) || meta.data[i].hidden,
+                                        index: i,
+                                        pointStyle: 'circle'
+                                    };
+                                });
+                            }
                         }
                     },
                     tooltip: {
@@ -519,7 +604,10 @@
                         padding: 8,
                         callbacks: {
                             label: function(ctx) {
-                                return ' ' + ctx.label + ': ' + ctx.raw.toFixed(1) + ' kg';
+                                var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0) || 1;
+                                var valor = Number(ctx.raw);
+                                var pct = (valor * 100 / total).toFixed(1);
+                                return ' ' + ctx.label + ': ' + valor.toFixed(1) + ' kg (' + pct + '%)';
                             }
                         }
                     }
@@ -530,7 +618,50 @@
 
     var evolucaoChart = null;
     var metaCO2Mensal = 150;
-    var taxaPorKm = 0.25;
+
+    function obterDadosEvolucao(tipo, veiculoId) {
+        if (veiculoId === 'total') {
+            if (tipo === 'co2') return emissoesPorMes;
+            if (tipo === 'km') return kmsPorMes;
+            return taxasPorMes;
+        }
+
+        if (tipo === 'co2') return co2MensalPorVeiculo[veiculoId] || [];
+        if (tipo === 'km') return kmsMensalPorVeiculo[veiculoId] || [];
+        return taxaMensalPorVeiculo[veiculoId] || [];
+    }
+
+    function atualizarPainelMeta(veiculoId) {
+        var metaInfo = document.getElementById('metaInfo');
+        if (!metaInfo) return;
+
+        metaInfo.style.display = 'block';
+
+        var totalCo2 = 0;
+        var totalKms = 0;
+        var totalTaxa = 0;
+
+        if (veiculoId === 'total') {
+            totalCo2 = valoresCo2Veiculos.reduce(function(a, b) { return a + b; }, 0);
+            totalKms = totalKmsPorVeiculoValores.reduce(function(a, b) { return a + b; }, 0);
+            totalTaxa = totalTaxaPorVeiculoValores.reduce(function(a, b) { return a + b; }, 0);
+        } else {
+            var idx = idsVeiculos.indexOf(veiculoId);
+            if (idx >= 0) {
+                totalCo2 = valoresCo2Veiculos[idx] || 0;
+                totalKms = totalKmsPorVeiculoValores[idx] || 0;
+                totalTaxa = totalTaxaPorVeiculoValores[idx] || 0;
+            }
+        }
+
+        var emissaoMediaPorKm = totalCo2 / (totalKms || 1);
+        var kmParaMeta = Math.round(metaCO2Mensal / (emissaoMediaPorKm || 0.2));
+        var taxaMediaPorKm = totalTaxa / (totalKms || 1);
+        var taxaMeta = kmParaMeta * taxaMediaPorKm;
+
+        document.getElementById('kmParaMeta').innerText = kmParaMeta + ' km';
+        document.getElementById('taxaMeta').innerText = '€' + taxaMeta.toFixed(2);
+    }
 
     function atualizarEvolucaoChart() {
         var tipoSelect = document.getElementById('tipoEvolucao');
@@ -542,30 +673,24 @@
 
         var tipo = tipoSelect.value;
         var veiculoId = veiculoSelect.value.toString();
-        var dados = [];
+        var dados = obterDadosEvolucao(tipo, veiculoId);
 
-        if (veiculoId === 'total') {
-            dados = tipo === 'co2' ? emissoesPorMes : kmsPorMes;
+        var labelGrafico = '';
+        var sufixoTooltip = '';
+
+        if (tipo === 'co2') {
+            labelGrafico = 'Emissões CO₂ (kg)';
+            sufixoTooltip = ' kg';
+        } else if (tipo === 'km') {
+            labelGrafico = 'Quilómetros (km)';
+            sufixoTooltip = ' km';
         } else {
-            var idx = idsVeiculos.indexOf(veiculoId);
-
-            if (idx >= 0) {
-                var somaTotalCo2 = valoresCo2Veiculos.reduce(function(a, b) {
-                    return a + b;
-                }, 0) || 1;
-
-                var proporcao = valoresCo2Veiculos[idx] / somaTotalCo2;
-
-                dados = (tipo === 'co2' ? emissoesPorMes : kmsPorMes).map(function(v) {
-                    return v * proporcao;
-                });
-            } else {
-                dados = tipo === 'co2' ? emissoesPorMes : kmsPorMes;
-            }
+            labelGrafico = 'Taxa (€)';
+            sufixoTooltip = ' €';
         }
 
         var datasets = [{
-            label: tipo === 'co2' ? 'Emissões CO₂ (kg)' : 'Quilómetros (km)',
+            label: labelGrafico,
             data: dados,
             borderColor: '#04523B',
             backgroundColor: 'rgba(4, 82, 59, 0.08)',
@@ -624,7 +749,7 @@
                         padding: 8,
                         callbacks: {
                             label: function(ctx) {
-                                return ctx.dataset.label + ': ' + ctx.raw.toFixed(1) + (tipo === 'co2' ? ' kg' : ' km');
+                                return ctx.dataset.label + ': ' + Number(ctx.raw).toFixed(1) + sufixoTooltip;
                             }
                         }
                     }
@@ -646,7 +771,9 @@
                             color: '#6b7c70',
                             font: { size: 9 },
                             callback: function(v) {
-                                return v.toFixed(0);
+                                if (tipo === 'co2') return v.toFixed(0) + ' kg';
+                                if (tipo === 'km') return v.toFixed(0) + ' km';
+                                return '€' + v.toFixed(0);
                             }
                         }
                     }
@@ -655,38 +782,18 @@
         });
 
         if (tipo === 'co2') {
-            metaInfo.style.display = 'block';
-
-            if (veiculoId !== 'total') {
-                var idxVeiculo = idsVeiculos.indexOf(veiculoId);
-
-                if (idxVeiculo >= 0) {
-                    var kmsVeiculo = totalKmsPorVeiculoValores[idxVeiculo] || 1;
-                    var emPorKm = valoresCo2Veiculos[idxVeiculo] / kmsVeiculo;
-                    var kmParaMeta = Math.round(metaCO2Mensal / (emPorKm || 0.2));
-
-                    document.getElementById('kmParaMeta').innerText = kmParaMeta + ' km';
-                    document.getElementById('taxaMeta').innerText = '€' + (kmParaMeta * taxaPorKm).toFixed(2);
-                }
-            } else {
-                var totalCo2 = valoresCo2Veiculos.reduce(function(a, b) {
-                    return a + b;
-                }, 0);
-
-                var totalKms = totalKmsPorVeiculoValores.reduce(function(a, b) {
-                    return a + b;
-                }, 0);
-
-                var emissaoMediaPorKm = totalCo2 / (totalKms || 1);
-                var kmParaMetaTotal = Math.round(metaCO2Mensal / (emissaoMediaPorKm || 0.2));
-
-                document.getElementById('kmParaMeta').innerText = kmParaMetaTotal + ' km';
-                document.getElementById('taxaMeta').innerText = '€' + (kmParaMetaTotal * taxaPorKm).toFixed(2);
-            }
+            atualizarPainelMeta(veiculoId);
         } else {
             metaInfo.style.display = 'none';
         }
     }
+
+    if (document.getElementById('tipoGraficoBarras')) {
+        document.getElementById('tipoGraficoBarras').addEventListener('change', renderChartBarras);
+        renderChartBarras();
+    }
+
+    renderChartCircular();
 
     if (document.getElementById('tipoEvolucao')) {
         document.getElementById('tipoEvolucao').addEventListener('change', atualizarEvolucaoChart);

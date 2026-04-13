@@ -9,15 +9,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pt.upskill.smart_city_co2.entities.*;
-import pt.upskill.smart_city_co2.services.CidadaoService;
 import pt.upskill.smart_city_co2.dto.DTODashboardCidadaoService;
 import pt.upskill.smart_city_co2.dto.DTODashboardCidadaoService.DashboardDataDTO;
+import pt.upskill.smart_city_co2.entities.*;
+import pt.upskill.smart_city_co2.services.CidadaoService;
 import pt.upskill.smart_city_co2.services.EmissaoCO2Service;
 import pt.upskill.smart_city_co2.services.TaxaService;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cidadao")
@@ -43,13 +46,11 @@ public class CidadaoController {
         return null;
     }
 
-
     @GetMapping("/perfil")
     public String exibirPerfil(Model model) {
         User userLogado = getAuthenticatedUser();
         if (userLogado == null) return "redirect:/auth/login";
 
-        // Buscar o Cidadao completo para garantir que temos morada, contacto, etc.
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
         model.addAttribute("user", cidadao);
         return "cidadao/perfil";
@@ -78,14 +79,12 @@ public class CidadaoController {
 
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
 
-        // Atualiza os dados
         cidadao.setEmail(email);
         cidadao.setContacto(contacto);
         cidadao.setMorada(morada);
         cidadao.setFirstName(firstName);
         cidadao.setLastName(lastName);
 
-        // Lógica da Foto em Base64
         if (foto != null && !foto.isEmpty()) {
             try {
                 String base64Image = java.util.Base64.getEncoder().encodeToString(foto.getBytes());
@@ -97,7 +96,6 @@ public class CidadaoController {
 
         cidadaoService.salvarAlteracoes(cidadao);
 
-        // Atualiza a sessão para a Navbar mostrar o novo nome/foto
         Authentication oldAuth = SecurityContextHolder.getContext().getAuthentication();
         Authentication newAuth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                 cidadao, oldAuth.getCredentials(), oldAuth.getAuthorities());
@@ -114,14 +112,12 @@ public class CidadaoController {
         Long id = userLogado.getId();
         cidadaoService.deleteCidadao(id);
 
-        // Fazer logout forçado
         SecurityContextHolder.clearContext();
         request.getSession().invalidate();
 
         return "redirect:/auth/login?contaApagada=true";
     }
 
-    // Direciona para pagina de home do cidadão
     @GetMapping("/homeCidadao")
     public String homeCidadao(Model model) {
         User userLogado = getAuthenticatedUser();
@@ -131,7 +127,6 @@ public class CidadaoController {
         return "cidadao/homeCidadao";
     }
 
-    // Direciona para pagina de registar veículo
     @GetMapping("/registoVeiculo")
     public String registarVeiculo(Model model) {
         User userLogado = getAuthenticatedUser();
@@ -164,7 +159,6 @@ public class CidadaoController {
         model.addAttribute("user", cidadao);
         model.addAttribute("cidadao", cidadao);
 
-        // Encontrar o ownership pelo veículo
         Ownership ownership = null;
         if (cidadao.getListaDeVeiculos() != null) {
             for (Ownership own : cidadao.getListaDeVeiculos()) {
@@ -180,15 +174,12 @@ public class CidadaoController {
             return "cidadao/simularTaxa";
         }
 
-        // Calcular emissão por km
         int anoReferencia = java.time.LocalDate.now().getYear();
         double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
 
-        // Simular taxa
         Municipio municipio = cidadao.getMunicipio();
         double valorTaxa = taxaService.simularTaxa(emissaoGPorKm, kms, municipio);
 
-        // Adicionar dados ao modelo
         model.addAttribute("ownershipSelecionado", ownership);
         model.addAttribute("kmsSimulacao", kms);
         model.addAttribute("emissaoGPorKm", emissaoGPorKm);
@@ -218,7 +209,6 @@ public class CidadaoController {
 
         DashboardDataDTO dados = dashboardService.prepararDadosDashboard(cidadaoCompleto);
 
-        // Dados principais já existentes
         model.addAttribute("listaVeiculos", dados.getListaVeiculos());
         model.addAttribute("matriculaPorVeiculo", dados.getMatriculaPorVeiculo());
         model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
@@ -235,22 +225,22 @@ public class CidadaoController {
         model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
         model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
 
-        // ==============================
-        // DADOS EXTRA PARA OS GRÁFICOS
-        // ==============================
         Map<Long, Double> kmsUltimoMes = new HashMap<>();
         Map<Long, Double> co2UltimoMes = new HashMap<>();
         Map<Long, Double> taxaUltimoMes = new HashMap<>();
+        Map<Long, Double> totalTaxaPorVeiculo = new LinkedHashMap<>();
 
-        java.time.LocalDate dataMaisRecente = null;
+        LocalDate dataMaisRecente = null;
 
         if (cidadaoCompleto.getListaDeVeiculos() != null) {
             for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms registo : ownership.getRegistosKms()) {
                         if (registo.getMes_ano() != null) {
-                            java.time.LocalDate dataRegisto =
-                                    new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+                            LocalDate dataRegisto = registo.getMes_ano()
+                                    .toInstant()
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate();
 
                             if (dataMaisRecente == null || dataRegisto.isAfter(dataMaisRecente)) {
                                 dataMaisRecente = dataRegisto;
@@ -261,78 +251,137 @@ public class CidadaoController {
             }
         }
 
-        if (dataMaisRecente != null) {
-            int mesRecente = dataMaisRecente.getMonthValue();
-            int anoRecente = dataMaisRecente.getYear();
+        SortedSet<YearMonth> mesesOrdenadosSet = new TreeSet<>();
+        Map<YearMonth, Double> totalCo2MensalMap = new LinkedHashMap<>();
+        Map<YearMonth, Double> totalKmsMensalMap = new LinkedHashMap<>();
+        Map<YearMonth, Double> totalTaxaMensalMap = new LinkedHashMap<>();
 
+        Map<Long, Map<YearMonth, Double>> co2MensalPorVeiculoMap = new LinkedHashMap<>();
+        Map<Long, Map<YearMonth, Double>> kmsMensalPorVeiculoMap = new LinkedHashMap<>();
+        Map<Long, Map<YearMonth, Double>> taxaMensalPorVeiculoMap = new LinkedHashMap<>();
+
+        if (cidadaoCompleto.getListaDeVeiculos() != null) {
             for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
                 Veiculo veiculo = ownership.getVeiculo();
                 if (veiculo == null) continue;
 
-                double kmsMes = 0.0;
-                double co2Mes = 0.0;
+                Long veiculoId = veiculo.getId();
+
+                co2MensalPorVeiculoMap.putIfAbsent(veiculoId, new LinkedHashMap<>());
+                kmsMensalPorVeiculoMap.putIfAbsent(veiculoId, new LinkedHashMap<>());
+                taxaMensalPorVeiculoMap.putIfAbsent(veiculoId, new LinkedHashMap<>());
+
+                double kmsMesRecente = 0.0;
+                double co2MesRecente = 0.0;
+                double taxaMesRecente = 0.0;
+                double totalTaxa = 0.0;
 
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms registo : ownership.getRegistosKms()) {
-                        if (registo.getMes_ano() != null) {
-                            java.time.LocalDate dataRegisto =
-                                    new java.sql.Date(registo.getMes_ano().getTime()).toLocalDate();
+                        if (registo.getMes_ano() == null) continue;
 
-                            if (dataRegisto.getMonthValue() == mesRecente &&
-                                    dataRegisto.getYear() == anoRecente) {
-                                kmsMes += registo.getKms_mes();
-                                co2Mes += registo.getEmissaoEfetivaKg();
-                            }
+                        LocalDate dataRegisto = registo.getMes_ano()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate();
+
+                        YearMonth ym = YearMonth.from(dataRegisto);
+                        mesesOrdenadosSet.add(ym);
+
+                        double kms = registo.getKms_mes();
+                        double co2 = registo.getEmissaoEfetivaKg();
+                        double taxa = calcularTaxaRegisto(ownership, registo, cidadaoCompleto.getMunicipio());
+
+                        totalCo2MensalMap.merge(ym, co2, Double::sum);
+                        totalKmsMensalMap.merge(ym, kms, Double::sum);
+                        totalTaxaMensalMap.merge(ym, taxa, Double::sum);
+
+                        co2MensalPorVeiculoMap.get(veiculoId).merge(ym, co2, Double::sum);
+                        kmsMensalPorVeiculoMap.get(veiculoId).merge(ym, kms, Double::sum);
+                        taxaMensalPorVeiculoMap.get(veiculoId).merge(ym, taxa, Double::sum);
+
+                        totalTaxa += taxa;
+
+                        if (dataMaisRecente != null &&
+                                dataRegisto.getMonthValue() == dataMaisRecente.getMonthValue() &&
+                                dataRegisto.getYear() == dataMaisRecente.getYear()) {
+                            kmsMesRecente += kms;
+                            co2MesRecente += co2;
+                            taxaMesRecente += taxa;
                         }
                     }
                 }
 
-                kmsUltimoMes.put(veiculo.getId(), kmsMes);
-                co2UltimoMes.put(veiculo.getId(), co2Mes);
-                taxaUltimoMes.put(veiculo.getId(), co2Mes * 0.25);
-            }
-        } else {
-            if (cidadaoCompleto.getListaDeVeiculos() != null) {
-                for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
-                    Veiculo veiculo = ownership.getVeiculo();
-                    if (veiculo != null) {
-                        kmsUltimoMes.put(veiculo.getId(), 0.0);
-                        co2UltimoMes.put(veiculo.getId(), 0.0);
-                        taxaUltimoMes.put(veiculo.getId(), 0.0);
-                    }
-                }
+                kmsUltimoMes.put(veiculoId, kmsMesRecente);
+                co2UltimoMes.put(veiculoId, co2MesRecente);
+                taxaUltimoMes.put(veiculoId, taxaMesRecente);
+                totalTaxaPorVeiculo.put(veiculoId, totalTaxa);
             }
         }
+
+        List<String> meses = new ArrayList<>();
+        List<Double> emissoesPorMes = new ArrayList<>();
+        List<Double> kmsPorMes = new ArrayList<>();
+        List<Double> taxaPorMes = new ArrayList<>();
+
+        Map<Long, List<Double>> co2MensalPorVeiculo = new LinkedHashMap<>();
+        Map<Long, List<Double>> kmsMensalPorVeiculo = new LinkedHashMap<>();
+        Map<Long, List<Double>> taxaMensalPorVeiculo = new LinkedHashMap<>();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM/yyyy", new Locale("pt", "PT"));
+
+        for (YearMonth ym : mesesOrdenadosSet) {
+            meses.add(ym.format(formatter));
+            emissoesPorMes.add(totalCo2MensalMap.getOrDefault(ym, 0.0));
+            kmsPorMes.add(totalKmsMensalMap.getOrDefault(ym, 0.0));
+            taxaPorMes.add(totalTaxaMensalMap.getOrDefault(ym, 0.0));
+        }
+
+        if (cidadaoCompleto.getListaDeVeiculos() != null) {
+            for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
+                Veiculo veiculo = ownership.getVeiculo();
+                if (veiculo == null) continue;
+
+                Long veiculoId = veiculo.getId();
+
+                List<Double> listaCo2 = new ArrayList<>();
+                List<Double> listaKms = new ArrayList<>();
+                List<Double> listaTaxa = new ArrayList<>();
+
+                Map<YearMonth, Double> mapaCo2 = co2MensalPorVeiculoMap.getOrDefault(veiculoId, new LinkedHashMap<>());
+                Map<YearMonth, Double> mapaKms = kmsMensalPorVeiculoMap.getOrDefault(veiculoId, new LinkedHashMap<>());
+                Map<YearMonth, Double> mapaTaxa = taxaMensalPorVeiculoMap.getOrDefault(veiculoId, new LinkedHashMap<>());
+
+                for (YearMonth ym : mesesOrdenadosSet) {
+                    listaCo2.add(mapaCo2.getOrDefault(ym, 0.0));
+                    listaKms.add(mapaKms.getOrDefault(ym, 0.0));
+                    listaTaxa.add(mapaTaxa.getOrDefault(ym, 0.0));
+                }
+
+                co2MensalPorVeiculo.put(veiculoId, listaCo2);
+                kmsMensalPorVeiculo.put(veiculoId, listaKms);
+                taxaMensalPorVeiculo.put(veiculoId, listaTaxa);
+            }
+        }
+
+        double totalTaxaGeral = totalTaxaPorVeiculo.values().stream()
+                .mapToDouble(Double::doubleValue)
+                .sum();
 
         model.addAttribute("kmsUltimoMes", kmsUltimoMes);
         model.addAttribute("co2UltimoMes", co2UltimoMes);
         model.addAttribute("taxaUltimoMes", taxaUltimoMes);
+        model.addAttribute("totalTaxaPorVeiculo", totalTaxaPorVeiculo);
+        model.addAttribute("totalTaxaGeral", totalTaxaGeral);
 
-        Map<String, Double> emissoesPorMes = new LinkedHashMap<>();
-        if (dados.getListaRegistos() != null) {
-            for (Map<String, Object> registo : dados.getListaRegistos()) {
-                String mes = (String) registo.get("mes");
-                Double emissoes = (Double) registo.get("emissoes");
-                if (mes != null && emissoes != null) {
-                    emissoesPorMes.merge(mes, emissoes, Double::sum);
-                }
-            }
-        }
+        model.addAttribute("meses", meses);
+        model.addAttribute("emissoesPorMes", emissoesPorMes);
+        model.addAttribute("kmsPorMes", kmsPorMes);
+        model.addAttribute("taxaPorMes", taxaPorMes);
 
-        Map<String, Double> kmsPorMes = new LinkedHashMap<>();
-        if (dados.getListaRegistos() != null) {
-            for (Map<String, Object> registo : dados.getListaRegistos()) {
-                String mes = (String) registo.get("mes");
-                Double kms = (Double) registo.get("kms");
-                if (mes != null && kms != null) {
-                    kmsPorMes.merge(mes, kms, Double::sum);
-                }
-            }
-        }
-
-        model.addAttribute("meses", new ArrayList<>(emissoesPorMes.keySet()));
-        model.addAttribute("emissoesPorMes", new ArrayList<>(emissoesPorMes.values()));
-        model.addAttribute("kmsPorMes", new ArrayList<>(kmsPorMes.values()));
+        model.addAttribute("co2MensalPorVeiculo", co2MensalPorVeiculo);
+        model.addAttribute("kmsMensalPorVeiculo", kmsMensalPorVeiculo);
+        model.addAttribute("taxaMensalPorVeiculo", taxaMensalPorVeiculo);
 
         List<String> coresVeiculos = Arrays.asList(
                 "#04523B", "#D4AF37", "#1f5a3d", "#8B6914", "#2b6a49", "#c49b28"
@@ -344,4 +393,23 @@ public class CidadaoController {
         return "cidadao/dashboardCidadao";
     }
 
+    private double calcularTaxaRegisto(Ownership ownership, RegistoKms registo, Municipio municipio) {
+        if (ownership == null || registo == null || municipio == null) {
+            return 0.0;
+        }
+
+        int anoReferencia = LocalDate.now().getYear();
+        if (registo.getMes_ano() != null) {
+            anoReferencia = registo.getMes_ano()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .getYear();
+        }
+
+        double kms = registo.getKms_mes();
+        double emissaoGPorKm = emissaoCO2Service.calcularEmissaoGPorKm(ownership, anoReferencia);
+
+        return taxaService.simularTaxa(emissaoGPorKm, kms, municipio);
+    }
 }
