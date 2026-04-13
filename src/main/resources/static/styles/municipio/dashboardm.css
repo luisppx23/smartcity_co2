@@ -14,32 +14,6 @@
     padding: 24px;
 }
 
-/* HERO - SEM ESTILIZAÇÃO EXTRA */
-.mun-hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-}
-
-.mun-hero-title {
-    margin: 0 0 8px;
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--mun-navy);
-}
-
-.mun-hero-subtitle {
-    margin: 0;
-    font-size: 0.98rem;
-    color: var(--mun-text-muted);
-    font-weight: 400;
-    max-width: 720px;
-}
-
 /* BOTÃO DE RELATÓRIO */
 .btn-print-report {
     display: inline-flex;
@@ -94,10 +68,10 @@
     grid-template-columns: repeat(5, minmax(180px, 1fr));
 }
 
-/* CARDS - TODOS COM FUNDO BRANCO E OPACIDADE */
+/* CARDS */
 .info-card,
 .fuel-card {
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255,255,255,0.9);
     border-radius: var(--mun-card-radius);
     padding: 24px 22px;
     border: var(--mun-card-border);
@@ -134,22 +108,21 @@
     font-weight: 400;
 }
 
-/* CARDS DE DESTAQUE - MESMO FUNDO BRANCO, APENAS COM BORDA COLORIDA */
+/* CARDS DE DESTAQUE */
 .destaque-card {
     border: 1px solid rgba(0, 31, 63, 0.08);
-    background: rgba(255, 255, 255, 0.9) !important;
 }
 
 .destaque-azul {
-    border-left: 4px solid #1A5276;
+    background: linear-gradient(180deg, rgba(232, 240, 251, 0.95), rgba(255, 255, 255, 0.92));
 }
 
 .destaque-azul .card-value {
-    color: #1A5276;
+    color: var(--mun-navy);
 }
 
 .destaque-laranja {
-    border-left: 4px solid #D4A017;
+    background: linear-gradient(180deg, rgba(212, 160, 23, 0.12), rgba(255, 255, 255, 0.92));
 }
 
 .destaque-laranja .card-value {
@@ -157,11 +130,11 @@
 }
 
 .destaque-vermelho {
-    border-left: 4px solid #C0392B;
+    background: linear-gradient(180deg, rgba(192, 57, 43, 0.10), rgba(255, 255, 255, 0.92));
 }
 
 .destaque-vermelho .card-value {
-    color: #C0392B;
+    color: var(--mun-danger);
 }
 
 /* WRAPPERS DOS GRÁFICOS */
@@ -179,7 +152,7 @@
     min-height: 280px;
 }
 
-/* FUEL CARDS - FUNDO BRANCO, BORDA SUPERIOR COLORIDA */
+/* FUEL CARDS - SEM GRADIENTE, APENAS FUNDO BRANCO E BORDA COLORIDA */
 .fuel-card {
     display: flex;
     flex-direction: column;
@@ -188,7 +161,7 @@
     position: relative;
     overflow: hidden;
     text-align: left;
-    background: rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 .fuel-card::before {
@@ -230,22 +203,27 @@
 /* PALETA DOS COMBUSTÍVEIS - APENAS A COR DO TEXTO E BORDA SUPERIOR */
 .fuel-gasolina {
     color: #9a6b00;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 .fuel-diesel {
     color: #1A5276;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 .fuel-hibrido {
     color: #1A7A4A;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 .fuel-gpl {
     color: #6B5CA5;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 .fuel-eletrico {
     color: #0F766E;
+    background: rgba(255, 255, 255, 0.95) !important;
 }
 
 /* EMPTY STATE */

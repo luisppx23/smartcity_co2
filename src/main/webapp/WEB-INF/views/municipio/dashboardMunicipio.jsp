@@ -16,8 +16,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
+
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/navbarm.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/homem.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-municipio.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/municipio/dashboardm.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,11 +27,11 @@
 <body class="dashboard-body">
 
 <jsp:include page="navbarm.jsp"/>
-<div class="dashboard-wrapper">
+
 
     <section class="mun-hero" style="display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
         <div>
-            <h1 class="mun-hero-title">
+            <h1 class="mun-hero-title" >
                 Dashboard do Município
                 <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
             </h1>
@@ -43,6 +45,7 @@
         </div>
     </section>
 
+<div class="dashboard-wrapper">
     <c:if test="${not empty erro}">
         <div class="empty-state-box">
                 ${erro}
