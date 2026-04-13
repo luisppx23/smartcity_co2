@@ -29,10 +29,7 @@
 
 <%-- HERO --%>
 <section class="mun-hero">
-    <h1 class="mun-hero-title">
-        Dashboard do Município
-        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-    </h1>
+    <h1 class="mun-hero-title">Dashboard do Município</h1>
     <p class="mun-hero-subtitle">Visão geral das emissões e dos veículos registados em ${municipio.nome}</p>
 
     <div class="report-actions">
@@ -41,10 +38,23 @@
             <span>Gerar Relatório</span>
         </button>
     </div>
-
 </section>
 
 <main class="mun-page-content">
+
+    <!-- Cabeçalho do Relatório (visível apenas na impressão) -->
+    <div class="report-header" style="display: none;">
+        <h2>Relatório de Emissões - ${municipio.nome}</h2>
+        <p>Gerado em <fmt:formatDate value="<%= new java.util.Date() %>" pattern="dd/MM/yyyy HH:mm:ss"/></p>
+    </div>
+
+    <!-- Texto introdutório do relatório (visível apenas na impressão) -->
+    <div class="report-intro" style="display: none;">
+        <p>O presente relatório apresenta uma análise detalhada das emissões de CO₂ registadas no município de <strong>${municipio.nome}</strong>. Durante o período analisado, foram registados <strong>${quantidadeVeiculosTotais} veículos</strong> associados aos cidadãos do município, que emitiram um total de <strong><fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="2" maxFractionDigits="2"/> kg de dióxido de carbono</strong>, tendo percorrido aproximadamente <strong><fmt:formatNumber value="${totalKmsGeral}" minFractionDigits="2" maxFractionDigits="2"/> quilómetros</strong>.</p>
+
+        <p>A média mensal de emissões verificada no município situa-se nos <strong><fmt:formatNumber value="${mediaGlobalEmissoesMensais}" minFractionDigits="2" maxFractionDigits="2"/> kg</strong>, enquanto a meta ambiental definida para o concelho é de <strong><fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2" maxFractionDigits="2"/> kg por habitante por mês</strong>. Os dados apresentados nas secções seguintes permitem uma consulta aprofundada da distribuição por tipo de combustível e da evolução temporal das emissões.</p>
+    </div>
+
 
     <c:if test="${not empty erro}">
         <div class="empty-state-box">
@@ -97,7 +107,20 @@
 
                 <div class="info-card">
                     <div class="card-label">Média Ano Atual</div>
-                    <div class="card-value">
+                    <div class="card-value
+        <c:choose>
+            <c:when test="${mediaAnoAtual <= mediaAnoAnterior}">media-melhor</c:when>
+            <c:otherwise>media-pior</c:otherwise>
+        </c:choose>
+    ">
+                        <c:choose>
+                            <c:when test="${mediaAnoAtual <= mediaAnoAnterior}">
+                                <i class="bi bi-arrow-down-short" style="font-size: 1.5rem;"></i>
+                            </c:when>
+                            <c:otherwise>
+                                <i class="bi bi-arrow-up-short" style="font-size: 1.5rem;"></i>
+                            </c:otherwise>
+                        </c:choose>
                         <fmt:formatNumber value="${mediaAnoAtual}" minFractionDigits="2" maxFractionDigits="2"/> kg
                     </div>
                     <div class="card-subtext">
@@ -242,6 +265,12 @@
             Voltar ao Home
         </a>
     </div>
+
+    <!-- Rodapé do Relatório (visível apenas na impressão) -->
+    <div class="report-footer" style="display: none;">
+        <p>Smart City CO₂ - Relatório de Emissões do Município - Documento gerado automaticamente</p>
+    </div>
+
 </main>
 
 <c:if test="${empty erro}">
@@ -326,23 +355,51 @@
 
         const ctxEvolucao = document.getElementById('evolucaoMensalChart');
         if (ctxEvolucao) {
+            // Calcular a média total de emissões (linha reta)
+            const mediaTotalEmissoes = evolucaoMensalValores.reduce((a, b) => a + b, 0) / evolucaoMensalValores.length;
+
+            // Calcular a meta total
+            const metaTotal = ${municipio.objetivo_co2_mes_hab};
+
             new Chart(ctxEvolucao, {
                 type: 'line',
                 data: {
                     labels: mesesLabels,
-                    datasets: [{
-                        label: 'Emissões CO₂ (kg)',
-                        data: evolucaoMensalValores,
-                        borderColor: '#001F3F',
-                        backgroundColor: 'rgba(26, 82, 118, 0.10)',
-                        pointBackgroundColor: '#1A5276',
-                        pointBorderColor: '#FFFFFF',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        fill: true,
-                        tension: 0.35
-                    }]
+                    datasets: [
+                        {
+                            label: 'Emissões Totais (kg)',
+                            data: evolucaoMensalValores,
+                            borderColor: '#001F3F',
+                            backgroundColor: 'rgba(26, 82, 118, 0.10)',
+                            pointBackgroundColor: '#1A5276',
+                            pointBorderColor: '#FFFFFF',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: true,
+                            tension: 0.35
+                        },
+                        {
+                            label: 'Média Total (kg)',
+                            data: mesesLabels.map(function() { return mediaTotalEmissoes; }),
+                            borderColor: '#D4A017',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Meta Total (kg)',
+                            data: mesesLabels.map(function() { return metaTotal; }),
+                            borderColor: '#C0392B',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [8, 4],
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -356,6 +413,13 @@
                             display: true,
                             position: 'top',
                             align: 'start'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw.toFixed(2) + ' kg';
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -363,10 +427,15 @@
                         y: {
                             ...axisCommon,
                             beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Emissões Totais (kg)',
+                                color: '#001F3F'
+                            },
                             ticks: {
                                 color: '#6B7A8D',
                                 callback: function (value) {
-                                    return value + ' kg';
+                                    return value.toFixed(0) + ' kg';
                                 }
                             }
                         }
@@ -471,6 +540,21 @@
         }
     </script>
 </c:if>
+<script>
+    // Alterar o título da página para o nome desejado no PDF
+    document.title = "Relatório Municipal de Emissões - ${municipio.nome} - <fmt:formatDate value="<%= new java.util.Date() %>" pattern="dd-MM-yyyy"/>";
 
+    // Opcional: alterar também quando clica no botão de imprimir
+    const btnPrint = document.querySelector('.btn-print-report');
+    if (btnPrint) {
+        btnPrint.addEventListener('click', function() {
+            const originalTitle = document.title;
+            document.title = "Relatório Municipal de Emissões - ${municipio.nome} - <fmt:formatDate value="<%= new java.util.Date() %>" pattern="dd-MM-yyyy"/>";
+            setTimeout(function() {
+                document.title = originalTitle;
+            }, 100);
+        });
+    }
+</script>
 </body>
 </html>

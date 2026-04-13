@@ -21,11 +21,8 @@
 
 <%-- HERO --%>
 <section class="mun-hero">
-    <h1 class="mun-hero-title">
-        Home do Município
-        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-    </h1>
-    <p class="mun-hero-subtitle">Gestão de dados em tempo real.</p>
+    <h1 class="mun-hero-title">Home do Município</h1>
+    <p class="mun-hero-subtitle">Gestão de dados em tempo real do município de ${municipio.nome}</p>
 </section>
 
 <main class="mun-page-content">

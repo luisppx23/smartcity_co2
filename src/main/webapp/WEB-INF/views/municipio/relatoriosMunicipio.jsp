@@ -21,10 +21,8 @@
 <jsp:include page="navbarm.jsp"/>
 <%-- HERO --%>
 <section class="mun-hero">
-    <h1 class="mun-hero-title">Relatórios do Município
-        <c:if test="${not empty municipio.nome}"> — <c:out value="${municipio.nome}"/></c:if>
-    </h1>
-    <p class="mun-hero-subtitle">Histórico agregado de emissões, KMs e tendências.</p>
+    <h1 class="mun-hero-title">Relatórios do Município</h1>
+    <p class="mun-hero-subtitle">Histórico agregado de emissões, KMs e tendências do município de ${municipio.nome}</p>
 </section>
 
 <main class="mun-page-content">
