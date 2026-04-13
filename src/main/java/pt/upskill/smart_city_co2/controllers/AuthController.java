@@ -45,6 +45,7 @@ public class AuthController {
         return "login";
     }
 
+
     // Redireciona o user autenticado para a página correspondente ao seu tipo (município ou cidadão)
     @GetMapping("/autenticado")
     public String autenticado(Model model) {

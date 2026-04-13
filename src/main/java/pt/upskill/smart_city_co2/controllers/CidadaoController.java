@@ -49,7 +49,7 @@ public class CidadaoController {
     @GetMapping("/perfil")
     public String exibirPerfil(Model model) {
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
 
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
         model.addAttribute("user", cidadao);
@@ -59,7 +59,7 @@ public class CidadaoController {
     @GetMapping("/perfil/editar")
     public String exibirFormEditar(Model model) {
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
 
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
         model.addAttribute("user", cidadao);
@@ -75,7 +75,7 @@ public class CidadaoController {
                                @RequestParam(value = "fotoFicheiro", required = false) MultipartFile foto) {
 
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
 
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
 
@@ -107,7 +107,7 @@ public class CidadaoController {
     @PostMapping("/perfil/apagar")
     public String apagarPerfil(HttpServletRequest request, HttpServletResponse response) {
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
 
         Long id = userLogado.getId();
         cidadaoService.deleteCidadao(id);
@@ -121,7 +121,7 @@ public class CidadaoController {
     @GetMapping("/homeCidadao")
     public String homeCidadao(Model model) {
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
         model.addAttribute("user", cidadao);
         return "cidadao/homeCidadao";
@@ -130,7 +130,7 @@ public class CidadaoController {
     @GetMapping("/registoVeiculo")
     public String registarVeiculo(Model model) {
         User userLogado = getAuthenticatedUser();
-        if (userLogado == null) return "redirect:/auth/login";
+        if (userLogado == null) return "redirect:/";
         Cidadao cidadao = cidadaoService.getUserC(userLogado.getId());
         model.addAttribute("user", cidadao);
         return "cidadao/registoVeiculo";

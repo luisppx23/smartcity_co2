@@ -38,7 +38,7 @@ public class RegistoKmsController {
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
-        if (cidadao == null) return "redirect:/auth/login";
+        if (cidadao == null) return "redirect:/";
 
         // Buscar o Cidadao completo (com fotoUrl)
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
@@ -88,7 +88,7 @@ public class RegistoKmsController {
     @Transactional(readOnly = true)
     public String verHistorico(Authentication authentication, Model model) {
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
-        if (cidadao == null) return "redirect:/auth/login";
+        if (cidadao == null) return "redirect:/";
 
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
         model.addAttribute("user", cidadaoCompleto);

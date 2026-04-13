@@ -34,6 +34,10 @@ public class SecurityWebConfig {
             // Requisições de forward (redirecionamentos internos)
             auth.dispatcherTypeMatchers(DispatcherType.FORWARD);
 
+            // Homepage pública
+            auth.requestMatchers("/").permitAll();
+
+
             // Acesso público a rotas de autenticação e recursos estáticos
             auth.requestMatchers(
                     "/auth/**",
