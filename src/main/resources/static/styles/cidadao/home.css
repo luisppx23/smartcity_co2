@@ -1,9 +1,31 @@
+/* ═══════════════════════════════════════
+   HOME CIDADÃO — estilo alinhado município
+   ═══════════════════════════════════════ */
+
+/* ── TOKENS (CIDADÃO) ── */
+:root {
+    --cid-green:        #1f5a3d;
+    --cid-green-dark:   #17442e;
+    --cid-green-soft:   rgba(31, 90, 61, 0.08);
+
+    --cid-text-dark:    #1A2332;
+    --cid-text-muted:   #6B7A8D;
+
+    --cid-card-bg:      rgba(255, 255, 255, 0.88);
+    --cid-card-radius:  24px;
+    --cid-card-shadow:  0 8px 32px rgba(0, 0, 0, 0.08);
+    --cid-card-border:  1px solid rgba(31, 90, 61, 0.10);
+
+    --cid-font: 'Outfit', sans-serif;
+}
+
+/* ── BODY ── */
 body {
     margin: 0;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
-    color: #111111;
-    background-color: #f3f5f2;
+    font-family: var(--cid-font);
+    color: var(--cid-text-dark);
+    background-color: #F0F3EE;
     background-image: url("../../images/Background_cidadao.png");
     background-repeat: no-repeat;
     background-position: center top;
@@ -12,116 +34,131 @@ body {
     padding-bottom: 40px;
 }
 
+/* ── CONTAINER ── */
 .dashboard-container {
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 34px 28px 50px;   /* mesmo padding lateral da navbar (28px) */
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
     box-sizing: border-box;
-    width: 100%;
 }
 
+/* ── HERO ── */
 .home-hero {
-    text-align: center;
+    text-align: left;
     margin-bottom: 24px;
 }
 
 .home-hero h1 {
-    margin: 0 0 10px;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #111111;
+    margin: 0;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 300;
+    color: var(--cid-green);
+    line-height: 1.2;
 }
 
 .home-hero p {
-    margin: 0;
-    color: #5f5f5f;
+    margin-top: 8px;
     font-size: 1rem;
+    color: var(--cid-text-muted);
 }
 
+/* ── GRID ── */
 .home-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
 }
 
+/* ── CARD ── */
 .home-card {
     display: block;
     text-decoration: none;
-    background: #ffffff;
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(31, 90, 61, 0.10);
+    background: var(--cid-card-bg);
+    border-radius: var(--cid-card-radius);
+    padding: 26px;
+    box-shadow: var(--cid-card-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: var(--cid-card-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     color: inherit;
 }
 
 .home-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
     text-decoration: none;
 }
 
+/* ── ICON ── */
 .card-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: rgba(31, 90, 61, 0.08);
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--cid-green-soft);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .card-icon i {
-    font-size: 1.6rem;
-    color: #1f5a3d;
+    font-size: 1.4rem;
+    color: var(--cid-green);
 }
 
+/* ── TEXTOS CARD ── */
 .home-card h3 {
-    margin: 0 0 10px;
-    font-size: 1.25rem;
-    color: #204c35;
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cid-green);
 }
 
 .home-card p {
     margin: 0;
-    color: #5f5f5f;
-    line-height: 1.45;
+    font-size: 0.85rem;
+    color: var(--cid-text-muted);
+    line-height: 1.5;
 }
 
+/* ── QUICK LINKS ── */
 .quick-links-card {
-    background: #ffffff;
-    border-radius: 18px;
+    background: var(--cid-card-bg);
+    border-radius: var(--cid-card-radius);
     padding: 24px;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(31, 90, 61, 0.10);
+    box-shadow: var(--cid-card-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: var(--cid-card-border);
 }
 
 .quick-links-card h3 {
     margin-top: 0;
-    margin-bottom: 16px;
-    font-size: 1.3rem;
-    color: #204c35;
+    margin-bottom: 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--cid-green);
 }
 
+/* ── LINKS ── */
 .quick-links-row {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .quick-links-row a {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 0;
+    padding: 10px 0;
     text-decoration: none;
-    color: #1f5a3d;
+    color: var(--cid-green);
+    font-size: 0.9rem;
     font-weight: 600;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     transition: all 0.2s ease;
 }
 
@@ -130,30 +167,25 @@ body {
 }
 
 .quick-links-row a:hover {
-    color: #17442e;
+    color: var(--cid-green-dark);
     transform: translateX(4px);
 }
 
 .quick-links-row i {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
+/* ── RESPONSIVO ── */
 @media (max-width: 768px) {
     .dashboard-container {
-        margin-top: 60px;
-        padding-bottom: 60px;
-    }
-
-    .home-hero h1 {
-        font-size: 1.5rem;
+        padding: 20px 16px 50px;
     }
 
     .home-grid {
         grid-template-columns: 1fr;
     }
 
-    .home-card,
-    .quick-links-card {
-        padding: 20px;
+    .home-hero h1 {
+        font-size: 1.5rem;
     }
 }

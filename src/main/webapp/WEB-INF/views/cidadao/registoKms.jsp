@@ -8,15 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registo Kms</title>
 
+    <!-- Fonte igual ao Município -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Navbar -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/cidadao-pages.css">
+
+    <!-- CSS da página -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/registokms.css">
 </head>
 <body class="dashboard-body">
 <jsp:include page="../navbar.jsp"/>
@@ -36,9 +40,11 @@
 
                 <div class="dashboard-actions">
                     <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="smart-btn btn-smart-primary-custom">
+                        <i class="bi bi-plus-lg"></i>
                         Registar Veículo
                     </a>
                     <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                        <i class="bi bi-arrow-left"></i>
                         Voltar
                     </a>
                 </div>
@@ -53,7 +59,6 @@
                         </div>
 
                         <h3 class="dashboard-card-title">Novo registo</h3>
-
 
                         <form action="${pageContext.request.contextPath}/cidadao/registoKmsAction" method="POST" class="kms-form-grid">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -90,9 +95,11 @@
 
                             <div class="kms-form-actions">
                                 <button type="submit" class="smart-btn btn-smart-primary-custom">
+                                    <i class="bi bi-check2-circle"></i>
                                     Salvar Registo
                                 </button>
                                 <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                                    <i class="bi bi-arrow-left"></i>
                                     Voltar
                                 </a>
                             </div>

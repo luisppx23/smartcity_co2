@@ -7,8 +7,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Cidadão</title>
+
+    <!-- Navbar -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
+
+    <!-- Estilo alinhado com município -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
+
+    <!-- Fonte (igual município) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body>
@@ -17,13 +26,16 @@
 
 <div class="dashboard-container">
 
+    <!-- HERO -->
     <div class="home-hero">
         <h1>Bem-vindo, ${user.firstName}!</h1>
         <p>Mobilidade mais inteligente para uma cidade mais sustentável.</p>
     </div>
 
+    <!-- AÇÕES PRINCIPAIS -->
     <div class="home-grid">
-        <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="home-card">
+
+        <a href="${pageContext.request.contextPath}/cidadao/registoVeiculo" class="home-card">
             <div class="card-icon">
                 <i class="bi bi-car-front"></i>
             </div>
@@ -54,26 +66,36 @@
             <h3>Ver Registos de KMs</h3>
             <p>Consulte o histórico dos seus registos de quilometragem.</p>
         </a>
+
     </div>
 
+    <!-- ACESSOS RÁPIDOS (estilo portal município) -->
     <div class="quick-links-card">
+
         <h3>Acessos Rápidos</h3>
+
         <div class="quick-links-row">
+
             <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao">
-                <i class="bi bi-bar-chart-line"></i> As minhas emissões
+                <i class="bi bi-bar-chart-line"></i>
+                <span>As minhas emissões</span>
             </a>
+
             <a href="${pageContext.request.contextPath}/cidadao/listaVeiculos">
-                <i class="bi bi-car-front"></i> Os meus veículos
+                <i class="bi bi-car-front"></i>
+                <span>Os meus veículos</span>
             </a>
-            <a href="${pageContext.request.contextPath}/cidadao/simularTaxa">
-                <i class="bi bi-calculator"></i> Simular taxa
-            </a>
+            
+
             <a href="${pageContext.request.contextPath}/cidadao/perfil">
-                <i class="bi bi-person"></i> O meu perfil
+                <i class="bi bi-person"></i>
+                <span>O meu perfil</span>
             </a>
+
         </div>
     </div>
 
 </div>
+
 </body>
 </html>

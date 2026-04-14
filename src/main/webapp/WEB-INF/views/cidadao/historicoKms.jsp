@@ -10,16 +10,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Quilómetros</title>
 
+    <!-- Fonte igual ao Município -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Navbar -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/emissoes-cidadao.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/cidadao-pages.css">
+
+    <!-- CSS da página -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/historicokms.css">
 </head>
 
 <body class="dashboard-body">
@@ -241,24 +244,24 @@
                 </div>
             </div>
 
-            <div class="emissoes-grid-2">
+            <div class="history-grid-2">
                 <div class="smart-card">
                     <h3 class="dashboard-card-title">Resumo global</h3>
-                    <div class="emissoes-ranking-row">
-                        <span class="emissoes-ranking-label">Quilómetros</span>
-                        <span class="emissoes-ranking-value">
+                    <div class="history-stat-row">
+                        <span class="history-stat-label">Quilómetros</span>
+                        <span class="history-stat-value">
                             <fmt:formatNumber value="${totalKmsGeral}" minFractionDigits="1" maxFractionDigits="1"/> km
                         </span>
                     </div>
-                    <div class="emissoes-ranking-row">
-                        <span class="emissoes-ranking-label">CO₂</span>
-                        <span class="emissoes-ranking-value">
+                    <div class="history-stat-row">
+                        <span class="history-stat-label">CO₂</span>
+                        <span class="history-stat-value">
                             <fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </span>
                     </div>
-                    <div class="emissoes-ranking-row">
-                        <span class="emissoes-ranking-label">Taxas</span>
-                        <span class="emissoes-ranking-value">
+                    <div class="history-stat-row">
+                        <span class="history-stat-label">Taxas</span>
+                        <span class="history-stat-value">
                             <fmt:formatNumber value="${totalTaxaGeral}" minFractionDigits="2" maxFractionDigits="2"/> €
                         </span>
                     </div>
@@ -266,13 +269,13 @@
 
                 <div class="smart-card">
                     <h3 class="dashboard-card-title">Ranking de poluição</h3>
-                    <div class="emissoes-ranking-row">
-                        <span class="emissoes-ranking-label">Posição</span>
-                        <span class="emissoes-ranking-value">${posicaoRankingPoluicao}º em ${numeroTotalCidadaos}</span>
+                    <div class="history-stat-row">
+                        <span class="history-stat-label">Posição</span>
+                        <span class="history-stat-value">${posicaoRankingPoluicao}º em ${numeroTotalCidadaos}</span>
                     </div>
-                    <div class="emissoes-ranking-row">
-                        <span class="emissoes-ranking-label">Interpretação</span>
-                        <span class="emissoes-ranking-value">Ranking dos mais poluidores</span>
+                    <div class="history-stat-row">
+                        <span class="history-stat-label">Interpretação</span>
+                        <span class="history-stat-value">Ranking dos mais poluidores</span>
                     </div>
                 </div>
             </div>
@@ -280,6 +283,7 @@
 
         <div class="dashboard-actions">
             <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                <i class="bi bi-arrow-left"></i>
                 Voltar à Home
             </a>
         </div>

@@ -9,15 +9,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simular Taxa</title>
 
+    <!-- Fonte igual ao Município -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
+    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Navbar -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/dashboard.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/cidadao-pages.css">
+
+    <!-- CSS da página -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/simulartaxa.css">
 </head>
 <body class="dashboard-body">
 
@@ -38,9 +42,11 @@
 
                 <div class="dashboard-actions">
                     <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="smart-btn btn-smart-primary-custom">
+                        <i class="bi bi-plus-lg"></i>
                         Registar Veículo
                     </a>
                     <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                        <i class="bi bi-arrow-left"></i>
                         Voltar
                     </a>
                 </div>
@@ -56,8 +62,8 @@
 
                         <h3 class="dashboard-card-title">Nova simulação</h3>
 
-                        <form action="${pageContext.request.contextPath}/cidadao/simularTaxa" method="POST" class="kms-form-grid">
-                            <div class="kms-form-group">
+                        <form action="${pageContext.request.contextPath}/cidadao/simularTaxa" method="POST" class="simulacao-form-grid">
+                            <div class="simulacao-form-group">
                                 <label for="veiculoId">Veículo</label>
                                 <select id="veiculoId" name="veiculoId" class="smart-input-dashboard" required>
                                     <option value="">Selecione um veículo</option>
@@ -68,12 +74,12 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-                                <small class="kms-field-help">
+                                <small class="simulacao-field-help">
                                     Escolha o veículo para o qual pretende estimar o valor da taxa.
                                 </small>
                             </div>
 
-                            <div class="kms-form-group">
+                            <div class="simulacao-form-group">
                                 <label for="kms">Quilómetros (km)</label>
                                 <input
                                         type="number"
@@ -84,16 +90,18 @@
                                         value="${kmsSimulacao > 0 ? kmsSimulacao : ''}"
                                         placeholder="Ex: 150.5"
                                         required>
-                                <small class="kms-field-help">
+                                <small class="simulacao-field-help">
                                     Introduza o total de quilómetros a considerar na simulação.
                                 </small>
                             </div>
 
-                            <div class="kms-form-actions">
+                            <div class="simulacao-form-actions">
                                 <button type="submit" class="smart-btn btn-smart-primary-custom">
+                                    <i class="bi bi-calculator"></i>
                                     Calcular Taxa
                                 </button>
                                 <a href="${pageContext.request.contextPath}/cidadao/homeCidadao" class="smart-btn smart-btn-secondary">
+                                    <i class="bi bi-arrow-left"></i>
                                     Voltar
                                 </a>
                             </div>
@@ -129,7 +137,7 @@
                 </div>
 
                 <c:if test="${valorTaxa != null}">
-                    <div class="smart-card simulacao-form-card simulacao-result-card">
+                    <div class="simulacao-result-card-white">
                         <h3 class="simulacao-result-title">Resultado da Simulação</h3>
 
                         <div class="simulacao-result-list">
@@ -154,7 +162,7 @@
                                 </span>
                             </div>
 
-                            <div class="simulacao-result-row">
+                            <div class="simulacao-result-row simulacao-result-row-main">
                                 <span class="simulacao-result-label">Valor da Taxa Estimada</span>
                                 <span class="simulacao-result-value simulacao-result-main">
                                     <fmt:formatNumber value="${valorTaxa}" minFractionDigits="2" maxFractionDigits="2"/> €
@@ -165,7 +173,7 @@
                 </c:if>
 
                 <c:if test="${not empty erro}">
-                    <div class="smart-card simulacao-form-card simulacao-error-card">
+                    <div class="simulacao-error-card">
                         <p class="simulacao-error-text">${erro}</p>
                     </div>
                 </c:if>
