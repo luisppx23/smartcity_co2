@@ -63,31 +63,7 @@
             <div class="mun-quick-desc">Veículos associados aos cidadãos do município.</div>
         </a>
     </div>
-    <%-- COMBUSTÍVEL + GAMIFICAÇÃO --%>
-    <div class="mun-grid-2">
 
-        <%-- CO₂ por combustível --%>
-        <div class="mun-card">
-            <h3 class="mun-card-title">CO₂ por Combustível</h3>
-            <div class="mun-combustivel-list">
-                <c:forEach var="entry" items="${totalCo2PorCombustivel}">
-                    <div class="mun-combustivel-row">
-                        <span class="mun-combustivel-label">${entry.key}</span>
-                        <span class="mun-combustivel-value">
-                            <fmt:formatNumber value="${entry.value}" minFractionDigits="1" maxFractionDigits="1"/> kg
-                            <span class="mun-combustivel-pct">(<fmt:formatNumber value="${percentagemCo2PorCombustivel[entry.key]}" minFractionDigits="0" maxFractionDigits="0"/>%)</span>
-                        </span>
-                    </div>
-                </c:forEach>
-            </div>
-            <div class="mun-mt-16">
-                <a href="<c:url value='/municipio/relatoriosMunicipio'/>" class="mun-btn-primary mun-full-width">
-                    <i class="bi bi-bar-chart-line"></i> Ver Relatório Completo
-                </a>
-            </div>
-        </div>
-    </div>
-    </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
