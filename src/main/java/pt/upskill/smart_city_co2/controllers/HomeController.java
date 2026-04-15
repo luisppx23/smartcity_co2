@@ -8,6 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage() {
+        // Mostra a página inicial da aplicação
         return "homePage";
     }
 }

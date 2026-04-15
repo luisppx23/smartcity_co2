@@ -30,22 +30,26 @@ public class RegistoKmsController {
     private CidadaoRepository cidadaoRepository;
 
     @Autowired
-    private CidadaoService cidadaoService;   // <-- para buscar o cidadão completo
+    private CidadaoService cidadaoService; // usado para carregar o cidadão completo
 
     @Autowired
     private DTODashboardCidadaoService dashboardService;
 
     @GetMapping("/registoKms")
     public String mostrarFormulario(Authentication authentication, Model model) {
+        // Obtém o cidadão autenticado
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
         if (cidadao == null) return "redirect:/";
 
-        // Buscar o Cidadao completo (com fotoUrl)
+        // Recarrega o cidadão completo da base de dados
+        // Isto é útil para garantir acesso a campos como fotoUrl e lista de veículos
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
 
+        // Dados necessários para o formulário
         model.addAttribute("user", cidadaoCompleto);
         model.addAttribute("registoKmsModel", new RegistarKmsModel());
         model.addAttribute("cidadao", cidadaoCompleto);
+
         return "cidadao/registoKms";
     }
 
@@ -55,29 +59,38 @@ public class RegistoKmsController {
                               @RequestParam Long veiculoId,
                               Authentication authentication,
                               Model model) {
+
+        // Obtém o cidadão da sessão
         Cidadao cidadaoProxy = obterCidadaoAutenticado(authentication);
+
+        // Validação básica: cidadão tem de existir e kms devem ser positivos
         if (cidadaoProxy == null || kms <= 0) {
             model.addAttribute("erro", "Dados inválidos");
             return "redirect:/cidadao/registoKms";
         }
 
-        // Carrega o cidadão completo (com a lista de veículos)
+        // Carrega o cidadão completo, incluindo os veículos associados
         Cidadao cidadao = cidadaoService.getUserC(cidadaoProxy.getId());
+
         if (cidadao == null) {
             model.addAttribute("erro", "Cidadão não encontrado");
             return "redirect:/cidadao/registoKms";
         }
 
+        // Procura o veículo escolhido dentro da lista do cidadão
         Ownership ownership = encontrarOwnership(cidadao, veiculoId);
+
         if (ownership == null) {
             model.addAttribute("erro", "Veículo não encontrado");
             return "redirect:/cidadao/registoKms";
         }
 
         try {
+            // Guarda o registo de kms através do service
             registoKmsService.salvarRegisto(cidadao, ownership, kms);
             model.addAttribute("mensagem", "Registo guardado com sucesso!");
         } catch (Exception e) {
+            // Se algo falhar, informa o utilizador
             model.addAttribute("erro", "Erro ao guardar registo: " + e.getMessage());
         }
 
@@ -87,13 +100,15 @@ public class RegistoKmsController {
     @GetMapping("/historicoKms")
     @Transactional(readOnly = true)
     public String verHistorico(Authentication authentication, Model model) {
+        // Obtém o cidadão autenticado
         Cidadao cidadao = obterCidadaoAutenticado(authentication);
         if (cidadao == null) return "redirect:/";
 
+        // Recarrega o cidadão completo da base de dados
         Cidadao cidadaoCompleto = cidadaoService.getUserC(cidadao.getId());
         model.addAttribute("user", cidadaoCompleto);
 
-        // 1. Recolher todos os registos de Kms (objetos RegistoKms) para a tabela de histórico
+        // 1. Recolher todos os registos de kms para a tabela de histórico
         List<RegistoKms> todosRegistos = new ArrayList<>();
         Map<Long, String> matriculaPorVeiculo = new LinkedHashMap<>();
         double totalKmsGeral = 0.0;
@@ -102,26 +117,33 @@ public class RegistoKmsController {
         if (cidadaoCompleto.getListaDeVeiculos() != null) {
             for (Ownership ownership : cidadaoCompleto.getListaDeVeiculos()) {
                 Veiculo veiculo = ownership.getVeiculo();
+
+                // Associa id do veículo à matrícula para mostrar na view
                 if (veiculo != null) {
                     matriculaPorVeiculo.put(veiculo.getId(), ownership.getMatricula());
                 }
+
                 if (ownership.getRegistosKms() != null) {
                     for (RegistoKms r : ownership.getRegistosKms()) {
-                        // Garantir que a taxa seja carregada (evita LazyInitialization)
+                        // Garante que a taxa está carregada antes de sair da transação
+                        // Evita problemas de LazyInitialization no JSP
                         Hibernate.initialize(r.getTaxa());
+
                         todosRegistos.add(r);
                         totalKmsGeral += r.getKms_mes();
                         totalCo2Geral += r.getEmissaoEfetivaKg();
                     }
                 }
             }
+
+            // Ordena os registos do mais recente para o mais antigo
             todosRegistos.sort((a, b) -> b.getMes_ano().compareTo(a.getMes_ano()));
         }
 
-        // 2. Obter os dados agregados (totais por veículo, percentagens, ranking) via DTO
+        // 2. Obter dados agregados do dashboard através do DTO service
         DTODashboardCidadaoService.DashboardDataDTO dados = dashboardService.prepararDadosDashboard(cidadaoCompleto);
 
-        // 3. Preparar os mapas de combustível a partir do combustiveisData (pois o JSP espera mapas separados)
+        // 3. Converter combustiveisData em mapas separados porque a JSP espera essa estrutura
         Map<String, Double> totalKmsPorCombustivel = new LinkedHashMap<>();
         Map<String, Double> percentagemKmsPorCombustivel = new LinkedHashMap<>();
         Map<String, Double> totalCo2PorCombustivel = new LinkedHashMap<>();
@@ -134,6 +156,7 @@ public class RegistoKmsController {
                 Double percKms = (Double) item.get("percentagemKms");
                 Double co2 = (Double) item.get("emissoes");
                 Double percCo2 = (Double) item.get("percentagemCo2");
+
                 if (tipo != null) {
                     totalKmsPorCombustivel.put(tipo, kms != null ? kms : 0.0);
                     percentagemKmsPorCombustivel.put(tipo, percKms != null ? percKms : 0.0);
@@ -143,17 +166,24 @@ public class RegistoKmsController {
             }
         }
 
+        // 4. Calcular taxa total por veículo com base nos registos
         Map<Long, Double> totalTaxaPorVeiculo = new LinkedHashMap<>();
+
         for (RegistoKms registo : todosRegistos) {
             if (registo.getTaxa() != null) {
                 Long veiculoId = registo.getOwnership().getVeiculo().getId();
                 double taxa = registo.getTaxa().getValor();
-                totalTaxaPorVeiculo.put(veiculoId, totalTaxaPorVeiculo.getOrDefault(veiculoId, 0.0) + taxa);
+
+                totalTaxaPorVeiculo.put(
+                        veiculoId,
+                        totalTaxaPorVeiculo.getOrDefault(veiculoId, 0.0) + taxa
+                );
             }
         }
+
         model.addAttribute("totalTaxaPorVeiculo", totalTaxaPorVeiculo);
 
-        // 4. Adicionar todos os atributos ao model
+        // 5. Enviar todos os dados para o model
         model.addAttribute("listaRegistos", todosRegistos);
         model.addAttribute("matriculaPorVeiculo", matriculaPorVeiculo);
         model.addAttribute("listaVeiculos", dados.getListaVeiculos());
@@ -161,26 +191,33 @@ public class RegistoKmsController {
         model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
         model.addAttribute("totalKmsGeral", totalKmsGeral);
         model.addAttribute("totalCo2Geral", totalCo2Geral);
-        // Mapas de combustível (para a tabela de percentagens)
+
+        // Dados agrupados por combustível
         model.addAttribute("totalKmsPorCombustivel", totalKmsPorCombustivel);
         model.addAttribute("percentagemKmsPorCombustivel", percentagemKmsPorCombustivel);
         model.addAttribute("totalCo2PorCombustivel", totalCo2PorCombustivel);
         model.addAttribute("percentagemCo2PorCombustivel", percentagemCo2PorCombustivel);
-        // Ranking
+
+        // Ranking do cidadão relativamente à poluição
         model.addAttribute("posicaoRankingPoluicao", dados.getPosicaoRankingPoluicao());
         model.addAttribute("numeroTotalCidadaos", dados.getNumeroTotalCidadaos());
+
+        // Utilizador atual
         model.addAttribute("user", cidadaoCompleto);
 
         return "cidadao/historicoKms";
     }
 
+    // Método auxiliar para obter o cidadão autenticado
     private Cidadao obterCidadaoAutenticado(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
             return (Cidadao) authentication.getPrincipal();
         }
+
         return null;
     }
 
+    // Método auxiliar para encontrar a ownership correspondente ao veículo selecionado
     private Ownership encontrarOwnership(Cidadao cidadao, Long veiculoId) {
         if (cidadao.getListaDeVeiculos() != null) {
             return cidadao.getListaDeVeiculos().stream()
@@ -188,6 +225,7 @@ public class RegistoKmsController {
                     .findFirst()
                     .orElse(null);
         }
+
         return null;
     }
 }

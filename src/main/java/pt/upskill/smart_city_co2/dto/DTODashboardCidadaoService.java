@@ -2,11 +2,8 @@ package pt.upskill.smart_city_co2.dto;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import pt.upskill.smart_city_co2.entities.*;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
 
