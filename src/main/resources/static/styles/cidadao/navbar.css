@@ -1,49 +1,27 @@
-:root {
-    --green-deep: #0f5a3c;
-    --green-mid: #1e6a49;
-    --off-white: #f8f7f2;
-    --gold: #c9a646;
-    --text-dark: #233128;
-    --text-muted: #6e786f;
-    --navbar-height: 76px;
-    --font-main: 'Segoe UI', Arial, sans-serif;
-}
-
-/* RESET */
-.smart-navbar *,
-.smart-navbar *::before,
-.smart-navbar *::after,
-.smart-navbar-mobile-menu *,
-.smart-navbar-mobile-menu *::before,
-.smart-navbar-mobile-menu *::after {
-    box-sizing: border-box;
-}
-
-/* NAVBAR */
+/* ── NAVBAR BASE ── */
 .smart-navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    background: linear-gradient(90deg, var(--green-deep) 0%, var(--green-mid) 100%);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
-    height: var(--navbar-height);
-    font-family: var(--font-main);
+    height: 72px;
+    background: linear-gradient(90deg, #0f5a3c 0%, #0b4630 100%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
 }
 
 .smart-navbar-inner {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 28px;
+    padding: 0 24px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 18px;
+    gap: 16px;
 }
 
-/* ESQUERDA */
+/* ── ESQUERDA ── */
 .smart-navbar-left {
     display: flex;
     align-items: center;
@@ -56,7 +34,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: var(--off-white);
+    background: #F7F4EE;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,27 +53,26 @@
 
 .smart-navbar-role {
     color: rgba(255, 255, 255, 0.92);
-    font-size: 1rem;
+    font-size: 0.98rem;
     font-weight: 600;
     white-space: nowrap;
-    letter-spacing: 0.01em;
 }
 
-/* CENTRO */
+/* ── CENTRO ── */
 .smart-navbar-center {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 4px;
     flex: 1;
 }
 
 .smart-nav-link {
     color: rgba(255, 255, 255, 0.86);
     text-decoration: none;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    padding: 9px 15px;
+    padding: 9px 14px;
     border-radius: 999px;
     transition: background 0.18s ease, color 0.18s ease;
     white-space: nowrap;
@@ -113,39 +90,22 @@
 .smart-nav-link.active {
     background: rgba(255, 255, 255, 0.18);
     color: #ffffff;
-    font-weight: 700;
 }
 
-/* ÍCONES */
-.smart-nav-icon {
-    width: 16px;
-    height: 16px;
-    display: inline-flex;
+/* ── AÇÕES DIREITA ── */
+.smart-navbar-actions {
+    display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 12px;
     flex-shrink: 0;
-    line-height: 1;
 }
 
-.smart-nav-icon svg {
-    width: 16px;
-    height: 16px;
-    align-items: center;
-    justify-content: center;
-    display: block;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-/* DIREITA — LAYOUT IGUAL AO MUNICÍPIO */
 .smart-navbar-right {
     position: relative;
     flex-shrink: 0;
 }
 
+/* ── AVATAR ── */
 .smart-navbar-avatar {
     display: flex;
     align-items: center;
@@ -172,27 +132,26 @@
     justify-content: center;
     overflow: hidden;
     flex-shrink: 0;
+    border: 1.5px solid rgba(255,255,255,0.32);
 }
 
-.smart-avatar-circle img {
+.avatar-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    border-radius: 50%;
 }
 
-.smart-avatar-circle .avatar-initials {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--gold, #c9a646);
-    text-transform: uppercase;
-    background: transparent;
-    line-height: normal;
-    width: auto;
-    height: auto;
+.avatar-initials {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
 }
 
 .smart-avatar-name {
@@ -212,7 +171,7 @@
     transform: rotate(180deg);
 }
 
-/* DROPDOWN MELHORADO */
+/* ── DROPDOWN PERFIL ── */
 .profile-dropdown {
     display: none;
     position: absolute;
@@ -238,14 +197,14 @@
 
 .pd-header {
     padding: 16px 20px 12px;
-    background: rgba(4, 82, 59, 0.04);
-    border-bottom: 1px solid rgba(4, 82, 59, 0.08);
+    background: rgba(15, 90, 60, 0.04);
+    border-bottom: 1px solid rgba(15, 90, 60, 0.08);
 }
 
 .pd-greeting {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--green-deep, #0f5a3c);
+    color: #0f5a3c;
 }
 
 .pd-email {
@@ -253,12 +212,6 @@
     color: #6B7A8D;
     margin-top: 2px;
     word-break: break-word;
-}
-
-.pd-divider {
-    height: 1px;
-    background: #f0f0f0;
-    margin: 4px 0;
 }
 
 .pd-menu-item {
@@ -274,15 +227,21 @@
 }
 
 .pd-menu-item:hover {
-    background: rgba(4, 82, 59, 0.05);
-    color: var(--green-deep);
+    background: rgba(15, 90, 60, 0.05);
+    color: #0f5a3c;
     text-decoration: none;
 }
 
 .pd-menu-item i {
     font-size: 1rem;
     color: #6B7A8D;
-    width: 20px;
+    width: 18px;
+}
+
+.pd-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 4px 0;
 }
 
 .pd-footer {
@@ -296,7 +255,7 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    background: var(--green-deep, #0f5a3c);
+    background: #0f5a3c;
     color: #ffffff;
     border: none;
     border-radius: 10px;
@@ -313,7 +272,7 @@
     text-decoration: none;
 }
 
-/* HAMBURGER */
+/* ── HAMBURGUER ── */
 .smart-navbar-hamburger {
     display: none;
     background: none;
@@ -321,30 +280,30 @@
     cursor: pointer;
     padding: 6px;
     color: rgba(255, 255, 255, 0.95);
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     line-height: 1;
     flex-shrink: 0;
 }
 
-/* MENU MOBILE */
+/* ── MENU MOBILE ── */
 .smart-navbar-mobile-menu {
     display: none;
     position: fixed;
-    top: var(--navbar-height);
+    top: 72px;
     left: 0;
     right: 0;
-    background: linear-gradient(180deg, var(--green-mid), var(--green-deep));
+    background: linear-gradient(180deg, #0f5a3c, #0b4630);
     z-index: 999;
-    padding: 10px 0 18px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    animation: menuSlide 0.18s ease;
+    padding: 8px 0 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.24);
+    animation: smartMenuSlide 0.2s ease;
 }
 
 .smart-navbar-mobile-menu.open {
     display: block;
 }
 
-@keyframes menuSlide {
+@keyframes smartMenuSlide {
     from { opacity: 0; transform: translateY(-8px); }
     to   { opacity: 1; transform: translateY(0); }
 }
@@ -352,46 +311,46 @@
 .smart-navbar-mobile-menu a {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     padding: 13px 24px;
-    color: rgba(255, 255, 255, 0.92);
+    color: rgba(255,255,255,0.9);
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.15s ease;
 }
 
 .smart-navbar-mobile-menu a:hover,
 .smart-navbar-mobile-menu a.active {
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255,255,255,0.08);
     color: #ffffff;
     text-decoration: none;
 }
 
 .smart-navbar-mobile-menu .mobile-logout {
-    margin: 12px 18px 0;
+    margin: 10px 18px 0;
+    background: rgba(255,255,255,0.10);
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.12);
-    text-align: center;
     border-bottom: none;
     justify-content: center;
 }
 
-/* ESPAÇADOR */
+/* ── ESPAÇADOR ── */
 .navbar-spacer {
-    height: var(--navbar-height);
+    height: 72px;
 }
 
-/* RESPONSIVO */
-@media (max-width: 860px) {
+/* ── RESPONSIVO ── */
+@media (max-width: 900px) {
     .smart-navbar-center {
         display: none;
     }
+
     .smart-navbar-hamburger {
-        display: block;
-    }
-    .smart-navbar-role {
-        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -399,6 +358,7 @@
     .smart-avatar-name {
         display: none;
     }
+
     .smart-navbar-avatar {
         padding: 6px;
     }
@@ -406,21 +366,20 @@
 
 @media (max-width: 480px) {
     .smart-navbar-inner {
-        padding: 0 16px;
+        padding: 0 14px;
     }
+
     .smart-navbar-role {
         display: none;
     }
+
     .smart-navbar-logo-wrap {
         width: 44px;
         height: 44px;
     }
-    /* Remove largura/altura fixa do avatar para manter o layout flexível */
-    .smart-navbar-avatar {
-        width: auto;
-        height: auto;
-    }
+
     .profile-dropdown {
-        width: 250px;
+        width: 240px;
+        right: 0;
     }
 }
