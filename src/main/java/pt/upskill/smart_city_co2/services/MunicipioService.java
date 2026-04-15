@@ -137,4 +137,19 @@ public class MunicipioService {
 
         municipioRepository.save(municipio);
     }
+
+    @Transactional
+    public void atualizarPerfil(String username, String nome, String email, int nif, double objetivoCo2, String fotoUrl) {
+        Municipio municipio = municipioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Município não encontrado."));
+
+        municipio.setNome(nome);
+        municipio.setEmail(email);
+        municipio.setNif(nif);
+        municipio.setObjetivo_co2_mes_hab(objetivoCo2);
+        if (fotoUrl != null) {
+            municipio.setFotoUrl(fotoUrl);
+        }
+        municipioRepository.save(municipio);
+    }
 }

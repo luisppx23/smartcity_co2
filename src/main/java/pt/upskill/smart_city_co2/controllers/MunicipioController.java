@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import pt.upskill.smart_city_co2.dto.DashboardMunicipioDataDTO;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
@@ -59,6 +60,60 @@ public class MunicipioController {
         Municipio municipio = adicionarContextoMunicipio(model);
         model.addAttribute("user", getAuthenticatedUser());
         return "municipio/homeMunicipio";
+    }
+
+    @GetMapping("/perfil")
+    public String perfilMunicipio(Model model) {
+        Municipio municipio = adicionarContextoMunicipio(model);
+        if (municipio == null) {
+            return "redirect:/municipio/homeMunicipio";
+        }
+        return "municipio/perfilM";
+    }
+
+    @GetMapping("/perfil/editar")
+    public String editarPerfilMunicipio(Model model) {
+        Municipio municipio = adicionarContextoMunicipio(model);
+        if (municipio == null) {
+            return "redirect:/municipio/homeMunicipio";
+        }
+        return "municipio/editarPerfilM";
+    }
+
+    @PostMapping("/perfil/salvar")
+    public String salvarPerfilMunicipio(
+            @RequestParam(required = false) MultipartFile fotoFicheiro,
+            @RequestParam String nome,
+            @RequestParam String email,
+            @RequestParam int nif,
+            @RequestParam double objetivo,
+            Model model) {
+
+        User userLogado = getAuthenticatedUser();
+        if (userLogado == null) {
+            return "redirect:/auth/login";
+        }
+
+        String fotoUrl = null;
+        if (fotoFicheiro != null && !fotoFicheiro.isEmpty()) {
+            try {
+                String base64Image = java.util.Base64.getEncoder().encodeToString(fotoFicheiro.getBytes());
+                fotoUrl = "data:" + fotoFicheiro.getContentType() + ";base64," + base64Image;
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            municipioService.atualizarPerfil(userLogado.getUsername(), nome, email, nif, objetivo, fotoUrl);
+            model.addAttribute("mensagem", "Perfil actualizado com sucesso!");
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("erro", e.getMessage());
+        }
+
+        // Recarregar o município actualizado para a vista
+        adicionarContextoMunicipio(model);
+        return "municipio/perfilM";
     }
 
     @GetMapping("/redefinirMeta")

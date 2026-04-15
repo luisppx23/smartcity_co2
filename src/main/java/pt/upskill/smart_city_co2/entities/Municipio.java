@@ -9,6 +9,8 @@ import java.util.List;
 public class Municipio extends User {
 
     private String nome;
+    @Column(columnDefinition = "LONGTEXT")
+    private String fotoUrl;
 
     // Taxas aplicadas de acordo com o nível de emissões do veículo.
     private double objetivo_co2_mes_hab;
@@ -128,5 +130,13 @@ public class Municipio extends User {
 
     public void setTaxaNivel7(double taxaNivel7) {
         this.taxaNivel7 = taxaNivel7;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
     }
 }

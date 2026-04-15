@@ -1,6 +1,6 @@
 <%-- ═══════════════════════════════════════════════
      NAVBAR FRAGMENT — Portal do Município
-     Caminho: src/main/webapp/WEB-INF/views/municipio/navbar-municipio.jsp
+     Caminho: src/main/webapp/WEB-INF/views/municipio/navbarm.jsp
      UX: active link dinâmico · hamburguer mobile
      ════════════════════════════════════════════════ --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -43,15 +43,22 @@
             <i class="bi bi-list" id="munHamburgerIcon"></i>
         </button>
 
-        <%-- Avatar município --%>
+        <%-- Avatar município com foto (se existir) --%>
         <div class="mun-navbar-right">
             <div class="mun-navbar-avatar" id="munAvatarBtn">
                 <div class="mun-avatar-circle">
                     <c:choose>
-                        <c:when test="${not empty municipio.nome}">
-                            ${municipio.nome.substring(0,2).toUpperCase()}
+                        <c:when test="${not empty municipio.fotoUrl}">
+                            <img src="${municipio.fotoUrl}" alt="Avatar" class="mun-avatar-img">
                         </c:when>
-                        <c:otherwise>MN</c:otherwise>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${not empty municipio.nome}">
+                                    ${municipio.nome.substring(0,2).toUpperCase()}
+                                </c:when>
+                                <c:otherwise>MN</c:otherwise>
+                            </c:choose>
+                        </c:otherwise>
                     </c:choose>
                 </div>
                 <span class="mun-avatar-name">
@@ -65,17 +72,13 @@
                     <div class="mun-dd-greeting">Olá, <c:out value="${municipio.nome}" default="Município"/>!</div>
                     <div class="mun-dd-email"><c:out value="${user.email}" default=""/></div>
                 </div>
-                <a href="<c:url value='/municipio/dashboardMunicipio'/>" class="mun-dd-item">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                <div class="mun-dd-divider"></div>
+                <a href="<c:url value='/municipio/perfil'/>" class="mun-dd-item">
+                    <i class="bi bi-person-circle"></i> Visualizar Perfil
                 </a>
-                <a href="<c:url value='/municipio/relatoriosMunicipio'/>" class="mun-dd-item">
-                    <i class="bi bi-file-earmark-bar-graph"></i> Relatórios
-                </a>
-                <a href="<c:url value='/municipio/listaCidadaos'/>" class="mun-dd-item">
-                    <i class="bi bi-people"></i> Lista de Cidadãos
-                </a>
-                <a href="<c:url value='/municipio/listaVeiculos'/>" class="mun-dd-item">
-                    <i class="bi bi-car-front"></i> Lista de Veículos
+                <div class="mun-dd-divider"></div>
+                <a href="<c:url value='/municipio/perfil/editar'/>" class="mun-dd-item">
+                    <i class="bi bi-pencil-square"></i> Editar Perfil
                 </a>
                 <div class="mun-dd-divider"></div>
                 <div class="mun-dd-footer">
@@ -109,6 +112,13 @@
     </a>
     <a href="<c:url value='/municipio/listaVeiculos'/>">
         <i class="bi bi-car-front"></i> Veículos
+    </a>
+    <!-- Opções de perfil no menu mobile -->
+    <a href="<c:url value='/municipio/perfil'/>">
+        <i class="bi bi-person-circle"></i> Visualizar Perfil
+    </a>
+    <a href="<c:url value='/municipio/perfil/editar'/>">
+        <i class="bi bi-pencil-square"></i> Editar Perfil
     </a>
     <a href="<c:url value='/logout'/>" class="mun-mobile-logout">
         <i class="bi bi-box-arrow-right"></i> Log out
@@ -152,3 +162,14 @@
         }
     })();
 </script>
+
+<style>
+    /* Estilo adicional para garantir que a imagem do avatar fique redonda e com o tamanho correcto */
+    .mun-avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+    }
+</style>
