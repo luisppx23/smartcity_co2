@@ -56,6 +56,7 @@ public class MunicipioController {
     @GetMapping("/homeMunicipio")
     public String homeMunicipio(Model model) {
         // Envia o utilizador autenticado para a home do município
+        Municipio municipio = adicionarContextoMunicipio(model);
         model.addAttribute("user", getAuthenticatedUser());
         return "municipio/homeMunicipio";
     }
