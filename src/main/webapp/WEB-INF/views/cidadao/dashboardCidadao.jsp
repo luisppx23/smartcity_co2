@@ -9,9 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Cidadão</title>
 
+    <!-- Fonte igual ao Município -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
@@ -40,9 +41,9 @@
 <body class="dashboard-body">
 <jsp:include page="../navbar.jsp"/>
 
-<div class="dashboard-wrapper dashboard-wrapper-cidadao-style">
+<div class="dashboard-wrapper dashboard-wrapper-cidadao-style page-internal-cidadao">
 
-    <section class="dashboard-page-header">
+    <section class="dashboard-page-header dashboard-page-header--kms-style">
         <h1>Dashboard</h1>
         <p>Veja as suas emissões</p>
     </section>
@@ -94,10 +95,29 @@
 
                 <div class="info-card">
                     <div class="card-label">CO₂ do mesmo mês do ano passado</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${co2MesmoMesAnoPassado}" minFractionDigits="2" maxFractionDigits="2"/> kg
+
+                    <c:set var="diferencaCo2" value="${co2MesAtual - co2MesmoMesAnoPassado}" />
+
+                    <div class="card-value
+        <c:if test='${diferencaCo2 < 0}'>co2-down</c:if>
+        <c:if test='${diferencaCo2 > 0}'>co2-up</c:if>
+    ">
+
+                        <fmt:formatNumber value="${co2MesAtual}" minFractionDigits="2" maxFractionDigits="2"/> kg
+
+                        <c:if test="${diferencaCo2 < 0}">
+                            <i class="bi bi-arrow-down"></i>
+                        </c:if>
+
+                        <c:if test="${diferencaCo2 > 0}">
+                            <i class="bi bi-arrow-up"></i>
+                        </c:if>
+
                     </div>
-                    <div class="card-subtext">Comparação com o período homólogo</div>
+
+                    <div class="card-subtext">
+                        Comparação com o período homólogo
+                    </div>
                 </div>
             </div>
 
@@ -167,6 +187,10 @@
                     <div class="card-label" id="tituloGraficoBarras">KMs por Veículo</div>
                     <div class="card-subtext" id="descricaoGraficoBarras">Total de quilómetros acumulados por veículo</div>
 
+                    <div class="chart-box chart-box-sm">
+                        <canvas id="chartVeiculos"></canvas>
+                    </div>
+
                     <div class="vehicle-legend-list">
                         <c:forEach var="veiculo" items="${listaVeiculos}" varStatus="st">
                             <div class="vehicle-legend-item">
@@ -174,10 +198,6 @@
                                 <span>${matriculaPorVeiculo[veiculo.id]} — ${veiculo.marca} ${veiculo.modelo}</span>
                             </div>
                         </c:forEach>
-                    </div>
-
-                    <div class="chart-box chart-box-sm">
-                        <canvas id="chartVeiculos"></canvas>
                     </div>
                 </div>
 
@@ -345,22 +365,22 @@
                     <div class="curiosidade-item">
                         <i class="bi bi-tree curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Uma árvore absorve em média 22kg de CO₂ por ano. Você emitiu o equivalente a
-                            <strong><fmt:formatNumber value="${totalCo2Geral / 22}" pattern="#,##0.0"/></strong> árvores!
+                            Uma árvore absorve em média 22kg de CO₂ por ano. Para colmatar as suas emissões serão necessárias plantar o equivalente a
+                            <strong><fmt:formatNumber value="${Math.ceil(totalCo2Geral / 22)}" pattern="#,##0"/></strong> árvores!
                         </p>
                     </div>
 
                     <div class="curiosidade-item">
                         <i class="bi bi-bicycle curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Ao caminhar ou andar de bicicleta 10km por semana, você pode economizar até €10/mês em taxas.
+                            Ao optar caminhar ou andar de bicicleta, estará não só a implementar um estilo de vida mais saudável como também permite reduzir a sua pegada ecológica e auxilia o seu Munícipio a atingir a sua meta.
                         </p>
                     </div>
 
                     <div class="curiosidade-item">
                         <i class="bi bi-ev-station curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Carros elétricos emitem 0g CO₂ durante a utilização, reduzindo drasticamente as suas taxas.
+                            Considere que ao optar por veículos elétricos, os mesmos não emitem CO₂ durante a utilização, reduzindo assim as suas emissões.
                         </p>
                     </div>
                 </div>

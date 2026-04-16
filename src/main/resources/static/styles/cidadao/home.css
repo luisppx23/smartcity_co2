@@ -1,64 +1,109 @@
 /* ═══════════════════════════════════════
-   HOME CIDADÃO — estilo alinhado município
+   HOME CIDADÃO
    ═══════════════════════════════════════ */
 
-/* ── TOKENS (CIDADÃO) ── */
+/* ── TOKENS ── */
 :root {
-    --cid-green:        #1f5a3d;
-    --cid-green-dark:   #17442e;
-    --cid-green-soft:   rgba(31, 90, 61, 0.08);
+    --cid-green: #176B47;
+    --cid-green-dark: #115136;
+    --cid-green-soft: #EAF4EE;
+    --cid-green-line: rgba(23, 107, 71, 0.12);
 
-    --cid-text-dark:    #1A2332;
-    --cid-text-muted:   #6B7A8D;
+    --cid-gold: #B08A2E;
+    --cid-gold-soft: #F8F2E5;
 
-    --cid-card-bg:      rgba(255, 255, 255, 0.88);
-    --cid-card-radius:  24px;
-    --cid-card-shadow:  0 8px 32px rgba(0, 0, 0, 0.08);
-    --cid-card-border:  1px solid rgba(31, 90, 61, 0.10);
+    --cid-bg-color: #F4F1E8;
+    --cid-text-dark: #1E2B24;
+    --cid-text-main: #23372C;
+    --cid-text-muted: #6E7C74;
+
+    --cid-white: #FFFFFF;
+    --cid-card-bg: rgba(255, 255, 255, 0.88);
+    --cid-card-radius: 24px;
+    --cid-card-shadow: 0 8px 32px rgba(23, 107, 71, 0.08);
+    --cid-card-shadow-hover: 0 16px 40px rgba(23, 107, 71, 0.12);
+    --cid-card-border: 1px solid rgba(255, 255, 255, 0.65);
+    --cid-card-blur: blur(10px);
 
     --cid-font: 'Outfit', sans-serif;
+    --cid-max-width: 1080px;
 }
 
-/* ── BODY ── */
-body {
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
     margin: 0;
+    padding: 0;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.dashboard-body {
     min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+/* ── BODY ── */
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
     font-family: var(--cid-font);
     color: var(--cid-text-dark);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body.dashboard-body {
+    min-height: 100vh;
     background-color: #F0F3EE;
     background-image: url("../../images/Background_cidadao.png");
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
-    padding-top: 20px;
-    padding-bottom: 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* ── CONTAINER ── */
-.dashboard-container {
-    max-width: 1080px;
+/* ── WRAPPER ── */
+.dashboard-wrapper.dashboard-wrapper-cidadao-style.page-internal-cidadao {
+    position: relative;
+    z-index: 1;
+    max-width: var(--cid-max-width);
+    width: 100%;
     margin: 0 auto;
     padding: 32px 24px 60px;
-    box-sizing: border-box;
 }
 
-/* ── HERO ── */
-.home-hero {
+/* ── HEADER / HERO ── */
+.dashboard-page-header.home-hero {
     text-align: left;
     margin-bottom: 24px;
 }
 
-.home-hero h1 {
-    margin: 0;
-    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+.dashboard-page-header.home-hero h1 {
+    margin: 0 0 8px;
+    font-family: var(--cid-font);
+    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
     font-weight: 300;
-    color: var(--cid-green);
-    line-height: 1.2;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--cid-text-main);
 }
 
-.home-hero p {
-    margin-top: 8px;
-    font-size: 1rem;
+.dashboard-page-header.home-hero p {
+    margin: 0;
+    font-family: var(--cid-font);
+    font-size: 0.98rem;
+    font-weight: 400;
+    line-height: 1.45;
     color: var(--cid-text-muted);
 }
 
@@ -70,24 +115,28 @@ body {
     margin-bottom: 20px;
 }
 
-/* ── CARD ── */
+/* ── CARDS ── */
+.home-card,
+.quick-links-card {
+    background: var(--cid-card-bg);
+    border-radius: var(--cid-card-radius);
+    box-shadow: var(--cid-card-shadow);
+    backdrop-filter: var(--cid-card-blur);
+    -webkit-backdrop-filter: var(--cid-card-blur);
+    border: var(--cid-card-border);
+}
+
 .home-card {
     display: block;
     text-decoration: none;
-    background: var(--cid-card-bg);
-    border-radius: var(--cid-card-radius);
-    padding: 26px;
-    box-shadow: var(--cid-card-shadow);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: var(--cid-card-border);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     color: inherit;
+    padding: 26px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .home-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    box-shadow: var(--cid-card-shadow-hover);
     text-decoration: none;
 }
 
@@ -113,36 +162,31 @@ body {
     margin: 0 0 6px;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--cid-green);
+    color: var(--cid-text-main);
+    font-family: var(--cid-font);
 }
 
 .home-card p {
     margin: 0;
-    font-size: 0.85rem;
-    color: var(--cid-text-muted);
+    font-size: 0.88rem;
     line-height: 1.5;
+    color: var(--cid-text-muted);
+    font-family: var(--cid-font);
 }
 
 /* ── QUICK LINKS ── */
 .quick-links-card {
-    background: var(--cid-card-bg);
-    border-radius: var(--cid-card-radius);
     padding: 24px;
-    box-shadow: var(--cid-card-shadow);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: var(--cid-card-border);
 }
 
 .quick-links-card h3 {
-    margin-top: 0;
-    margin-bottom: 14px;
-    font-size: 1.1rem;
+    margin: 0 0 14px;
+    font-size: 1.08rem;
     font-weight: 700;
-    color: var(--cid-green);
+    color: var(--cid-text-main);
+    font-family: var(--cid-font);
 }
 
-/* ── LINKS ── */
 .quick-links-row {
     display: flex;
     flex-direction: column;
@@ -156,10 +200,11 @@ body {
     padding: 10px 0;
     text-decoration: none;
     color: var(--cid-green);
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 600;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(23, 107, 71, 0.08);
     transition: all 0.2s ease;
+    font-family: var(--cid-font);
 }
 
 .quick-links-row a:last-child {
@@ -177,15 +222,29 @@ body {
 
 /* ── RESPONSIVO ── */
 @media (max-width: 768px) {
-    .dashboard-container {
-        padding: 20px 16px 50px;
+    html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    body.dashboard-body {
+        min-height: 100dvh;
+    }
+
+    .dashboard-wrapper.dashboard-wrapper-cidadao-style.page-internal-cidadao {
+        padding: 24px 16px 40px;
+    }
+
+    .dashboard-page-header.home-hero h1 {
+        font-size: clamp(1.65rem, 7vw, 2.2rem);
     }
 
     .home-grid {
         grid-template-columns: 1fr;
     }
 
-    .home-hero h1 {
-        font-size: 1.5rem;
+    .home-card,
+    .quick-links-card {
+        border-radius: 20px;
     }
 }

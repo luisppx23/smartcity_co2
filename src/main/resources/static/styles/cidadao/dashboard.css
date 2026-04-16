@@ -27,8 +27,13 @@
 
     --radius-md: 12px;
     --radius-lg: 16px;
+
+    --cid-text-main: #23372C;
+    --cid-text-muted: #6E7C74;
+    --cid-max-width: 1080px;
 }
 
+/* BODY */
 body.dashboard-body {
     margin: 0;
     min-height: 100vh;
@@ -39,48 +44,70 @@ body.dashboard-body {
     background-repeat: no-repeat;
     background-position: center top;
     background-size: cover;
-    padding-top: 12px;
+    padding-top: 0 !important;
     padding-bottom: 28px;
 }
 
-.dashboard-wrapper {
-    position: relative;
-    z-index: 1;
-}
-
+/* WRAPPER */
 .dashboard-wrapper-cidadao-style {
-    max-width: 1100px;
+    max-width: var(--cid-max-width);
     margin: 0 auto;
-    padding: 8px 28px 28px;   /* mesmo padding lateral da navbar */
+    padding: 32px 24px 60px;
     box-sizing: border-box;
     width: 100%;
 }
 
 /* HEADER */
 .dashboard-page-header {
-    margin: 4px 0 14px;
-    padding: 0 2px;
+    text-align: left;
+    margin-bottom: 20px;
 }
 
-.dashboard-page-header h1 {
-    margin: 0;
-    font-size: 1.55rem;
-    font-weight: 700;
-    line-height: 1.1;
+.dashboard-page-header--kms-style {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.dashboard-page-header h1,
+.dashboard-page-header--kms-style h1 {
+    margin: 0 0 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+    font-weight: 300;
     letter-spacing: -0.02em;
-    color: var(--blue-900);
+    line-height: 1.15;
+    color: var(--cid-text-main);
 }
 
-.dashboard-page-header p {
-    margin: 3px 0 0;
-    font-size: 0.78rem;
-    font-weight: 500;
-    color: var(--text-400);
+.dashboard-page-header p,
+.dashboard-page-header--kms-style p {
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--cid-text-muted);
 }
 
 .dashboard-hero,
 .cidadao-hero {
     display: none;
+}
+
+/* cor quando melhorou */
+.card-value.co2-down {
+    color: #166534 !important;
+}
+
+/* cor quando piorou */
+.card-value.co2-up {
+    color: #b42318 !important;
+}
+
+/* seta */
+.card-value i {
+    margin-left: 6px;
+    font-size: 0.9rem;
 }
 
 /* LAYOUT */
@@ -236,11 +263,16 @@ body.dashboard-body {
 .chart-panel {
     min-height: 290px;
     padding: 14px;
+    display: flex;
+    flex-direction: column;
 }
 
 .chart-box {
     position: relative;
     width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .chart-box-sm {
@@ -257,7 +289,7 @@ body.dashboard-body {
 }
 
 .vehicle-legend-list {
-    margin: 10px 0 12px;
+    margin: 10px 0 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -423,7 +455,7 @@ body.dashboard-body {
 @media (max-width: 768px) {
     .dashboard-wrapper-cidadao-style {
         max-width: 100%;
-        padding: 10px 12px 24px;
+        padding: 24px 16px 40px;
     }
 
     .row-2,
@@ -435,12 +467,14 @@ body.dashboard-body {
         grid-template-columns: 1fr;
     }
 
-    .dashboard-page-header h1 {
-        font-size: 1.35rem;
+    .dashboard-page-header h1,
+    .dashboard-page-header--kms-style h1 {
+        font-size: clamp(1.65rem, 7vw, 2.2rem);
     }
 
-    .dashboard-page-header p {
-        font-size: 0.76rem;
+    .dashboard-page-header p,
+    .dashboard-page-header--kms-style p {
+        font-size: 0.98rem;
     }
 
     .card-value {

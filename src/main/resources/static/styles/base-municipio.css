@@ -45,7 +45,9 @@
     --mun-page-padding:  0 24px;
 
     /* BACKGROUND */
-    --mun-bg-image:     url('/images/Background_municipio.png');
+    --mun-bg-image:
+            linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+            url('/images/Background_municipio.png');
     --mun-bg-color:     #F0F3EE;    /* fallback */
 
     /* SEMÂNTICAS */
@@ -62,6 +64,7 @@
     margin: 0;
     padding: 0;
 }
+
 
 /* ── BODY ── */
 html, body {

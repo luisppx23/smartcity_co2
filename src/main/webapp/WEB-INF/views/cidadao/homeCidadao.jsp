@@ -6,35 +6,37 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Cidadão</title>
 
     <!-- Navbar -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
 
-    <!-- Estilo alinhado com município -->
+    <!-- CSS da página -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/home.css">
 
-    <!-- Fonte (igual município) -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Fonte -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="dashboard-body">
 
 <jsp:include page="../navbar.jsp"/>
 
-<div class="dashboard-container">
+<div class="dashboard-wrapper dashboard-wrapper-cidadao-style page-internal-cidadao">
 
-    <!-- HERO -->
-    <div class="home-hero">
+    <!-- HEADER -->
+    <section class="dashboard-page-header home-hero">
         <h1>Bem-vindo, ${user.firstName}!</h1>
         <p>Mobilidade mais inteligente para uma cidade mais sustentável.</p>
-    </div>
+    </section>
 
     <!-- AÇÕES PRINCIPAIS -->
-    <div class="home-grid">
-
+    <section class="home-grid">
         <a href="${pageContext.request.contextPath}/cidadao/registoVeiculo" class="home-card">
             <div class="card-icon">
                 <i class="bi bi-car-front"></i>
@@ -66,16 +68,13 @@
             <h3>Ver Registos de KMs</h3>
             <p>Consulte o histórico dos seus registos de quilometragem.</p>
         </a>
+    </section>
 
-    </div>
-
-    <!-- ACESSOS RÁPIDOS (estilo portal município) -->
-    <div class="quick-links-card">
-
+    <!-- ACESSOS RÁPIDOS -->
+    <section class="quick-links-card">
         <h3>Acessos Rápidos</h3>
 
         <div class="quick-links-row">
-
             <a href="${pageContext.request.contextPath}/cidadao/dashboardCidadao">
                 <i class="bi bi-bar-chart-line"></i>
                 <span>As minhas emissões</span>
@@ -85,15 +84,13 @@
                 <i class="bi bi-car-front"></i>
                 <span>Os meus veículos</span>
             </a>
-            
 
             <a href="${pageContext.request.contextPath}/cidadao/perfil">
                 <i class="bi bi-person"></i>
                 <span>O meu perfil</span>
             </a>
-
         </div>
-    </div>
+    </section>
 
 </div>
 
