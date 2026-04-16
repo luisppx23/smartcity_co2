@@ -3,12 +3,7 @@ package pt.upskill.smart_city_co2.services;
 import org.springframework.stereotype.Service;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.entities.Ownership;
-import pt.upskill.smart_city_co2.entities.RegistoKms;
-import pt.upskill.smart_city_co2.entities.Veiculo;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Service
 public class EmissaoCO2Service {

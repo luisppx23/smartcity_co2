@@ -10,12 +10,13 @@
     <title>Dashboard Cidadão</title>
 
     <!-- Fonte igual ao Município -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"/>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cidadao/navbar.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/base-cidadao.css">
@@ -62,7 +63,8 @@
                 <div class="info-card">
                     <div class="card-label">Km médios mensais</div>
                     <div class="card-value">
-                        <fmt:formatNumber value="${mediaKmsMensalCidadao}" minFractionDigits="1" maxFractionDigits="1"/> km
+                        <fmt:formatNumber value="${mediaKmsMensalCidadao}" minFractionDigits="1" maxFractionDigits="1"/>
+                        km
                     </div>
                     <div class="card-subtext">Média mensal de quilómetros</div>
                 </div>
@@ -70,7 +72,8 @@
                 <div class="info-card">
                     <div class="card-label">CO₂ médio mensal</div>
                     <div class="card-value">
-                        <fmt:formatNumber value="${mediaCo2MensalCidadao}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                        <fmt:formatNumber value="${mediaCo2MensalCidadao}" minFractionDigits="2" maxFractionDigits="2"/>
+                        kg
                     </div>
                     <div class="card-subtext">Média mensal de emissões</div>
                 </div>
@@ -96,7 +99,7 @@
                 <div class="info-card">
                     <div class="card-label">CO₂ do mesmo mês do ano passado</div>
 
-                    <c:set var="diferencaCo2" value="${co2MesAtual - co2MesmoMesAnoPassado}" />
+                    <c:set var="diferencaCo2" value="${co2MesAtual - co2MesmoMesAnoPassado}"/>
 
                     <div class="card-value
         <c:if test='${diferencaCo2 < 0}'>co2-down</c:if>
@@ -131,7 +134,8 @@
                 </div>
 
                 <div class="emissoes-metric-card">
-                    <span class="emissoes-metric-icon emissoes-metric-icon--gold"><i class="bi bi-cloud-haze2"></i></span>
+                    <span class="emissoes-metric-icon emissoes-metric-icon--gold"><i
+                            class="bi bi-cloud-haze2"></i></span>
                     <span class="emissoes-metric-label">CO₂ Total</span>
                     <span class="emissoes-metric-value">
                         <fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="1" maxFractionDigits="1"/> kg
@@ -154,21 +158,27 @@
                         <div class="fuel-info">
                             <span>Km</span>
                             <strong>
-                                <fmt:formatNumber value="${kmsUltimoMes[veiculo.id] != null ? kmsUltimoMes[veiculo.id] : 0}" pattern="#,##0"/>
+                                <fmt:formatNumber
+                                        value="${kmsUltimoMes[veiculo.id] != null ? kmsUltimoMes[veiculo.id] : 0}"
+                                        pattern="#,##0"/>
                             </strong>
                         </div>
 
                         <div class="fuel-info">
                             <span>CO₂</span>
                             <strong>
-                                <fmt:formatNumber value="${co2UltimoMes[veiculo.id] != null ? co2UltimoMes[veiculo.id] : 0}" pattern="#,##0.0"/> kg
+                                <fmt:formatNumber
+                                        value="${co2UltimoMes[veiculo.id] != null ? co2UltimoMes[veiculo.id] : 0}"
+                                        pattern="#,##0.0"/> kg
                             </strong>
                         </div>
 
                         <div class="fuel-info">
                             <span>Taxa</span>
                             <strong>
-                                €<fmt:formatNumber value="${taxaUltimoMes[veiculo.id] != null ? taxaUltimoMes[veiculo.id] : 0}" pattern="#,##0.00"/>
+                                €<fmt:formatNumber
+                                    value="${taxaUltimoMes[veiculo.id] != null ? taxaUltimoMes[veiculo.id] : 0}"
+                                    pattern="#,##0.00"/>
                             </strong>
                         </div>
                     </div>
@@ -185,7 +195,8 @@
                     </div>
 
                     <div class="card-label" id="tituloGraficoBarras">KMs por Veículo</div>
-                    <div class="card-subtext" id="descricaoGraficoBarras">Total de quilómetros acumulados por veículo</div>
+                    <div class="card-subtext" id="descricaoGraficoBarras">Total de quilómetros acumulados por veículo
+                    </div>
 
                     <div class="chart-box chart-box-sm">
                         <canvas id="chartVeiculos"></canvas>
@@ -194,7 +205,8 @@
                     <div class="vehicle-legend-list">
                         <c:forEach var="veiculo" items="${listaVeiculos}" varStatus="st">
                             <div class="vehicle-legend-item">
-                                <span class="vehicle-legend-dot" style="background:${coresVeiculos[st.index % 6]};"></span>
+                                <span class="vehicle-legend-dot"
+                                      style="background:${coresVeiculos[st.index % 6]};"></span>
                                 <span>${matriculaPorVeiculo[veiculo.id]} — ${veiculo.marca} ${veiculo.modelo}</span>
                             </div>
                         </c:forEach>
@@ -203,7 +215,9 @@
 
                 <div class="info-card chart-panel">
                     <div class="card-label" id="tituloGraficoCircular">CO₂ por Veículo</div>
-                    <div class="card-subtext" id="descricaoGraficoCircular">Distribuição das emissões acumuladas pelos seus veículos</div>
+                    <div class="card-subtext" id="descricaoGraficoCircular">Distribuição das emissões acumuladas pelos
+                        seus veículos
+                    </div>
 
                     <div class="chart-box chart-box-md">
                         <canvas id="chartCombustivel"></canvas>
@@ -317,7 +331,8 @@
                 </div>
 
                 <c:if test="${numeroTotalCidadaos > 0}">
-                    <c:set var="pctMelhor" value="${((numeroTotalCidadaos - posicaoRankingPoluicao) * 100) / numeroTotalCidadaos}" />
+                    <c:set var="pctMelhor"
+                           value="${((numeroTotalCidadaos - posicaoRankingPoluicao) * 100) / numeroTotalCidadaos}"/>
 
                     <c:choose>
                         <c:when test="${pctMelhor >= 90}">
@@ -345,12 +360,15 @@
                     <div class="emissoes-ranking-progress">
                         <p class="emissoes-ranking-label">Melhor que</p>
                         <div class="emissoes-progress-track">
-                            <div class="emissoes-progress-fill" style="width: <fmt:formatNumber value="${pctMelhor}" minFractionDigits="0" maxFractionDigits="0"/>%;"></div>
+                            <div class="emissoes-progress-fill"
+                                 style="width: <fmt:formatNumber value="${pctMelhor}" minFractionDigits="0"
+                                                                 maxFractionDigits="0"/>%;"></div>
                         </div>
 
                         <div class="emissoes-gamif-footer">
                             <p class="emissoes-ranking-pct">
-                                <fmt:formatNumber value="${pctMelhor}" minFractionDigits="0" maxFractionDigits="0"/>% do município
+                                <fmt:formatNumber value="${pctMelhor}" minFractionDigits="0" maxFractionDigits="0"/>% do
+                                município
                             </p>
                             <span class="emissoes-gamif-titulo ${classeGamif}">${tituloGamif}</span>
                         </div>
@@ -365,22 +383,27 @@
                     <div class="curiosidade-item">
                         <i class="bi bi-tree curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Uma árvore absorve em média 22kg de CO₂ por ano. Para colmatar as suas emissões serão necessárias plantar o equivalente a
-                            <strong><fmt:formatNumber value="${Math.ceil(totalCo2Geral / 22)}" pattern="#,##0"/></strong> árvores!
+                            Uma árvore absorve em média 22kg de CO₂ por ano. Para colmatar as suas emissões serão
+                            necessárias plantar o equivalente a
+                            <strong><fmt:formatNumber value="${Math.ceil(totalCo2Geral / 22)}"
+                                                      pattern="#,##0"/></strong> árvores!
                         </p>
                     </div>
 
                     <div class="curiosidade-item">
                         <i class="bi bi-bicycle curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Ao optar caminhar ou andar de bicicleta, estará não só a implementar um estilo de vida mais saudável como também permite reduzir a sua pegada ecológica e auxilia o seu Munícipio a atingir a sua meta.
+                            Ao optar caminhar ou andar de bicicleta, estará não só a implementar um estilo de vida mais
+                            saudável como também permite reduzir a sua pegada ecológica e auxilia o seu Munícipio a
+                            atingir a sua meta.
                         </p>
                     </div>
 
                     <div class="curiosidade-item">
                         <i class="bi bi-ev-station curiosidade-icon"></i>
                         <p class="curiosidade-texto">
-                            Considere que ao optar por veículos elétricos, os mesmos não emitem CO₂ durante a utilização, reduzindo assim as suas emissões.
+                            Considere que ao optar por veículos elétricos, os mesmos não emitem CO₂ durante a
+                            utilização, reduzindo assim as suas emissões.
                         </p>
                     </div>
                 </div>
@@ -396,18 +419,45 @@
 </div>
 
 <script>
+    /*
+     * Iniciação:
+     * Paleta de cores utilizada nos gráficos.
+     * A estratégia adotada consiste em reutilizar ciclicamente as cores
+     * quando o número de veículos excede o tamanho do array.
+     */
     var CORES = ['#04523B', '#D4AF37', '#2F7D32', '#8B6914', '#2b6a49', '#c49b28'];
 
+    /*
+     * Estruturas lineares para armazenamento agregado por veículo.
+     * Estes arrays funcionam como fonte principal de dados para os gráficos
+     * de barras e circular (doughnut).
+     */
     var idsVeiculos = [];
     var labelsVeiculos = [];
     var valoresCo2Veiculos = [];
     var totalKmsPorVeiculoValores = [];
     var totalTaxaPorVeiculoValores = [];
 
+    /*
+     * Estruturas associativas (objectos) para o armazenamento temporal por veículo.
+     * Cada chave corresponde ao identificador de um veículo onde o valor associado
+     * é um array com os valores mensais respetivos.
+     */
     var co2MensalPorVeiculo = {};
     var kmsMensalPorVeiculo = {};
     var taxaMensalPorVeiculo = {};
 
+    /*
+     * O bloco JSTL abaixo injeta no JavaScript os dados provenientes do servidor.
+     * Para cada veículo existente em listaVeiculos procede-se da seguinte forma:
+     *  1 - guarda-se o identificador;
+     *  2 - associa-se a matrícula como label de visualização;
+     *  3 - convertem-se os totais numéricos para float;
+     *  4 - constroem-se séries temporais mensais para CO2, quilómetros e taxa.
+     *
+     * O uso de parseFloat(... ) || 0  irá permitir a robustez contra valores nulos,
+     * vazios ou não numéricos, evitando que os gráficos recebam NaN.
+     */
     <c:forEach var="veiculo" items="${listaVeiculos}">
     idsVeiculos.push('${veiculo.id}'.toString());
     labelsVeiculos.push('${matriculaPorVeiculo[veiculo.id]}');
@@ -415,18 +465,27 @@
     totalKmsPorVeiculoValores.push(parseFloat('${totalKmsPorVeiculo[veiculo.id]}') || 0);
     totalTaxaPorVeiculoValores.push(parseFloat('${totalTaxaPorVeiculo[veiculo.id]}') || 0);
 
+    /*
+     * Série mensal de emissões CO2 para o veículo atual.
+     */
     co2MensalPorVeiculo['${veiculo.id}'] = [
         <c:forEach var="valor" items="${co2MensalPorVeiculo[veiculo.id]}" varStatus="status">
         ${valor}${!status.last ? ',' : ''}
         </c:forEach>
     ];
 
+    /*
+     * Série mensal de quilómetros para o veículo atual.
+     */
     kmsMensalPorVeiculo['${veiculo.id}'] = [
         <c:forEach var="valor" items="${kmsMensalPorVeiculo[veiculo.id]}" varStatus="status">
         ${valor}${!status.last ? ',' : ''}
         </c:forEach>
     ];
 
+    /*
+     * Série mensal de taxa para o veículo atual.
+     */
     taxaMensalPorVeiculo['${veiculo.id}'] = [
         <c:forEach var="valor" items="${taxaMensalPorVeiculo[veiculo.id]}" varStatus="status">
         ${valor}${!status.last ? ',' : ''}
@@ -434,12 +493,21 @@
     ];
     </c:forEach>
 
+    /*
+     * Array ordenado com os meses que irão servir de eixo X
+     * no gráfico de evolução temporal.
+     */
     var meses = [
         <c:forEach var="mes" items="${meses}" varStatus="status">
         "${mes}"${!status.last ? ',' : ''}
         </c:forEach>
     ];
 
+    /*
+     * Séries globais mensais agregadas para todos os veículos.
+     * Estas estruturas são utilizadas quando o utilizador seleciona
+     * a opção "total" no gráfico de evolução.
+     */
     var emissoesPorMes = [
         <c:forEach var="emissao" items="${emissoesPorMes}" varStatus="status">
         ${emissao}${!status.last ? ',' : ''}
@@ -458,6 +526,18 @@
         </c:forEach>
     ];
 
+    /*
+     * Função de abstração responsável por devolver a configuração
+     * necessária para o gráfico de barras, consoante o tipo selecionado.
+     *
+     * Esta abordagem reduz a duplicação e centraliza o seguinte:
+     *  - label do dataset,
+     *  - descrição textual,
+     *  - array de dados,
+     *  - sufixo de unidade,
+     *  - número de casas decimais,
+     *  - formatação dos ticks do eixo Y.
+     */
     function getDadosBarrasPorTipo(tipo) {
         if (tipo === 'taxa') {
             return {
@@ -466,23 +546,39 @@
                 data: totalTaxaPorVeiculoValores,
                 sufixo: ' €',
                 casas: 0,
-                tickFormatter: function(v) { return '€' + v.toFixed(0); }
+                tickFormatter: function (v) {
+                    return '€' + v.toFixed(0);
+                }
             };
         }
 
+        /*
+         *  No Caso por omissão assume-se a visualização de quilómetros.
+         */
         return {
             label: 'KMs por Veículo',
             descricao: 'Total de quilómetros acumulados por veículo',
             data: totalKmsPorVeiculoValores,
             sufixo: ' km',
             casas: 0,
-            tickFormatter: function(v) { return v.toFixed(0) + ' km'; }
+            tickFormatter: function (v) {
+                return v.toFixed(0) + ' km';
+            }
         };
     }
 
+    /*
+     * Referências globais para instâncias Chart.js.
+     * São mantidas para permitir destroy() antes de nova renderização,
+     * evitando assim a sobreposição de gráficos e fuga de memória.
+     */
     var chartVeiculos = null;
     var chartCircularVeiculos = null;
 
+    /*
+     * Atualiza os elementos textuais associados ao gráfico de barras,
+     * sincronizando o título e a descrição com o tipo de dado selecionado.
+     */
     function atualizarTextoGraficoBarras(info) {
         var titulo = document.getElementById('tituloGraficoBarras');
         var descricao = document.getElementById('descricaoGraficoBarras');
@@ -491,6 +587,17 @@
         if (descricao) descricao.textContent = info.descricao;
     }
 
+    /*
+     * Renderiza o gráfico de barras para comparação entre veículos.
+     *
+     * Fluxo:
+     *  1 - Obtém o tipo selecionado no seletor.
+     *  2 - Recolhe a configuração correspondente.
+     *  3 - Valida a existência do canvas.
+     *  4 - Atualiza o texto auxiliar da interface.
+     *  5 - Destrói a instância anterior, se existir.
+     *  6 - Cria um novo gráfico Chart.js.
+     */
     function renderChartBarras() {
         var tipo = document.getElementById('tipoGraficoBarras')?.value || 'km';
         var info = getDadosBarrasPorTipo(tipo);
@@ -511,9 +618,14 @@
                 datasets: [{
                     label: info.label,
                     data: info.data,
-                    backgroundColor: labelsVeiculos.map(function(_, i) {
+
+                    /*
+                     * Atribuição cíclica de cores às barras.
+                     */
+                    backgroundColor: labelsVeiculos.map(function (_, i) {
                         return CORES[i % CORES.length];
                     }),
+
                     borderRadius: 4,
                     borderSkipped: false,
                     maxBarThickness: 34
@@ -523,7 +635,12 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: {display: false},
+
+                    /*
+                     * Tooltip personalizado para apresentação consistente
+                     * de unidade e para a  precisão numérica.
+                     */
                     tooltip: {
                         backgroundColor: 'rgba(22, 50, 79, 0.95)',
                         titleColor: '#fff',
@@ -531,7 +648,7 @@
                         cornerRadius: 8,
                         padding: 8,
                         callbacks: {
-                            label: function(ctx) {
+                            label: function (ctx) {
                                 return ' ' + info.label + ': ' + Number(ctx.raw).toFixed(info.casas) + info.sufixo;
                             }
                         }
@@ -539,10 +656,10 @@
                 },
                 scales: {
                     x: {
-                        grid: { display: false },
+                        grid: {display: false},
                         ticks: {
                             color: '#6b7c70',
-                            font: { size: 10 }
+                            font: {size: 10}
                         }
                     },
                     y: {
@@ -552,7 +669,7 @@
                         },
                         ticks: {
                             color: '#6b7c70',
-                            font: { size: 10 },
+                            font: {size: 10},
                             callback: info.tickFormatter
                         }
                     }
@@ -561,6 +678,10 @@
         });
     }
 
+    /*
+     * Renderiza o gráfico circular (doughnut) com a distribuição
+     * de emissões CO2 por veículo.
+     */
     function renderChartCircular() {
         var canvas = document.getElementById('chartCombustivel');
         if (!canvas) return;
@@ -575,7 +696,7 @@
                 labels: labelsVeiculos,
                 datasets: [{
                     data: valoresCo2Veiculos,
-                    backgroundColor: labelsVeiculos.map(function(_, i) {
+                    backgroundColor: labelsVeiculos.map(function (_, i) {
                         return CORES[i % CORES.length];
                     }),
                     borderWidth: 0,
@@ -586,6 +707,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '66%',
+
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -594,12 +716,18 @@
                             usePointStyle: true,
                             pointStyle: 'circle',
                             padding: 10,
-                            font: { size: 10 },
-                            generateLabels: function(chart) {
+                            font: {size: 10},
+
+                            /*
+                             * Geração manual das labels da legenda.
+                             * Isto permite controlar explicitamente o estilo visual
+                             * e o estado hidden de cada segmento.
+                             */
+                            generateLabels: function (chart) {
                                 var data = chart.data;
                                 if (!data.labels.length || !data.datasets.length) return [];
 
-                                return data.labels.map(function(label, i) {
+                                return data.labels.map(function (label, i) {
                                     var meta = chart.getDatasetMeta(0);
                                     var style = meta.controller.getStyle(i);
 
@@ -616,6 +744,12 @@
                             }
                         }
                     },
+
+                    /*
+                     * Tooltip que apresenta:
+                     *  1 - valor absoluto em kg
+                     *  2 - percentagem relativa ao total
+                     */
                     tooltip: {
                         backgroundColor: 'rgba(22, 50, 79, 0.95)',
                         titleColor: '#fff',
@@ -623,8 +757,10 @@
                         cornerRadius: 8,
                         padding: 8,
                         callbacks: {
-                            label: function(ctx) {
-                                var total = ctx.dataset.data.reduce(function(a, b) { return a + b; }, 0) || 1;
+                            label: function (ctx) {
+                                var total = ctx.dataset.data.reduce(function (a, b) {
+                                    return a + b;
+                                }, 0) || 1;
                                 var valor = Number(ctx.raw);
                                 var pct = (valor * 100 / total).toFixed(1);
                                 return ' ' + ctx.label + ': ' + valor.toFixed(1) + ' kg (' + pct + '%)';
@@ -636,9 +772,22 @@
         });
     }
 
+    /*
+     * Instância do gráfico de evolução temporal.
+     * metaCO2Mensal representa um valor de referência fixo
+     * usado para comparação no gráfico de emissões.
+     */
     var evolucaoChart = null;
     var metaCO2Mensal = 150;
 
+    /*
+     * Devolve a série temporal correta com base em:
+     *  1 - tipo de métrica (co2, km, taxa)
+     *  2 - veículo selecionado
+     *
+     * Se veiculoId === 'total', devolvem-se os dados agregados mensais.
+     * Caso contrário, devolvem-se os dados mensais do veículo específico.
+     */
     function obterDadosEvolucao(tipo, veiculoId) {
         if (veiculoId === 'total') {
             if (tipo === 'co2') return emissoesPorMes;
@@ -651,6 +800,19 @@
         return taxaMensalPorVeiculo[veiculoId] || [];
     }
 
+    /*
+     * Atualiza o painel de apoio à meta ambiental.
+     *
+     * Objetivo:
+     *  - calcular emissão média por km,
+     *  - estimar quantos km seriam necessários para atingir a meta mensal,
+     *  - estimar a taxa correspondente a essa projeção.
+     *
+     * Notas:
+     *  - usa-se (totalKms || 1) para evitar divisão por zero;
+     *  - usa-se (emissaoMediaPorKm || 0.2) como fallback para evitar infinito
+     *    ou resultados inválidos quando não existem dados suficientes.
+     */
     function atualizarPainelMeta(veiculoId) {
         var metaInfo = document.getElementById('metaInfo');
         if (!metaInfo) return;
@@ -661,11 +823,24 @@
         var totalKms = 0;
         var totalTaxa = 0;
 
+        /*
+         * Se estiver selecionado o modo global, soma-se o contributo
+         * de todos os veículos.
+         */
         if (veiculoId === 'total') {
-            totalCo2 = valoresCo2Veiculos.reduce(function(a, b) { return a + b; }, 0);
-            totalKms = totalKmsPorVeiculoValores.reduce(function(a, b) { return a + b; }, 0);
-            totalTaxa = totalTaxaPorVeiculoValores.reduce(function(a, b) { return a + b; }, 0);
+            totalCo2 = valoresCo2Veiculos.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            totalKms = totalKmsPorVeiculoValores.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            totalTaxa = totalTaxaPorVeiculoValores.reduce(function (a, b) {
+                return a + b;
+            }, 0);
         } else {
+            /*
+             * Caso contrário, localiza-se o índice do veículo nas estruturas paralelas.
+             */
             var idx = idsVeiculos.indexOf(veiculoId);
             if (idx >= 0) {
                 totalCo2 = valoresCo2Veiculos[idx] || 0;
@@ -683,6 +858,13 @@
         document.getElementById('taxaMeta').innerText = '€' + taxaMeta.toFixed(2);
     }
 
+    /*
+     * Renderiza/atualiza o gráfico de evolução temporal.
+     *
+     * Esta função é sensível a dois controlos de interface:
+     *  - tipoEvolucao: define a métrica visualizada;
+     *  - veiculoEvolucao: define se os dados são globais ou de um veículo específico.
+     */
     function atualizarEvolucaoChart() {
         var tipoSelect = document.getElementById('tipoEvolucao');
         var veiculoSelect = document.getElementById('veiculoEvolucao');
@@ -698,6 +880,10 @@
         var labelGrafico = '';
         var sufixoTooltip = '';
 
+        /*
+         * Definição dinâmica do nome da série e da unidade,
+         * em função do tipo de dado selecionado.
+         */
         if (tipo === 'co2') {
             labelGrafico = 'Emissões CO₂ (kg)';
             sufixoTooltip = ' kg';
@@ -709,6 +895,9 @@
             sufixoTooltip = ' €';
         }
 
+        /*
+         * Dataset principal da série temporal.
+         */
         var datasets = [{
             label: labelGrafico,
             data: dados,
@@ -721,10 +910,14 @@
             pointHoverRadius: 3
         }];
 
+        /*
+         * No caso de emissões CO2, adiciona-se uma segunda série
+         * representando a meta mensal como linha de referência.
+         */
         if (tipo === 'co2') {
             datasets.push({
                 label: 'Meta CO₂',
-                data: meses.map(function() {
+                data: meses.map(function () {
                     return metaCO2Mensal;
                 }),
                 borderColor: '#D4AF37',
@@ -735,6 +928,9 @@
             });
         }
 
+        /*
+         * Destrói a instância anterior antes de recriar o gráfico.
+         */
         if (evolucaoChart) {
             evolucaoChart.destroy();
         }
@@ -748,17 +944,23 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+
+                /*
+                 * interaction.mode = 'index' permite comparar datasets no mesmo ponto X.
+                 * intersect = false torna o hover mais permissivo e usável.
+                 */
                 interaction: {
                     mode: 'index',
                     intersect: false
                 },
+
                 plugins: {
                     legend: {
                         labels: {
                             color: '#5f6f65',
                             usePointStyle: true,
                             padding: 12,
-                            font: { size: 10 }
+                            font: {size: 10}
                         }
                     },
                     tooltip: {
@@ -768,7 +970,7 @@
                         cornerRadius: 8,
                         padding: 8,
                         callbacks: {
-                            label: function(ctx) {
+                            label: function (ctx) {
                                 return ctx.dataset.label + ': ' + Number(ctx.raw).toFixed(1) + sufixoTooltip;
                             }
                         }
@@ -776,10 +978,10 @@
                 },
                 scales: {
                     x: {
-                        grid: { display: false },
+                        grid: {display: false},
                         ticks: {
                             color: '#6b7c70',
-                            font: { size: 9 }
+                            font: {size: 9}
                         }
                     },
                     y: {
@@ -789,8 +991,12 @@
                         },
                         ticks: {
                             color: '#6b7c70',
-                            font: { size: 9 },
-                            callback: function(v) {
+                            font: {size: 9},
+
+                            /*
+                             * Formatação contextual dos valores do eixo Y.
+                             */
+                            callback: function (v) {
                                 if (tipo === 'co2') return v.toFixed(0) + ' kg';
                                 if (tipo === 'km') return v.toFixed(0) + ' km';
                                 return '€' + v.toFixed(0);
@@ -801,6 +1007,10 @@
             }
         });
 
+        /*
+         * O painel de meta apenas é relevante quando o utilizador
+         * está a analisar emissões CO2.
+         */
         if (tipo === 'co2') {
             atualizarPainelMeta(veiculoId);
         } else {
@@ -808,11 +1018,21 @@
         }
     }
 
+    /*
+     * Associação de eventos aos elementos de interface.
+     *
+     * A lógica é inicializada apenas se os elementos existirem no DOM,
+     * o que torna o código mais resiliente e reutilizável em páginas
+     * onde alguns blocos possam estar ausentes.
+     */
     if (document.getElementById('tipoGraficoBarras')) {
         document.getElementById('tipoGraficoBarras').addEventListener('change', renderChartBarras);
         renderChartBarras();
     }
 
+    /*
+     * O gráfico circular é renderizado imediatamente, dado que não depende de um seletor prévio.
+     */
     renderChartCircular();
 
     if (document.getElementById('tipoEvolucao')) {
