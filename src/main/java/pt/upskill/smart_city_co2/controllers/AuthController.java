@@ -37,9 +37,14 @@ public class AuthController {
 
     // Exibe a página de login
     @GetMapping(value = "/login")
-    public String loginPage(@RequestParam(value = "contaApagada", required = false) boolean contaApagada, Model model) {
+    public String loginPage(@RequestParam(value = "contaApagada", required = false) boolean contaApagada,
+                            @RequestParam(value = "error", required = false) String error,
+                            Model model) {
         if (contaApagada) {
             model.addAttribute("message", "A sua conta foi apagada com sucesso.");
+        }
+        if (error != null) {
+            model.addAttribute("erro", "Username ou password incorretos. Tente novamente.");
         }
         return "login";
     }
