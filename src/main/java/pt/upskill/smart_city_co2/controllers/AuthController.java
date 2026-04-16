@@ -27,7 +27,6 @@ public class AuthController {
     MunicipioService municipioService;
 
     // Exibe a página de registo de novo user
-
     @GetMapping(value = "/signup")
     public String signUpPage(Model model) {  // ← ADICIONAR Model COMO PARÂMETRO
         // Buscar todos os municípios
@@ -78,7 +77,7 @@ public class AuthController {
 
 
         try {
-            authService.register(signUp);
+            authService.registar(signUp);
             model.addAttribute("message", "Conta criada com sucesso! Faça login.");
             return "login";
         } catch (RuntimeException e) {
@@ -93,8 +92,6 @@ public class AuthController {
     public String recuperarPasswordPage() {
         return "recuperarPassword";
     }
-
-    // Adicione estes novos métodos ao AuthController existente
 
     // Processa a verificação do usuário e envia código por email
     @PostMapping("/verificarUtilizadorAction")

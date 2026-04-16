@@ -103,7 +103,7 @@
                        min="0.1"
                        max="1000"
                        placeholder="Ex: 2.50"
-                       value="<c:if test='${not empty municipio}'><fmt:formatNumber value='${municipio.objetivo_co2_mes_hab}' minFractionDigits='2' maxFractionDigits='2'/></c:if>"
+                       value="<c:if test='${not empty municipio && municipio.objetivo_co2_mes_hab != null}'>${municipio.objetivo_co2_mes_hab}</c:if>"
                        required />
             </div>
 

@@ -6,6 +6,7 @@ import pt.upskill.smart_city_co2.TipoDeCombustivel;
 @Entity
 public class Veiculo {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +21,7 @@ public class Veiculo {
     @Enumerated(EnumType.STRING)
     private TipoDeCombustivel tipoDeCombustivel;
 
+    //CONSTRUTOR VAZIO
     public Veiculo() {}
 
     public Veiculo(String marca, String modelo, TipoDeCombustivel tipoDeCombustivel, double consumo) {
@@ -29,6 +31,7 @@ public class Veiculo {
         this.consumo = consumo;
     }
 
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

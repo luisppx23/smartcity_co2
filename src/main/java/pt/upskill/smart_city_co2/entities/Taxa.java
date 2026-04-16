@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 public class Taxa {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +26,7 @@ public class Taxa {
     @JoinColumn(name = "registo_kms_id")
     private RegistoKms registoKms;
 
+    //CONSTRUTOR VAZIO
     public Taxa() {}
 
     public Taxa(double valor, LocalDate mes_ano) {
@@ -32,6 +34,7 @@ public class Taxa {
         this.mes_ano = mes_ano;
     }
 
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

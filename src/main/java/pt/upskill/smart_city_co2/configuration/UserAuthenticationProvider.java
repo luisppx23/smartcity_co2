@@ -28,7 +28,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         // Valida as credenciais e retorna o user se forem corretas
-        User user = authService.validateLogin(username, password);
+        User user = authService.validarLogin(username, password);
 
         if (user != null) {
             // Lista de roles de user - permissões

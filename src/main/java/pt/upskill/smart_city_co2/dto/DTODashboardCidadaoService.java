@@ -10,6 +10,7 @@ import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+//Alimenta o dashboard de visualização dos gráficos e dados processados do Cidadão
 @Service
 public class DTODashboardCidadaoService {
 

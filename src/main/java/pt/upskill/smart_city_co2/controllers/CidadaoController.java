@@ -38,7 +38,7 @@ public class CidadaoController {
     @Autowired
     private TaxaService taxaService;
 
-    // Método auxiliar para obter o utilizador autenticado na sessão atual
+    // Metodo auxiliar para obter o utilizador autenticado na sessão atual
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -490,7 +490,7 @@ public class CidadaoController {
         return "cidadao/dashboardCidadao";
     }
 
-    // Método auxiliar para calcular a taxa associada a um registo de kms
+    // Metodo auxiliar para calcular a taxa associada a um registo de kms
     private double calcularTaxaRegisto(Ownership ownership, RegistoKms registo, Municipio municipio) {
         // Se faltar informação essencial, devolve 0
         if (ownership == null || registo == null || municipio == null) {

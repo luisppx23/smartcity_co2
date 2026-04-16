@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 public class PasswordResetToken {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,7 @@ public class PasswordResetToken {
     @Column(nullable = false)
     private boolean used = false;
 
+    //CONSTRUTOR VAZIO
     public PasswordResetToken() {}
 
     public PasswordResetToken(String token, User user, LocalDateTime expiryDate) {
@@ -35,7 +37,7 @@ public class PasswordResetToken {
         return LocalDateTime.now().isAfter(expiryDate);
     }
 
-    // Getters e Setters
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

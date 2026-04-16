@@ -12,9 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
 
-    @Query(value = "SELECT * FROM Cidadao", nativeQuery = true)
-    List<Cidadao> customQuery(@Param("email") String email);
-
+    // Busca os cidadãos de um município com os seus veículos carregados
     @Query("""
         SELECT DISTINCT c
         FROM Cidadao c
@@ -24,13 +22,7 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
     """)
     List<Cidadao> buscarCidadaosDoMunicipioComVeiculos(@Param("municipioId") Long municipioId);
 
-    // Find by username
-    Optional<Cidadao> findByUsername(String username);
-
-    // Find by email
-    Optional<Cidadao> findByEmail(String email);
-
-    // CORRIGIDO: Buscar apenas com veículos (sem registos)
+    // Busca apenas com veículos (sem registos)
     @Query("""
         SELECT DISTINCT c
         FROM Cidadao c
@@ -40,7 +32,7 @@ public interface CidadaoRepository extends JpaRepository<Cidadao, Long> {
     """)
     Optional<Cidadao> findByIdWithVeiculos(@Param("id") Long id);
 
-    // CORRIGIDO: Para o ranking, buscar apenas os cidadãos com veículos
+    // Busca< apenas os cidadãos com veículos, para o ranking
     @Query("""
         SELECT DISTINCT c
         FROM Cidadao c

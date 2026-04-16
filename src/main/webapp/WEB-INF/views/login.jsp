@@ -71,8 +71,6 @@
                    required />
         </div>
 
-        <div class="auth-btn-icon-wrap">🌿</div>
-
         <button type="submit" class="auth-btn-primary">
             ENTRAR NO FUTURO SUSTENTÁVEL
         </button>

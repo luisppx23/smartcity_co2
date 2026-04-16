@@ -63,7 +63,7 @@ public enum EscalaTaxaEmissao {
 
     /*
      Determina automaticamente o nível da escala a partir do valor de emissões em g/km.
-     Este método é importante porque centraliza a regra de classificação ambiental
+     Este metodo é importante porque centraliza a regra de classificação ambiental
      e garante consistência sempre que for necessário converter emissões num nível.
      */
     public static EscalaTaxaEmissao fromEmissao(double emissaoGPorKm) {

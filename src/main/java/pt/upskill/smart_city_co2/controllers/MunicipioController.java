@@ -26,7 +26,7 @@ public class MunicipioController {
     @Autowired
     private MunicipioService municipioService;
 
-    // Método auxiliar para obter o utilizador autenticado
+    // Metodo auxiliar para obter o utilizador autenticado
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -274,7 +274,7 @@ public class MunicipioController {
         return "municipio/dashboardMunicipio_b";
     }
 
-    // Método auxiliar que coloca no model o utilizador e o município autenticado
+    // Metodo auxiliar que coloca no model o utilizador e o município autenticado
     private Municipio adicionarContextoMunicipio(Model model) {
         User user = getAuthenticatedUser();
         model.addAttribute("user", user);
@@ -298,7 +298,7 @@ public class MunicipioController {
         return municipio;
     }
 
-    // Método auxiliar que adiciona ao model todos os dados necessários para o dashboard/relatórios
+    // Metodo auxiliar que adiciona ao model todos os dados necessários para o dashboard/relatórios
     private void adicionarRelatorioAoModel(Model model, Municipio municipio) {
         DashboardMunicipioDataDTO dados = municipioService.gerarRelatorioMunicipio(municipio);
 

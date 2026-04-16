@@ -9,6 +9,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +22,7 @@ public abstract class User {
     private String tipo;
     private boolean ativo;
 
+    //CONSTRUTOR VAZIO
     public User() {}
 
     public User(String username, LocalDateTime data_registo, String email, String password, int nif, String tipo, boolean ativo) {
@@ -33,6 +35,7 @@ public abstract class User {
         this.ativo = ativo;
     }
 
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
