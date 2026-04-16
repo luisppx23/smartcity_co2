@@ -33,11 +33,6 @@
     <form method="POST" action="/auth/signUpAction">
         <input type="hidden" name="tipo" value="cidadao" />
 
-        <div class="auth-group">
-            <label class="auth-label" for="fotoFicheiro">Foto de Perfil (opcional)</label>
-            <input type="file" id="fotoFicheiro" name="fotoFicheiro" class="auth-input" />
-        </div>
-
         <div class="auth-grid-2">
             <div class="auth-group">
                 <label class="auth-label" for="firstName">Primeiro Nome</label>
@@ -71,7 +66,7 @@
             </div>
             <div class="auth-group">
                 <label class="auth-label" for="nif">NIF</label>
-                <input type="number" id="nif" name="nif"
+                <input type="tel" id="nif" name="nif"
                        class="auth-input" placeholder="123456789" required />
             </div>
         </div>
@@ -81,7 +76,7 @@
             <select id="municipioId" name="municipioId" class="auth-select" required>
                 <option value="">Selecione um município</option>
                 <c:forEach var="municipio" items="${municipios}">
-                    <option value="${municipio.id}">${municipio.username} - ${municipio.nome}</option>
+                    <option value="${municipio.id}">${municipio.nome}</option>
                 </c:forEach>
             </select>
             <small class="auth-help">Selecione o município onde reside.</small>
@@ -105,8 +100,6 @@
                        class="auth-input" placeholder="Confirmar" required />
             </div>
         </div>
-
-        <div class="auth-btn-icon-wrap">🌿</div>
 
         <button type="submit" class="auth-btn-primary">
             REGISTAR

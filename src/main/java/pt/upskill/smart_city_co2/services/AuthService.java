@@ -3,8 +3,6 @@ package pt.upskill.smart_city_co2.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +44,7 @@ public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private static final SecureRandom secureRandom = new SecureRandom();
 
-    public User register(SignUpModel signUpModel) {
+    public void registar(SignUpModel signUpModel) {
 
         // Verificar email
         if (userRepository.findByEmail(signUpModel.getEmail()).isPresent()) {
@@ -97,17 +95,15 @@ public class AuthService {
                 municipioRepository.save(municipio);
             }
 
-            return savedCidadao;
         }
 
-        return null;
     }
 
     public User getUser(String username) {
         return userRepository.getUserByUsername(username);
     }
 
-    public User validateLogin(String username, String password) {
+    public User validarLogin(String username, String password) {
         User user = getUser(username);
         if (user == null || user.getId() == null) {
             return null;
@@ -120,21 +116,12 @@ public class AuthService {
         return user;
     }
 
-    public User getAuthenticatedUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || auth.getPrincipal() == null) {
-            return null;
-        }
-        String username = auth.getPrincipal().toString();
-        return getUser(username);
-    }
-
     public boolean verificarDadosRecuperacao(String username, String email) {
         return userRepository.findByUsernameAndEmail(username, email).isPresent();
     }
 
     @Transactional
-    public String gerarCodigoRecuperacao(String username, String email) {
+    public void gerarCodigoRecuperacao(String username, String email) {
         User user = userRepository.findByUsernameAndEmail(username, email)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
@@ -167,19 +154,12 @@ public class AuthService {
             logger.info("Email enviado com sucesso para: {}", user.getEmail());
         } catch (Exception e) {
             logger.error("Erro ao enviar email: {}", e.getMessage());
-            // Fallback: mostrar no console para debugging
-            System.out.println("=========================================");
-            System.out.println("CÓDIGO DE RECUPERAÇÃO PARA: " + username);
-            System.out.println("CÓDIGO: " + codigo);
-            System.out.println("EMAIL DO UTILIZADOR: " + user.getEmail());
-            System.out.println("=========================================");
         }
 
-        return codigo;
     }
 
     @Transactional
-    public boolean validarCodigoRecuperacao(String username, String codigo) {
+    public void validarCodigoRecuperacao(String username, String codigo) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
 
@@ -198,7 +178,6 @@ public class AuthService {
             throw new RuntimeException("Código inválido. Verifique e tente novamente.");
         }
 
-        return true;
     }
 
     @Transactional
@@ -219,14 +198,5 @@ public class AuthService {
             resetToken.setUsed(true);
             tokenRepository.save(resetToken);
         }
-    }
-
-    // Method original mantido para compatibilidade (sem código de verificação)
-    public void atualizarPassword(String username, String novaPassword) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Utilizador não encontrado"));
-
-        user.setPassword(passwordEncoder.encode(novaPassword));
-        userRepository.save(user);
     }
 }

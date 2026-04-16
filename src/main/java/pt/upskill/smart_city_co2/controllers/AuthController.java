@@ -27,7 +27,6 @@ public class AuthController {
     MunicipioService municipioService;
 
     // Exibe a página de registo de novo user
-
     @GetMapping(value = "/signup")
     public String signUpPage(Model model) {  // ← ADICIONAR Model COMO PARÂMETRO
         // Buscar todos os municípios
@@ -38,9 +37,14 @@ public class AuthController {
 
     // Exibe a página de login
     @GetMapping(value = "/login")
-    public String loginPage(@RequestParam(value = "contaApagada", required = false) boolean contaApagada, Model model) {
+    public String loginPage(@RequestParam(value = "contaApagada", required = false) boolean contaApagada,
+                            @RequestParam(value = "error", required = false) String error,
+                            Model model) {
         if (contaApagada) {
             model.addAttribute("message", "A sua conta foi apagada com sucesso.");
+        }
+        if (error != null) {
+            model.addAttribute("erro", "Username ou password incorretos. Tente novamente.");
         }
         return "login";
     }
@@ -78,7 +82,7 @@ public class AuthController {
 
 
         try {
-            authService.register(signUp);
+            authService.registar(signUp);
             model.addAttribute("message", "Conta criada com sucesso! Faça login.");
             return "login";
         } catch (RuntimeException e) {
@@ -93,8 +97,6 @@ public class AuthController {
     public String recuperarPasswordPage() {
         return "recuperarPassword";
     }
-
-    // Adicione estes novos métodos ao AuthController existente
 
     // Processa a verificação do usuário e envia código por email
     @PostMapping("/verificarUtilizadorAction")

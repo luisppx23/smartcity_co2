@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//Alimenta o dashboard de visualização dos gráficos e dados processados do Município
 public class DashboardMunicipioDataDTO {
 
     // Dados base

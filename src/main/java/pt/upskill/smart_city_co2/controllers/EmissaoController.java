@@ -23,7 +23,7 @@ public class EmissaoController {
         this.emissaoCO2Service = emissaoCO2Service;
     }
 
-    // Método auxiliar para obter o utilizador autenticado
+    // Metodo auxiliar para obter o utilizador autenticado
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

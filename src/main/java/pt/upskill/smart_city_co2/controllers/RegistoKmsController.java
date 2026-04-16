@@ -208,7 +208,7 @@ public class RegistoKmsController {
         return "cidadao/historicoKms";
     }
 
-    // Método auxiliar para obter o cidadão autenticado
+    // Metodo auxiliar para obter o cidadão autenticado
     private Cidadao obterCidadaoAutenticado(Authentication authentication) {
         if (authentication != null && authentication.getPrincipal() instanceof Cidadao) {
             return (Cidadao) authentication.getPrincipal();
@@ -217,7 +217,7 @@ public class RegistoKmsController {
         return null;
     }
 
-    // Método auxiliar para encontrar a ownership correspondente ao veículo selecionado
+    // Metodo auxiliar para encontrar a ownership correspondente ao veículo selecionado
     private Ownership encontrarOwnership(Cidadao cidadao, Long veiculoId) {
         if (cidadao.getListaDeVeiculos() != null) {
             return cidadao.getListaDeVeiculos().stream()

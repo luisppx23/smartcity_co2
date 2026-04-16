@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Relatórios Município</title>
+    <title>Históricos Município</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
@@ -23,8 +23,8 @@
 <jsp:include page="navbarm.jsp"/>
 <%-- HERO --%>
 <section class="mun-hero">
-    <h1 class="mun-hero-title">Relatórios do Município</h1>
-    <p class="mun-hero-subtitle">Histórico agregado de emissões, KMs e tendências do município de ${municipio.nome}</p>
+    <h1 class="mun-hero-title">Históricos do Município</h1>
+    <p class="mun-hero-subtitle">Agregado de emissões, KMs e tendências do município de ${municipio.nome}</p>
 </section>
 
 <main class="mun-page-content">

@@ -1,9 +1,9 @@
 package pt.upskill.smart_city_co2.entities;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
+//Classe não utilizada para a criação de relatórios por mudanças de plano no desenvolvimento do projeto (poderá ser útil nisso futuramente), mas usada para cálculos
 @Entity
 public class RelatorioMensal {
 

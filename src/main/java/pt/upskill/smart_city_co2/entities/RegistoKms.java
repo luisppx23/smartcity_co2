@@ -6,6 +6,7 @@ import java.util.Date;
 @Entity
 public class RegistoKms {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +23,7 @@ public class RegistoKms {
     @OneToOne(mappedBy = "registoKms")
     private Taxa taxa;
 
+    //CONSTRUTOR VAZIO
     public RegistoKms() {}
 
     public RegistoKms(Date mes_ano, double kms_mes) {
@@ -29,6 +31,7 @@ public class RegistoKms {
         this.kms_mes = kms_mes;
     }
 
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -6,6 +6,7 @@ import java.util.List;
 @Entity
 public class Ownership {
 
+    //ATRIBUTOS
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,12 +25,14 @@ public class Ownership {
     @OneToMany(mappedBy = "ownership")
     private List<RegistoKms> registosKms;
 
+    //CONSTRUTOR VAZIO
     public Ownership() {}
 
     public Ownership(String matricula) {
         this.matricula = matricula;
     }
 
+    //GETTERS E SETTERS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

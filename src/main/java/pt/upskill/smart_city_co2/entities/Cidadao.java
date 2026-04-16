@@ -7,6 +7,7 @@ import java.util.List;
 @Entity
 public class Cidadao extends User {
 
+    //ATRIBUTOS
     private String firstName;
     private String lastName;
     private String contacto;
@@ -22,6 +23,7 @@ public class Cidadao extends User {
     @OneToMany(mappedBy = "cidadao")
     private List<Ownership> listaDeVeiculos;
 
+    //CONSTRUTOR VAZIO
     public Cidadao() {}
 
     public Cidadao(String firstName, String lastName, String username,
@@ -34,6 +36,7 @@ public class Cidadao extends User {
         this.morada = morada;
     }
 
+    //GETTERS E SETTERS
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
 

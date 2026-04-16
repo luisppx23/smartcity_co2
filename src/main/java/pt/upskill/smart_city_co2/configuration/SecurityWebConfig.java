@@ -37,7 +37,6 @@ public class SecurityWebConfig {
             // Homepage pública
             auth.requestMatchers("/").permitAll();
 
-
             // Acesso público a rotas de autenticação e recursos estáticos
             auth.requestMatchers(
                     "/auth/**",
@@ -47,6 +46,7 @@ public class SecurityWebConfig {
                     "/images/**",
                     "/api/**",
             "/favicon.ico").permitAll();
+
             // Acesso mediante Role do User - endpoints reais dos controllers
             auth.requestMatchers("/auth/autenticado").authenticated();
             auth.requestMatchers("/auth/homeCidadao").hasRole("CIDADAO");

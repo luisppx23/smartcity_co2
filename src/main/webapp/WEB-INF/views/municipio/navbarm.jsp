@@ -26,7 +26,7 @@
             </a>
             <a href="<c:url value='/municipio/relatoriosMunicipio'/>"
                class="mun-nav-link ${currentURI.contains('relatoriosMunicipio') ? 'active' : ''}">
-                <i class="bi bi-file-earmark-bar-graph"></i> Relatórios
+                <i class="bi bi-file-earmark-bar-graph"></i> Históricos
             </a>
             <a href="<c:url value='/municipio/redefinirTaxa'/>"
                class="mun-nav-link ${currentURI.contains('redefinirTaxa') ? 'active' : ''}">

@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 public class Municipio extends User {
 
+    //ATRIBUTOS
     private String nome;
     @Column(columnDefinition = "LONGTEXT")
     private String fotoUrl;
@@ -43,11 +44,10 @@ public class Municipio extends User {
         this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;
     }
 
-    //Getters e Setters
+    //GETTERS E SETTERS
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -55,31 +55,18 @@ public class Municipio extends User {
     public double getObjetivo_co2_mes_hab() {
         return objetivo_co2_mes_hab;
     }
-
-    public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) {
-        this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;
-    }
+    public void setObjetivo_co2_mes_hab(double objetivo_co2_mes_hab) {this.objetivo_co2_mes_hab = objetivo_co2_mes_hab;}
 
     public List<Cidadao> getListaDeCidadaos() {
         return listaDeCidadaos;
     }
-
     public void setListaDeCidadaos(List<Cidadao> listaDeCidadaos) {
         this.listaDeCidadaos = listaDeCidadaos;
-    }
-
-    public List<RelatorioMensal> getRelatoriosMensais() {
-        return relatoriosMensais;
-    }
-
-    public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {
-        this.relatoriosMensais = relatoriosMensais;
     }
 
     public double getTaxaNivel1() {
         return taxaNivel1;
     }
-
     public void setTaxaNivel1(double taxaNivel1) {
         this.taxaNivel1 = taxaNivel1;
     }
@@ -87,7 +74,6 @@ public class Municipio extends User {
     public double getTaxaNivel2() {
         return taxaNivel2;
     }
-
     public void setTaxaNivel2(double taxaNivel2) {
         this.taxaNivel2 = taxaNivel2;
     }
@@ -95,7 +81,6 @@ public class Municipio extends User {
     public double getTaxaNivel3() {
         return taxaNivel3;
     }
-
     public void setTaxaNivel3(double taxaNivel3) {
         this.taxaNivel3 = taxaNivel3;
     }
@@ -103,7 +88,6 @@ public class Municipio extends User {
     public double getTaxaNivel4() {
         return taxaNivel4;
     }
-
     public void setTaxaNivel4(double taxaNivel4) {
         this.taxaNivel4 = taxaNivel4;
     }
@@ -111,7 +95,6 @@ public class Municipio extends User {
     public double getTaxaNivel5() {
         return taxaNivel5;
     }
-
     public void setTaxaNivel5(double taxaNivel5) {
         this.taxaNivel5 = taxaNivel5;
     }
@@ -119,7 +102,6 @@ public class Municipio extends User {
     public double getTaxaNivel6() {
         return taxaNivel6;
     }
-
     public void setTaxaNivel6(double taxaNivel6) {
         this.taxaNivel6 = taxaNivel6;
     }
@@ -127,16 +109,13 @@ public class Municipio extends User {
     public double getTaxaNivel7() {
         return taxaNivel7;
     }
-
     public void setTaxaNivel7(double taxaNivel7) {
         this.taxaNivel7 = taxaNivel7;
     }
 
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
+    public String getFotoUrl() {return fotoUrl;}
+    public void setFotoUrl(String fotoUrl) {this.fotoUrl = fotoUrl;}
 
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
-    }
+    public List<RelatorioMensal> getRelatoriosMensais() {return relatoriosMensais;}
+    public void setRelatoriosMensais(List<RelatorioMensal> relatoriosMensais) {this.relatoriosMensais = relatoriosMensais;}
 }

@@ -23,30 +23,14 @@
 
     <div class="auth-divider"></div>
 
-    <%-- Alert erro: credenciais erradas (Spring Security) --%>
-    <c:if test="${not empty param.error}">
-        <div class="auth-alert auth-alert-error">
-            <i class="bi bi-exclamation-circle"></i> Credenciais inválidas. Tente novamente.
-        </div>
-    </c:if>
-
-    <%-- Alert sucesso: vindo do signup via RedirectAttributes flash --%>
-    <c:if test="${registoSucesso == true}">
-        <div class="auth-alert auth-alert-success">
-            <i class="bi bi-check-circle"></i> Conta criada com sucesso
-            <c:if test="${not empty nomeUtilizador}">, <strong>${nomeUtilizador}</strong></c:if>!
-            Faça login para continuar.
-        </div>
-    </c:if>
-
-    <%-- Alert erro: vindo do signup via flash (passwords não coincidem, etc.) --%>
+    <%-- Mensagem de erro (credenciais inválidas, etc.) --%>
     <c:if test="${not empty erro}">
         <div class="auth-alert auth-alert-error">
             <i class="bi bi-exclamation-circle"></i> ${erro}
         </div>
     </c:if>
 
-    <%-- Alert mensagem genérica (recuperação de password, etc.) --%>
+    <%-- Mensagem de sucesso (conta criada, password alterada, etc.) --%>
     <c:if test="${not empty message}">
         <div class="auth-alert auth-alert-success">
             <i class="bi bi-check-circle"></i> ${message}
@@ -70,8 +54,6 @@
                    placeholder="Introduza a sua password"
                    required />
         </div>
-
-        <div class="auth-btn-icon-wrap">🌿</div>
 
         <button type="submit" class="auth-btn-primary">
             ENTRAR NO FUTURO SUSTENTÁVEL
