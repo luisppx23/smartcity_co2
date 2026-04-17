@@ -451,8 +451,164 @@ body.dashboard-body {
     transform: translateY(-1px);
 }
 
+/*CARDS*/
+.dashboard-recent-summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.vehicle-month-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
+    border-radius: var(--radius-lg);
+    min-height: 128px;
+    padding: 16px 18px;
+    position: relative;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.vehicle-month-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(44, 62, 52, 0.10);
+}
+
+/* barra lateral mais discreta */
+.vehicle-month-card--orange {
+    border-left: 3px solid #f97316;
+}
+
+.vehicle-month-card--blue {
+    border-left: 3px solid #3b82f6;
+}
+
+.vehicle-month-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.vehicle-month-card-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vehicle-month-card-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--blue-900);
+    line-height: 1.15;
+}
+
+.vehicle-month-card-subtitle {
+    font-size: 0.72rem;
+    color: var(--text-400);
+    line-height: 1.25;
+}
+
+/* ícone mais leve */
+.vehicle-month-card-icon {
+    font-size: 0.95rem;
+    line-height: 1;
+    margin-top: 2px;
+    opacity: 0.9;
+}
+
+.vehicle-month-card--orange .vehicle-month-card-icon {
+    color: #f97316;
+}
+
+.vehicle-month-card--blue .vehicle-month-card-icon {
+    color: #3b82f6;
+}
+
+.vehicle-month-card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    align-items: start;
+}
+
+.vehicle-month-card-stat {
+    text-align: center;
+}
+
+/* números menos agressivos e mais próximos do dashboard */
+.vehicle-month-card-stat strong {
+    display: block;
+    font-size: 1.55rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+}
+
+.vehicle-month-card--orange .vehicle-month-card-stat strong {
+    color: #f97316;
+}
+
+.vehicle-month-card--blue .vehicle-month-card-stat strong {
+    color: #3b82f6;
+}
+
+.vehicle-month-card-stat span {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-500);
+    line-height: 1.2;
+}
+
+/* opcional: separadores subtis entre métricas */
+.vehicle-month-card-stat:not(:last-child) {
+    border-right: 1px solid rgba(22, 50, 79, 0.06);
+}
+
+/* garantir coerência com a linha */
+.dashboard-recent-summary {
+    align-items: stretch;
+}
+
 /* RESPONSIVO */
 @media (max-width: 768px) {
+    .dashboard-recent-summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-month-card {
+        min-height: auto;
+        padding: 14px 16px;
+    }
+
+    .vehicle-month-card-header {
+        margin-bottom: 14px;
+    }
+
+    .vehicle-month-card-title {
+        font-size: 0.96rem;
+    }
+
+    .vehicle-month-card-subtitle {
+        font-size: 0.68rem;
+    }
+
+    .vehicle-month-card-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .vehicle-month-card-stat strong {
+        font-size: 1.25rem;
+    }
+
+    .vehicle-month-card-stat span {
+        font-size: 0.68rem;
+    }
+
     .dashboard-wrapper-cidadao-style {
         max-width: 100%;
         padding: 24px 16px 40px;

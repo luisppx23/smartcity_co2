@@ -59,26 +59,6 @@
 
         <c:if test="${not empty listaVeiculos}">
 
-            <div class="dashboard-row row-2 dashboard-top-summary">
-                <div class="info-card">
-                    <div class="card-label">Km médios mensais</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaKmsMensalCidadao}" minFractionDigits="1" maxFractionDigits="1"/>
-                        km
-                    </div>
-                    <div class="card-subtext">Média mensal de quilómetros</div>
-                </div>
-
-                <div class="info-card">
-                    <div class="card-label">CO₂ médio mensal</div>
-                    <div class="card-value">
-                        <fmt:formatNumber value="${mediaCo2MensalCidadao}" minFractionDigits="2" maxFractionDigits="2"/>
-                        kg
-                    </div>
-                    <div class="card-subtext">Média mensal de emissões</div>
-                </div>
-            </div>
-
             <div class="dashboard-row row-3 dashboard-secondary-summary">
                 <div class="info-card">
                     <div class="card-label">Km deste mês</div>
@@ -98,92 +78,64 @@
 
                 <div class="info-card">
                     <div class="card-label">CO₂ do mesmo mês do ano passado</div>
-
                     <c:set var="diferencaCo2" value="${co2MesAtual - co2MesmoMesAnoPassado}"/>
-
-                    <div class="card-value
-        <c:if test='${diferencaCo2 < 0}'>co2-down</c:if>
-        <c:if test='${diferencaCo2 > 0}'>co2-up</c:if>
-    ">
-
+                    <div class="card-value <c:if test='${diferencaCo2 < 0}'>co2-down</c:if> <c:if test='${diferencaCo2 > 0}'>co2-up</c:if> ">
                         <fmt:formatNumber value="${co2MesAtual}" minFractionDigits="2" maxFractionDigits="2"/> kg
-
                         <c:if test="${diferencaCo2 < 0}">
                             <i class="bi bi-arrow-down"></i>
                         </c:if>
-
                         <c:if test="${diferencaCo2 > 0}">
                             <i class="bi bi-arrow-up"></i>
                         </c:if>
-
                     </div>
-
                     <div class="card-subtext">
                         Comparação com o período homólogo
                     </div>
                 </div>
             </div>
 
-            <div class="emissoes-metrics">
-                <div class="emissoes-metric-card">
-                    <span class="emissoes-metric-icon"><i class="bi bi-speedometer2"></i></span>
-                    <span class="emissoes-metric-label">Total KMs</span>
-                    <span class="emissoes-metric-value">
-                        <fmt:formatNumber value="${totalKmsGeral}" minFractionDigits="0" maxFractionDigits="0"/> km
-                    </span>
-                </div>
+            <div class="dashboard-row row-vehicles dashboard-recent-summary dashboard-recent-summary-cards">
+                <c:forEach var="veiculo" items="${listaVeiculos}" varStatus="st">
+                    <div class="vehicle-month-card ${st.index % 2 == 0 ? 'vehicle-month-card--orange' : 'vehicle-month-card--blue'}">
+                        <div class="vehicle-month-card-header">
+                            <div class="vehicle-month-card-title-group">
+                                <h3 class="vehicle-month-card-title">
+                                        ${matriculaPorVeiculo[veiculo.id]}
+                                </h3>
+                                <div class="vehicle-month-card-subtitle">
+                                        ${veiculo.marca} ${veiculo.modelo}
+                                </div>
+                            </div>
 
-                <div class="emissoes-metric-card">
-                    <span class="emissoes-metric-icon emissoes-metric-icon--gold"><i
-                            class="bi bi-cloud-haze2"></i></span>
-                    <span class="emissoes-metric-label">CO₂ Total</span>
-                    <span class="emissoes-metric-value">
-                        <fmt:formatNumber value="${totalCo2Geral}" minFractionDigits="1" maxFractionDigits="1"/> kg
-                    </span>
-                </div>
-
-                <div class="emissoes-metric-card">
-                    <span class="emissoes-metric-icon emissoes-metric-icon--rank"><i class="bi bi-trophy"></i></span>
-                    <span class="emissoes-metric-label">Ranking Poluição</span>
-                    <span class="emissoes-metric-value">#${posicaoRankingPoluicao} / ${numeroTotalCidadaos}</span>
-                </div>
-            </div>
-
-            <div class="dashboard-row row-vehicles dashboard-recent-summary">
-                <c:forEach var="veiculo" items="${listaVeiculos}">
-                    <div class="info-card">
-                        <div class="card-label">${veiculo.marca} ${veiculo.modelo}</div>
-                        <div class="card-subtext">Resumo do mês mais recente</div>
-
-                        <div class="fuel-info">
-                            <span>Km</span>
-                            <strong>
-                                <fmt:formatNumber
-                                        value="${kmsUltimoMes[veiculo.id] != null ? kmsUltimoMes[veiculo.id] : 0}"
-                                        pattern="#,##0"/>
-                            </strong>
+                            <i class="bi bi-car-front vehicle-month-card-icon"></i>
                         </div>
 
-                        <div class="fuel-info">
-                            <span>CO₂</span>
-                            <strong>
-                                <fmt:formatNumber
-                                        value="${co2UltimoMes[veiculo.id] != null ? co2UltimoMes[veiculo.id] : 0}"
-                                        pattern="#,##0.0"/> kg
-                            </strong>
-                        </div>
+                        <div class="vehicle-month-card-stats">
+                            <div class="vehicle-month-card-stat">
+                                <strong>
+                                    <fmt:formatNumber value="${kmsUltimoMes[veiculo.id] != null ? kmsUltimoMes[veiculo.id] : 0}" pattern="#,##0"/>
+                                </strong>
+                                <span>Km</span>
+                            </div>
 
-                        <div class="fuel-info">
-                            <span>Taxa</span>
-                            <strong>
-                                €<fmt:formatNumber
-                                    value="${taxaUltimoMes[veiculo.id] != null ? taxaUltimoMes[veiculo.id] : 0}"
-                                    pattern="#,##0.00"/>
-                            </strong>
+                            <div class="vehicle-month-card-stat">
+                                <strong>
+                                    <fmt:formatNumber value="${co2UltimoMes[veiculo.id] != null ? co2UltimoMes[veiculo.id] : 0}" pattern="#,##0.0"/>
+                                </strong>
+                                <span>CO₂</span>
+                            </div>
+
+                            <div class="vehicle-month-card-stat">
+                                <strong>
+                                    €<fmt:formatNumber value="${taxaUltimoMes[veiculo.id] != null ? taxaUltimoMes[veiculo.id] : 0}" pattern="#,##0.00"/>
+                                </strong>
+                                <span>Taxa</span>
+                            </div>
                         </div>
                     </div>
                 </c:forEach>
             </div>
+
 
             <div class="dashboard-row row-2 dashboard-charts-row">
                 <div class="info-card chart-panel">
@@ -277,42 +229,6 @@
 
         </c:if>
 
-        <div class="smart-card">
-            <h3 class="dashboard-card-title">Percentagem por tipo de combustível</h3>
-            <div class="table-responsive">
-                <table class="smart-table">
-                    <thead>
-                    <tr>
-                        <th>Combustível</th>
-                        <th>Total Kms</th>
-                        <th>% dos Kms</th>
-                        <th>Total CO2 (kg)</th>
-                        <th>% do CO2</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="combustivel" items="${combustiveisData}">
-                        <tr>
-                            <td>${combustivel.tipo}</td>
-                            <td><fmt:formatNumber value="${combustivel.kms}" pattern="#,##0.0"/> km</td>
-                            <td><fmt:formatNumber value="${combustivel.percentagemKms}" pattern="#,##0.00"/>%</td>
-                            <td><fmt:formatNumber value="${combustivel.emissoes}" pattern="#,##0.00"/> kg</td>
-                            <td><fmt:formatNumber value="${combustivel.percentagemCo2}" pattern="#,##0.00"/>%</td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td><strong><fmt:formatNumber value="${totalKmsGeral}" pattern="#,##0.0"/> km</strong></td>
-                        <td></td>
-                        <td><strong><fmt:formatNumber value="${totalCo2Geral}" pattern="#,##0.00"/> kg</strong></td>
-                        <td></td>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
 
         <div class="emissoes-grid-2">
             <div class="smart-card">
