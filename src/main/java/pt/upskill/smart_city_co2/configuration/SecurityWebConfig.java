@@ -45,6 +45,7 @@ public class SecurityWebConfig {
                     "/scripts",
                     "/images/**",
                     "/api/**",
+            "/error",
             "/favicon.ico").permitAll();
 
             // Acesso mediante Role do User - endpoints reais dos controllers
@@ -58,7 +59,7 @@ public class SecurityWebConfig {
             // Rotas do município
             auth.requestMatchers("/municipio/**").hasRole("MUNICIPIO");
 
-            auth.requestMatchers("/**").denyAll();
+            auth.requestMatchers("/**").authenticated();
         });
 
         // Formulário de Login sob httpSecurity

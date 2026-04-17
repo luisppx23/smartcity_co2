@@ -44,6 +44,7 @@ public class AuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
     private static final SecureRandom secureRandom = new SecureRandom();
 
+    //Metodo para a funcionalidade de SignUp
     public void registar(SignUpModel signUpModel) {
 
         // Verificar email
@@ -103,6 +104,7 @@ public class AuthService {
         return userRepository.getUserByUsername(username);
     }
 
+    //Metodo para a funcionalidade de Login
     public User validarLogin(String username, String password) {
         User user = getUser(username);
         if (user == null || user.getId() == null) {
@@ -116,6 +118,7 @@ public class AuthService {
         return user;
     }
 
+    //Metodos para a funcionalidade de recuperação de Password
     public boolean verificarDadosRecuperacao(String username, String email) {
         return userRepository.findByUsernameAndEmail(username, email).isPresent();
     }

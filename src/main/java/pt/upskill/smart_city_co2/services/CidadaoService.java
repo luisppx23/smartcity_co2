@@ -33,6 +33,7 @@ public class CidadaoService {
     @Autowired
     private VeiculoRepository veiculoRepository;
 
+    //Popular a base de dados com contas de Cidadão
     @PostConstruct
     public void init() {
         if (cidadaoRepository.count() > 0) return;
@@ -63,12 +64,12 @@ public class CidadaoService {
     public List<Cidadao> getNome() {
         return cidadaoRepository.findAll();
     }
-
     public Cidadao getUserC(Long id) {
         return cidadaoRepository.findById(id).orElse(null);
     }
 
-    public void salvarAlteracoes(Cidadao cidadao) {
+    //Funcionalidade de editar Perfil de Cidadão
+    public void guardarAlteracoes(Cidadao cidadao) {
         try {
             cidadaoRepository.save(cidadao);
         } catch (Exception e) {

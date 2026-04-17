@@ -18,6 +18,7 @@ public class EmailService {
     @Value("${app.base.url}")
     private String baseUrl;
 
+    //Formato do mail enviado à conta que fez pedido de alteração de password
     public void enviarCodigoRecuperacao(String toEmail, String codigo, String username) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);

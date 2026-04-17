@@ -5,22 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.upskill.smart_city_co2.TipoDeCombustivel;
 import pt.upskill.smart_city_co2.dto.DashboardMunicipioDataDTO;
-import pt.upskill.smart_city_co2.entities.Cidadao;
-import pt.upskill.smart_city_co2.entities.Municipio;
-import pt.upskill.smart_city_co2.entities.Ownership;
-import pt.upskill.smart_city_co2.entities.RegistoKms;
-import pt.upskill.smart_city_co2.entities.Veiculo;
+import pt.upskill.smart_city_co2.entities.*;
 import pt.upskill.smart_city_co2.repositories.CidadaoRepository;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DashboardMunicipioAnalyticsService {
@@ -30,407 +20,394 @@ public class DashboardMunicipioAnalyticsService {
 
     @Transactional(readOnly = true)
     public DashboardMunicipioDataDTO prepararDadosDashboard(Municipio municipio) {
-        DashboardMunicipioDataDTO dados = new DashboardMunicipioDataDTO();
+        if (municipio == null) {
+            return DashboardMunicipioDataDTO.empty(municipio);
+        }
+
+        List<Cidadao> cidadaos = cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
+
+        if (cidadaos == null || cidadaos.isEmpty()) {
+            return DashboardMunicipioDataDTO.empty(municipio);
+        }
+
+        DashboardMunicipioDataDTO dto = new DashboardMunicipioDataDTO(municipio);
+        dto.setCidadaos(cidadaos);
+        dto.setNumeroHabitantes(cidadaos.size());
+
+        Set<Veiculo> veiculosUnicos = new HashSet<>();
+        List<RegistoKms> todosRegistos = new ArrayList<>();
+
+        for (Cidadao cidadao : cidadaos) {
+            if (cidadao.getListaDeVeiculos() != null) {
+                for (Ownership ownership : cidadao.getListaDeVeiculos()) {
+                    if (ownership != null && ownership.getVeiculo() != null) {
+                        veiculosUnicos.add(ownership.getVeiculo());
+                        if (ownership.getRegistosKms() != null) {
+                            todosRegistos.addAll(ownership.getRegistosKms());
+                        }
+                    }
+                }
+            }
+        }
+
+        dto.setVeiculos(new ArrayList<>(veiculosUnicos));
+        dto.setQuantidadeVeiculosTotais(veiculosUnicos.size());
+        dto.setRegistos(todosRegistos);
+
+        return dto;
+    }
+
+    // ========== MÉTRICAS POR COMBUSTÍVEL ==========
+
+    public Map<String, Double> calcularTotalKmsPorCombustivel(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getOwnership() != null && r.getOwnership().getVeiculo() != null)
+                .collect(Collectors.groupingBy(
+                        r -> obterCombustivel(r.getOwnership().getVeiculo()),
+                        Collectors.summingDouble(RegistoKms::getKms_mes)
+                ));
+    }
+
+    public Map<String, Double> calcularTotalCo2PorCombustivel(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getOwnership() != null && r.getOwnership().getVeiculo() != null)
+                .collect(Collectors.groupingBy(
+                        r -> obterCombustivel(r.getOwnership().getVeiculo()),
+                        Collectors.summingDouble(RegistoKms::getEmissaoEfetivaKg)
+                ));
+    }
+
+    public Map<String, Double> calcularTotalTaxaPorCombustivel(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getTaxa() != null && r.getOwnership() != null && r.getOwnership().getVeiculo() != null)
+                .collect(Collectors.groupingBy(
+                        r -> obterCombustivel(r.getOwnership().getVeiculo()),
+                        Collectors.summingDouble(r -> r.getTaxa().getValor())
+                ));
+    }
+
+    public Map<String, Double> calcularPercentagemKmsPorCombustivel(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> kmsPorCombustivel = calcularTotalKmsPorCombustivel(dto);
+        double totalKms = kmsPorCombustivel.values().stream().mapToDouble(Double::doubleValue).sum();
+
+        return kmsPorCombustivel.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> totalKms > 0 ? (e.getValue() / totalKms) * 100 : 0.0
+                ));
+    }
+
+    public Map<String, Double> calcularPercentagemCo2PorCombustivel(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorCombustivel = calcularTotalCo2PorCombustivel(dto);
+        double totalCo2 = co2PorCombustivel.values().stream().mapToDouble(Double::doubleValue).sum();
+
+        return co2PorCombustivel.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> totalCo2 > 0 ? (e.getValue() / totalCo2) * 100 : 0.0
+                ));
+    }
+
+    public Map<String, Integer> calcularNumeroRegistosPorCombustivel(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getOwnership() != null && r.getOwnership().getVeiculo() != null)
+                .collect(Collectors.groupingBy(
+                        r -> obterCombustivel(r.getOwnership().getVeiculo()),
+                        Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
+                ));
+    }
+
+    public Map<String, Double> calcularEmissaoMediaPorCombustivel(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> totalCo2 = calcularTotalCo2PorCombustivel(dto);
+        Map<String, Integer> totalRegistos = calcularNumeroRegistosPorCombustivel(dto);
+
+        return totalCo2.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> totalRegistos.getOrDefault(e.getKey(), 0) > 0
+                                ? e.getValue() / totalRegistos.get(e.getKey())
+                                : 0.0
+                ));
+    }
+
+    public Map<String, Integer> contarVeiculosPorCombustivel(DashboardMunicipioDataDTO dto) {
+        Map<String, Integer> resultado = new LinkedHashMap<>();
+
+        for (TipoDeCombustivel tipo : TipoDeCombustivel.values()) {
+            resultado.put(tipo.name(), 0);
+        }
+
+        Set<Long> veiculosContados = new HashSet<>();
+
+        for (Veiculo veiculo : dto.getVeiculos()) {
+            if (veiculo.getId() != null && !veiculosContados.contains(veiculo.getId())) {
+                veiculosContados.add(veiculo.getId());
+                if (veiculo.getTipoDeCombustivel() != null) {
+                    String combustivel = veiculo.getTipoDeCombustivel().name();
+                    resultado.put(combustivel, resultado.getOrDefault(combustivel, 0) + 1);
+                }
+            }
+        }
+
+        return resultado;
+    }
+
+    // ========== MÉTRICAS MENSAIS ==========
+
+    public Map<String, Double> calcularTotalKmsPorMes(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getMes_ano() != null)
+                .collect(Collectors.groupingBy(
+                        r -> formatarMesAno(r.getMes_ano()),
+                        Collectors.summingDouble(RegistoKms::getKms_mes)
+                ));
+    }
+
+    public Map<String, Double> calcularTotalCo2PorMes(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getMes_ano() != null)
+                .collect(Collectors.groupingBy(
+                        r -> formatarMesAno(r.getMes_ano()),
+                        Collectors.summingDouble(RegistoKms::getEmissaoEfetivaKg)
+                ));
+    }
+
+    public Map<String, Double> calcularMediaCo2PorHabitantePorMes(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
+        int habitantes = dto.getNumeroHabitantes();
+
+        return co2PorMes.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> habitantes > 0 ? e.getValue() / habitantes : 0.0
+                ));
+    }
+
+    public Map<String, Double> calcularMediaEmissoesPorMes(DashboardMunicipioDataDTO dto) {
+        return calcularTotalCo2PorMes(dto);
+    }
+
+    public Map<String, Boolean> calcularObjetivoAtingidoPorMes(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> mediaPorHabitante = calcularMediaCo2PorHabitantePorMes(dto);
+        Municipio municipio = dto.getMunicipio();
 
         if (municipio == null) {
-            return dados.empty();
+            return new HashMap<>();
         }
 
-        List<Cidadao> listaCidadaos = cidadaoRepository.buscarCidadaosDoMunicipioComVeiculos(municipio.getId());
+        double objetivo = municipio.getObjetivo_co2_mes_hab();
 
-        if (listaCidadaos == null || listaCidadaos.isEmpty()) {
-            return dados.empty();
+        if (objetivo <= 0) {
+            return new HashMap<>();
         }
 
-        dados.setListaCidadaos(listaCidadaos);
-        dados.setNumeroHabitantes(listaCidadaos.size());
-
-        processarCidadaos(listaCidadaos, dados);
-        calcularPercentagensPorCombustivel(dados);
-        calcularMediasPorCombustivel(dados);
-        calcularMetricasMensais(dados, municipio);
-        calcularVariacaoMesAnterior(dados);
-        calcularVariacaoAnoAnterior(dados);
-        calcularEvolucaoMensal(dados);
-        dados.setQuantidadeVeiculosPorCombustivel(contarVeiculosPorCombustivel(listaCidadaos));
-        calcularIndicadoresGlobais(dados);
-        calcularIndicadoresAnuais(dados);
-        calcularNivelMunicipio(dados);
-
-        return dados;
+        return mediaPorHabitante.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue() <= objetivo
+                ));
     }
 
-    @Transactional(readOnly = true)
-    public DashboardMunicipioDataDTO prepararDadosCharts(Municipio municipio) {
-        return prepararDadosDashboard(municipio);
+    // ========== VARIAÇÕES ==========
+
+    public Map<String, Double> calcularVariacaoMesAnterior(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
+        List<String> mesesOrdenados = getMesesOrdenados(dto);
+        Map<String, Double> variacoes = new LinkedHashMap<>();
+
+        for (int i = 1; i < mesesOrdenados.size(); i++) {
+            String mesAtual = mesesOrdenados.get(i);
+            String mesAnterior = mesesOrdenados.get(i - 1);
+
+            double emissaoAtual = co2PorMes.getOrDefault(mesAtual, 0.0);
+            double emissaoAnterior = co2PorMes.getOrDefault(mesAnterior, 0.0);
+
+            variacoes.put(mesAtual, emissaoAtual - emissaoAnterior);
+        }
+
+        return variacoes;
     }
 
-    private void processarCidadaos(List<Cidadao> listaCidadaos, DashboardMunicipioDataDTO dados) {
-        for (Cidadao cidadao : listaCidadaos) {
-            processarCidadao(cidadao, dados);
-        }
-
-        dados.setQuantidadeVeiculosTotais(dados.getIdsVeiculosUnicos().size());
+    public Map<String, String> calcularCorComparacaoMesAnterior(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> variacoes = calcularVariacaoMesAnterior(dto);
+        return variacoes.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> obterCorVariacao(e.getValue())
+                ));
     }
 
-    private void processarCidadao(Cidadao cidadao, DashboardMunicipioDataDTO dados) {
-        if (cidadao == null || cidadao.getListaDeVeiculos() == null) {
-            return;
-        }
+    public Map<String, Double> calcularVariacaoAnoAnterior(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
+        Map<String, Double> variacoes = new LinkedHashMap<>();
 
-        for (Ownership ownership : cidadao.getListaDeVeiculos()) {
-            processarOwnership(ownership, dados);
-        }
-    }
-
-    private void processarOwnership(Ownership ownership, DashboardMunicipioDataDTO dados) {
-        if (ownership == null || ownership.getVeiculo() == null) {
-            return;
-        }
-
-        Veiculo veiculo = ownership.getVeiculo();
-        Long veiculoId = veiculo.getId();
-
-        dados.getListaVeiculos().add(veiculo);
-        dados.getIdsVeiculosUnicos().add(veiculoId);
-        dados.getMatriculaPorVeiculo().put(veiculoId, ownership.getMatricula());
-
-        String combustivel = obterCombustivel(veiculo);
-        dados.getCombustivelPorVeiculo().put(veiculoId, combustivel);
-
-        inicializarEstruturasVeiculoECombustivel(dados, veiculoId, combustivel);
-
-        if (ownership.getRegistosKms() == null) {
-            return;
-        }
-
-        for (RegistoKms registo : ownership.getRegistosKms()) {
-            processarRegisto(registo, veiculoId, combustivel, dados);
-        }
-    }
-
-    private void inicializarEstruturasVeiculoECombustivel(
-            DashboardMunicipioDataDTO dados,
-            Long veiculoId,
-            String combustivel
-    ) {
-        dados.getTotalKmsPorVeiculo().putIfAbsent(veiculoId, 0.0);
-        dados.getTotalCo2PorVeiculo().putIfAbsent(veiculoId, 0.0);
-
-        dados.getTotalKmsPorCombustivel().putIfAbsent(combustivel, 0.0);
-        dados.getTotalCo2PorCombustivel().putIfAbsent(combustivel, 0.0);
-        dados.getNumeroRegistosPorCombustivel().putIfAbsent(combustivel, 0);
-        dados.getTotalTaxaPorCombustivel().putIfAbsent(combustivel, 0.0);
-    }
-
-    private void processarRegisto(
-            RegistoKms registo,
-            Long veiculoId,
-            String combustivel,
-            DashboardMunicipioDataDTO dados
-    ) {
-        if (registo == null || registo.getMes_ano() == null) {
-            return;
-        }
-
-        dados.getListaRegistos().add(registo);
-
-        double kms = registo.getKms_mes();
-        double co2 = registo.getEmissaoEfetivaKg();
-
-        String mesAno = formatarMesAno(registo.getMes_ano());
-
-        dados.setTotalKmsGeral(dados.getTotalKmsGeral() + kms);
-        dados.setTotalCo2Geral(dados.getTotalCo2Geral() + co2);
-
-
-
-        double taxa = 0.0;
-        if (registo.getTaxa() != null) {
-            taxa = registo.getTaxa().getValor();
-            dados.setTotalTaxaGeral(dados.getTotalTaxaGeral() + taxa);
-        }
-        dados.getTotalTaxaPorCombustivel().put(
-                combustivel,
-                dados.getTotalTaxaPorCombustivel().getOrDefault(combustivel, 0.0) + taxa
-        );
-
-        dados.getTotalKmsPorVeiculo().put(
-                veiculoId,
-                dados.getTotalKmsPorVeiculo().getOrDefault(veiculoId, 0.0) + kms
-        );
-
-        dados.getTotalCo2PorVeiculo().put(
-                veiculoId,
-                dados.getTotalCo2PorVeiculo().getOrDefault(veiculoId, 0.0) + co2
-        );
-
-        dados.getTotalKmsPorCombustivel().put(
-                combustivel,
-                dados.getTotalKmsPorCombustivel().getOrDefault(combustivel, 0.0) + kms
-        );
-
-        dados.getTotalCo2PorCombustivel().put(
-                combustivel,
-                dados.getTotalCo2PorCombustivel().getOrDefault(combustivel, 0.0) + co2
-        );
-
-        dados.getNumeroRegistosPorCombustivel().put(
-                combustivel,
-                dados.getNumeroRegistosPorCombustivel().getOrDefault(combustivel, 0) + 1
-        );
-
-        dados.getTotalKmsPorMes().put(
-                mesAno,
-                dados.getTotalKmsPorMes().getOrDefault(mesAno, 0.0) + kms
-        );
-
-        dados.getTotalCo2PorMes().put(
-                mesAno,
-                dados.getTotalCo2PorMes().getOrDefault(mesAno, 0.0) + co2
-        );
-    }
-
-    private void calcularPercentagensPorCombustivel(DashboardMunicipioDataDTO dados) {
-        for (String combustivel : dados.getTotalKmsPorCombustivel().keySet()) {
-            double kmsCombustivel = dados.getTotalKmsPorCombustivel().getOrDefault(combustivel, 0.0);
-            double co2Combustivel = dados.getTotalCo2PorCombustivel().getOrDefault(combustivel, 0.0);
-
-            double percentagemKms = dados.getTotalKmsGeral() > 0
-                    ? (kmsCombustivel / dados.getTotalKmsGeral()) * 100
-                    : 0.0;
-
-            double percentagemCo2 = dados.getTotalCo2Geral() > 0
-                    ? (co2Combustivel / dados.getTotalCo2Geral()) * 100
-                    : 0.0;
-
-            dados.getPercentagemKmsPorCombustivel().put(combustivel, percentagemKms);
-            dados.getPercentagemCo2PorCombustivel().put(combustivel, percentagemCo2);
-        }
-    }
-
-    private void calcularMediasPorCombustivel(DashboardMunicipioDataDTO dados) {
-        for (String combustivel : dados.getTotalCo2PorCombustivel().keySet()) {
-            double totalCo2Combustivel = dados.getTotalCo2PorCombustivel().getOrDefault(combustivel, 0.0);
-            int totalRegistos = dados.getNumeroRegistosPorCombustivel().getOrDefault(combustivel, 0);
-
-            double media = totalRegistos > 0 ? totalCo2Combustivel / totalRegistos : 0.0;
-            dados.getEmissaoMediaPorCombustivel().put(combustivel, media);
-        }
-    }
-
-    private void calcularMetricasMensais(DashboardMunicipioDataDTO dados, Municipio municipio) {
-        for (String mesAno : dados.getTotalCo2PorMes().keySet()) {
-            double co2Mes = dados.getTotalCo2PorMes().get(mesAno);
-
-            double mediaPorHabitante = dados.getNumeroHabitantes() > 0
-                    ? co2Mes / dados.getNumeroHabitantes()
-                    : 0.0;
-
-            dados.getMediaCo2PorHabitantePorMes().put(mesAno, mediaPorHabitante);
-            dados.getObjetivoAtingidoPorMes().put(
-                    mesAno,
-                    mediaPorHabitante <= municipio.getObjetivo_co2_mes_hab()
-            );
-
-            dados.getMediaEmissoesPorMes().put(mesAno, co2Mes);
-            dados.setSomaEmissoesMensais(dados.getSomaEmissoesMensais() + co2Mes);
-        }
-
-        dados.setMediaGlobalEmissoesMensais(
-                !dados.getTotalCo2PorMes().isEmpty()
-                        ? dados.getSomaEmissoesMensais() / dados.getTotalCo2PorMes().size()
-                        : 0.0
-        );
-
-        dados.setMesesOrdenados(ordenarMeses(dados.getTotalCo2PorMes().keySet()));
-    }
-
-    private void calcularVariacaoMesAnterior(DashboardMunicipioDataDTO dados) {
-        for (int i = 1; i < dados.getMesesOrdenados().size(); i++) {
-            String mesAtual = dados.getMesesOrdenados().get(i);
-            String mesAnterior = dados.getMesesOrdenados().get(i - 1);
-
-            double emissaoAtual = dados.getTotalCo2PorMes().getOrDefault(mesAtual, 0.0);
-            double emissaoAnterior = dados.getTotalCo2PorMes().getOrDefault(mesAnterior, 0.0);
-
-            double variacao = emissaoAtual - emissaoAnterior;
-            dados.getVariacaoMesAnterior().put(mesAtual, variacao);
-            dados.getCorComparacaoMesAnterior().put(mesAtual, obterCorVariacao(variacao));
-        }
-    }
-
-    private void calcularVariacaoAnoAnterior(DashboardMunicipioDataDTO dados) {
-        for (String mesAno : dados.getTotalCo2PorMes().keySet()) {
+        for (Map.Entry<String, Double> entry : co2PorMes.entrySet()) {
+            String mesAno = entry.getKey();
             String[] partes = mesAno.split("/");
             int mes = Integer.parseInt(partes[0]);
             int ano = Integer.parseInt(partes[1]);
 
             String mesAnoAnterior = String.format("%02d/%d", mes, ano - 1);
+            double emissaoAtual = entry.getValue();
+            double emissaoAnterior = co2PorMes.getOrDefault(mesAnoAnterior, -1.0);
 
-            double emissaoAtual = dados.getTotalCo2PorMes().getOrDefault(mesAno, 0.0);
-            double emissaoAnoAnterior = dados.getTotalCo2PorMes().getOrDefault(mesAnoAnterior, -1.0);
-
-            if (emissaoAnoAnterior >= 0) {
-                double variacao = emissaoAtual - emissaoAnoAnterior;
-                dados.getVariacaoAnoAnteriorPorMes().put(mesAno, variacao);
-                dados.getCorComparacaoAnoAnteriorPorMes().put(mesAno, obterCorVariacao(variacao));
+            if (emissaoAnterior >= 0) {
+                variacoes.put(mesAno, emissaoAtual - emissaoAnterior);
             }
         }
+
+        return variacoes;
     }
 
-    private void calcularEvolucaoMensal(DashboardMunicipioDataDTO dados) {
-        for (String mes : dados.getMesesOrdenados()) {
-            dados.getEvolucaoEmissoesMensais().put(
-                    mes,
-                    dados.getTotalCo2PorMes().getOrDefault(mes, 0.0)
-            );
-        }
+    public Map<String, String> calcularCorComparacaoAnoAnteriorPorMes(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> variacoes = calcularVariacaoAnoAnterior(dto);
+        return variacoes.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> obterCorVariacao(e.getValue())
+                ));
     }
 
-    private void calcularIndicadoresGlobais(DashboardMunicipioDataDTO dados) {
-        dados.setMediaPorVeiculo(
-                dados.getQuantidadeVeiculosTotais() > 0
-                        ? dados.getTotalCo2Geral() / dados.getQuantidadeVeiculosTotais()
-                        : 0.0
-        );
+    // ========== EVOLUÇÃO ==========
 
-        dados.setMesAtualLabel(
-                dados.getMesesOrdenados().isEmpty()
-                        ? ""
-                        : dados.getMesesOrdenados().get(dados.getMesesOrdenados().size() - 1)
-        );
+    public Map<String, Double> calcularEvolucaoEmissoesMensais(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
+        List<String> mesesOrdenados = getMesesOrdenados(dto);
 
-        dados.setMesAtualCo2(
-                dados.getMesAtualLabel().isEmpty()
-                        ? 0.0
-                        : dados.getTotalCo2PorMes().getOrDefault(dados.getMesAtualLabel(), 0.0)
-        );
+        return mesesOrdenados.stream()
+                .collect(Collectors.toMap(
+                        mes -> mes,
+                        mes -> co2PorMes.getOrDefault(mes, 0.0),
+                        (v1, v2) -> v1,
+                        LinkedHashMap::new
+                ));
     }
 
-    private void calcularIndicadoresAnuais(DashboardMunicipioDataDTO dados) {
+    // ========== INDICADORES GLOBAIS ==========
+
+    public double getTotalKmsGeral(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .mapToDouble(RegistoKms::getKms_mes)
+                .sum();
+    }
+
+    public double getTotalCo2Geral(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .mapToDouble(RegistoKms::getEmissaoEfetivaKg)
+                .sum();
+    }
+
+    public double getTotalTaxaGeral(DashboardMunicipioDataDTO dto) {
+        return dto.getRegistos().stream()
+                .filter(r -> r.getTaxa() != null)
+                .mapToDouble(r -> r.getTaxa().getValor())
+                .sum();
+    }
+
+    public double getMediaPorVeiculo(DashboardMunicipioDataDTO dto) {
+        double totalCo2 = getTotalCo2Geral(dto);
+        int totalVeiculos = dto.getQuantidadeVeiculosTotais();
+        return totalVeiculos > 0 ? totalCo2 / totalVeiculos : 0.0;
+    }
+
+    public double getMediaGlobalEmissoesMensais(DashboardMunicipioDataDTO dto) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
+        return co2PorMes.isEmpty() ? 0.0 :
+                co2PorMes.values().stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+    }
+
+    public double calcularSomaEmissoesMensais(DashboardMunicipioDataDTO dto) {
+        return calcularTotalCo2PorMes(dto).values().stream()
+                .mapToDouble(Double::doubleValue)
+                .sum();
+    }
+
+    public String getMesAtualLabel(DashboardMunicipioDataDTO dto) {
+        List<String> mesesOrdenados = getMesesOrdenados(dto);
+        return mesesOrdenados.isEmpty() ? "" : mesesOrdenados.get(mesesOrdenados.size() - 1);
+    }
+
+    public double getMesAtualCo2(DashboardMunicipioDataDTO dto) {
+        String mesAtual = getMesAtualLabel(dto);
+        if (mesAtual.isEmpty()) return 0.0;
+        return calcularTotalCo2PorMes(dto).getOrDefault(mesAtual, 0.0);
+    }
+
+    // ========== INDICADORES ANUAIS ==========
+
+    public double getMediaAnoAtual(DashboardMunicipioDataDTO dto) {
         int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-        int anoAnterior = anoAtual - 1;
-
-        double somaAnoAtual = 0.0;
-        int countAnoAtual = 0;
-        double somaAnoAnterior = 0.0;
-        int countAnoAnterior = 0;
-
-        for (Map.Entry<String, Double> entry : dados.getTotalCo2PorMes().entrySet()) {
-            String mesAno = entry.getKey();
-            double valor = entry.getValue();
-
-            String[] partes = mesAno.split("/");
-            int ano = Integer.parseInt(partes[1]);
-
-            if (ano == anoAtual) {
-                somaAnoAtual += valor;
-                countAnoAtual++;
-            } else if (ano == anoAnterior) {
-                somaAnoAnterior += valor;
-                countAnoAnterior++;
-            }
-        }
-
-        dados.setAnoAtual(anoAtual);
-        dados.setAnoAnterior(anoAnterior);
-        dados.setMediaAnoAtual(countAnoAtual > 0 ? somaAnoAtual / countAnoAtual : 0.0);
-        dados.setMediaAnoAnterior(countAnoAnterior > 0 ? somaAnoAnterior / countAnoAnterior : 0.0);
+        return calcularMediaAno(dto, anoAtual);
     }
 
-    private void calcularNivelMunicipio(DashboardMunicipioDataDTO dados) {
-        int mesesAtingidos = 0;
+    public double getMediaAnoAnterior(DashboardMunicipioDataDTO dto) {
+        int anoAnterior = Calendar.getInstance().get(Calendar.YEAR) - 1;
+        return calcularMediaAno(dto, anoAnterior);
+    }
 
-        for (Boolean atingido : dados.getObjetivoAtingidoPorMes().values()) {
-            if (Boolean.TRUE.equals(atingido)) {
-                mesesAtingidos++;
-            }
-        }
+    private double calcularMediaAno(DashboardMunicipioDataDTO dto, int ano) {
+        Map<String, Double> co2PorMes = calcularTotalCo2PorMes(dto);
 
-        dados.setMesesAtingidos(mesesAtingidos);
+        List<Double> valores = co2PorMes.entrySet().stream()
+                .filter(entry -> {
+                    String[] partes = entry.getKey().split("/");
+                    return Integer.parseInt(partes[1]) == ano;
+                })
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
+
+        return valores.isEmpty() ? 0.0 :
+                valores.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+    }
+
+    // ========== NÍVEL DO MUNICÍPIO ==========
+
+    public Map<String, Object> calcularNivelMunicipio(DashboardMunicipioDataDTO dto) {
+        Map<String, Boolean> objetivoAtingido = calcularObjetivoAtingidoPorMes(dto);
+        long mesesAtingidos = objetivoAtingido.values().stream().filter(v -> v).count();
+
+        Map<String, Object> resultado = new LinkedHashMap<>();
+        resultado.put("mesesAtingidos", mesesAtingidos);
 
         if (mesesAtingidos >= 12) {
-            dados.setNivelMunicipio("Platinum");
-            dados.setNivelMunicipioPct(100);
-            dados.setNivelMunicipioIndex(4);
+            resultado.put("nivel", "Platinum");
+            resultado.put("pct", 100);
+            resultado.put("index", 4);
         } else if (mesesAtingidos >= 7) {
-            dados.setNivelMunicipio("Gold");
-            dados.setNivelMunicipioPct(75);
-            dados.setNivelMunicipioIndex(3);
+            resultado.put("nivel", "Gold");
+            resultado.put("pct", 75);
+            resultado.put("index", 3);
         } else if (mesesAtingidos >= 4) {
-            dados.setNivelMunicipio("Silver");
-            dados.setNivelMunicipioPct(50);
-            dados.setNivelMunicipioIndex(2);
+            resultado.put("nivel", "Silver");
+            resultado.put("pct", 50);
+            resultado.put("index", 2);
         } else if (mesesAtingidos >= 1) {
-            dados.setNivelMunicipio("Bronze");
-            dados.setNivelMunicipioPct(25);
-            dados.setNivelMunicipioIndex(1);
+            resultado.put("nivel", "Bronze");
+            resultado.put("pct", 25);
+            resultado.put("index", 1);
         } else {
-            dados.setNivelMunicipio("Initial");
-            dados.setNivelMunicipioPct(0);
-            dados.setNivelMunicipioIndex(0);
+            resultado.put("nivel", "Initial");
+            resultado.put("pct", 0);
+            resultado.put("index", 0);
         }
+
+        return resultado;
     }
 
-    private Map<String, Integer> contarVeiculosPorCombustivel(List<Cidadao> listaCidadaos) {
-        Map<String, Integer> quantidadeVeiculosPorCombustivel = new LinkedHashMap<>();
+    // ========== MÉTODOS AUXILIARES ==========
 
-        for (TipoDeCombustivel tipo : TipoDeCombustivel.values()) {
-            quantidadeVeiculosPorCombustivel.put(tipo.name(), 0);
-        }
-
-        Set<Long> veiculosJaContados = new HashSet<>();
-
-        for (Cidadao cidadao : listaCidadaos) {
-            if (cidadao == null || cidadao.getListaDeVeiculos() == null) {
-                continue;
-            }
-
-            for (Ownership ownership : cidadao.getListaDeVeiculos()) {
-                if (ownership == null || ownership.getVeiculo() == null) {
-                    continue;
-                }
-
-                Veiculo veiculo = ownership.getVeiculo();
-                Long veiculoId = veiculo.getId();
-
-                if (veiculoId != null && veiculosJaContados.contains(veiculoId)) {
-                    continue;
-                }
-
-                if (veiculoId != null) {
-                    veiculosJaContados.add(veiculoId);
-                }
-
-                if (veiculo.getTipoDeCombustivel() != null) {
-                    String combustivel = veiculo.getTipoDeCombustivel().name();
-                    quantidadeVeiculosPorCombustivel.put(
-                            combustivel,
-                            quantidadeVeiculosPorCombustivel.getOrDefault(combustivel, 0) + 1
-                    );
-                }
-            }
-        }
-
-        return quantidadeVeiculosPorCombustivel;
-    }
-
-    private List<String> ordenarMeses(Set<String> meses) {
+    public List<String> getMesesOrdenados(DashboardMunicipioDataDTO dto) {
+        Set<String> meses = calcularTotalCo2PorMes(dto).keySet();
         List<String> mesesOrdenados = new ArrayList<>(meses);
 
         mesesOrdenados.sort((m1, m2) -> {
             String[] p1 = m1.split("/");
             String[] p2 = m2.split("/");
-
             int mes1 = Integer.parseInt(p1[0]);
             int ano1 = Integer.parseInt(p1[1]);
             int mes2 = Integer.parseInt(p2[0]);
             int ano2 = Integer.parseInt(p2[1]);
-
-            if (ano1 != ano2) {
-                return Integer.compare(ano1, ano2);
-            }
+            if (ano1 != ano2) return Integer.compare(ano1, ano2);
             return Integer.compare(mes1, mes2);
         });
 
@@ -448,11 +425,8 @@ public class DashboardMunicipioAnalyticsService {
     }
 
     private String obterCorVariacao(double variacao) {
-        if (variacao < 0) {
-            return "green";
-        } else if (variacao > 0) {
-            return "red";
-        }
+        if (variacao < 0) return "green";
+        if (variacao > 0) return "red";
         return "gray";
     }
 }

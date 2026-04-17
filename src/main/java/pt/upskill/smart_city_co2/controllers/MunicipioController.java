@@ -15,9 +15,11 @@ import pt.upskill.smart_city_co2.dto.DashboardMunicipioDataDTO;
 import pt.upskill.smart_city_co2.entities.Cidadao;
 import pt.upskill.smart_city_co2.entities.Municipio;
 import pt.upskill.smart_city_co2.entities.User;
+import pt.upskill.smart_city_co2.services.DashboardMunicipioAnalyticsService;
 import pt.upskill.smart_city_co2.services.MunicipioService;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/municipio")
@@ -25,6 +27,9 @@ public class MunicipioController {
 
     @Autowired
     private MunicipioService municipioService;
+
+    @Autowired
+    private DashboardMunicipioAnalyticsService analyticsService;
 
     // Metodo auxiliar para obter o utilizador autenticado
     private User getAuthenticatedUser() {
@@ -302,51 +307,63 @@ public class MunicipioController {
     private void adicionarRelatorioAoModel(Model model, Municipio municipio) {
         DashboardMunicipioDataDTO dados = municipioService.gerarRelatorioMunicipio(municipio);
 
+        // Adiciona os dados brutos ao model
         model.addAttribute("dados", dados);
-        model.addAttribute("listaCidadaos", dados.getListaCidadaos());
-        model.addAttribute("listaRegistos", dados.getListaRegistos());
-        model.addAttribute("listaVeiculos", dados.getListaVeiculos());
-        model.addAttribute("idsVeiculosUnicos", dados.getIdsVeiculosUnicos());
-        model.addAttribute("matriculaPorVeiculo", dados.getMatriculaPorVeiculo());
-        model.addAttribute("combustivelPorVeiculo", dados.getCombustivelPorVeiculo());
-        model.addAttribute("totalKmsGeral", dados.getTotalKmsGeral());
-        model.addAttribute("totalCo2Geral", dados.getTotalCo2Geral());
-        model.addAttribute("totalKmsPorVeiculo", dados.getTotalKmsPorVeiculo());
-        model.addAttribute("totalCo2PorVeiculo", dados.getTotalCo2PorVeiculo());
-        model.addAttribute("totalTaxaPorCombustivel", dados.getTotalTaxaPorCombustivel());
-        model.addAttribute("totalKmsPorCombustivel", dados.getTotalKmsPorCombustivel());
-        model.addAttribute("totalCo2PorCombustivel", dados.getTotalCo2PorCombustivel());
-        model.addAttribute("totalTaxaGeral", dados.getTotalTaxaGeral());
-        model.addAttribute("percentagemKmsPorCombustivel", dados.getPercentagemKmsPorCombustivel());
-        model.addAttribute("percentagemCo2PorCombustivel", dados.getPercentagemCo2PorCombustivel());
-        model.addAttribute("numeroRegistosPorCombustivel", dados.getNumeroRegistosPorCombustivel());
-        model.addAttribute("emissaoMediaPorCombustivel", dados.getEmissaoMediaPorCombustivel());
-        model.addAttribute("quantidadeVeiculosPorCombustivel", dados.getQuantidadeVeiculosPorCombustivel());
-        model.addAttribute("totalKmsPorMes", dados.getTotalKmsPorMes());
-        model.addAttribute("totalCo2PorMes", dados.getTotalCo2PorMes());
-        model.addAttribute("mediaCo2PorHabitantePorMes", dados.getMediaCo2PorHabitantePorMes());
-        model.addAttribute("objetivoAtingidoPorMes", dados.getObjetivoAtingidoPorMes());
-        model.addAttribute("mediaEmissoesPorMes", dados.getMediaEmissoesPorMes());
-        model.addAttribute("variacaoAnoAnteriorPorMes", dados.getVariacaoAnoAnteriorPorMes());
-        model.addAttribute("corComparacaoAnoAnteriorPorMes", dados.getCorComparacaoAnoAnteriorPorMes());
-        model.addAttribute("variacaoMesAnterior", dados.getVariacaoMesAnterior());
-        model.addAttribute("corComparacaoMesAnterior", dados.getCorComparacaoMesAnterior());
-        model.addAttribute("evolucaoEmissoesMensais", dados.getEvolucaoEmissoesMensais());
-        model.addAttribute("somaEmissoesMensais", dados.getSomaEmissoesMensais());
-        model.addAttribute("mediaGlobalEmissoesMensais", dados.getMediaGlobalEmissoesMensais());
-        model.addAttribute("mediaPorVeiculo", dados.getMediaPorVeiculo());
-        model.addAttribute("mesAtualCo2", dados.getMesAtualCo2());
-        model.addAttribute("mediaAnoAnterior", dados.getMediaAnoAnterior());
-        model.addAttribute("mediaAnoAtual", dados.getMediaAnoAtual());
+        model.addAttribute("listaCidadaos", dados.getCidadaos());
+        model.addAttribute("listaRegistos", dados.getRegistos());
+        model.addAttribute("listaVeiculos", dados.getVeiculos());
         model.addAttribute("numeroHabitantes", dados.getNumeroHabitantes());
         model.addAttribute("quantidadeVeiculosTotais", dados.getQuantidadeVeiculosTotais());
-        model.addAttribute("anoAnterior", dados.getAnoAnterior());
-        model.addAttribute("anoAtual", dados.getAnoAtual());
-        model.addAttribute("nivelMunicipioPct", dados.getNivelMunicipioPct());
-        model.addAttribute("nivelMunicipioIndex", dados.getNivelMunicipioIndex());
-        model.addAttribute("mesesAtingidos", dados.getMesesAtingidos());
-        model.addAttribute("mesAtualLabel", dados.getMesAtualLabel());
-        model.addAttribute("nivelMunicipio", dados.getNivelMunicipio());
-        model.addAttribute("mesesOrdenados", dados.getMesesOrdenados());
+
+        // Calcula e adiciona todas as métricas derivadas
+        model.addAttribute("totalKmsGeral", analyticsService.getTotalKmsGeral(dados));
+        model.addAttribute("totalCo2Geral", analyticsService.getTotalCo2Geral(dados));
+        model.addAttribute("totalTaxaGeral", analyticsService.getTotalTaxaGeral(dados));
+
+        model.addAttribute("totalKmsPorCombustivel", analyticsService.calcularTotalKmsPorCombustivel(dados));
+        model.addAttribute("totalCo2PorCombustivel", analyticsService.calcularTotalCo2PorCombustivel(dados));
+        model.addAttribute("totalTaxaPorCombustivel", analyticsService.calcularTotalTaxaPorCombustivel(dados));
+
+        model.addAttribute("percentagemKmsPorCombustivel", analyticsService.calcularPercentagemKmsPorCombustivel(dados));
+        model.addAttribute("percentagemCo2PorCombustivel", analyticsService.calcularPercentagemCo2PorCombustivel(dados));
+
+        model.addAttribute("numeroRegistosPorCombustivel", analyticsService.calcularNumeroRegistosPorCombustivel(dados));
+        model.addAttribute("emissaoMediaPorCombustivel", analyticsService.calcularEmissaoMediaPorCombustivel(dados));
+        model.addAttribute("quantidadeVeiculosPorCombustivel", analyticsService.contarVeiculosPorCombustivel(dados));
+
+        model.addAttribute("totalKmsPorMes", analyticsService.calcularTotalKmsPorMes(dados));
+        model.addAttribute("totalCo2PorMes", analyticsService.calcularTotalCo2PorMes(dados));
+        model.addAttribute("mediaCo2PorHabitantePorMes", analyticsService.calcularMediaCo2PorHabitantePorMes(dados));
+        model.addAttribute("objetivoAtingidoPorMes", analyticsService.calcularObjetivoAtingidoPorMes(dados));
+        model.addAttribute("mediaEmissoesPorMes", analyticsService.calcularMediaEmissoesPorMes(dados));
+
+        model.addAttribute("variacaoAnoAnteriorPorMes", analyticsService.calcularVariacaoAnoAnterior(dados));
+        model.addAttribute("corComparacaoAnoAnteriorPorMes", analyticsService.calcularCorComparacaoAnoAnteriorPorMes(dados));
+        model.addAttribute("variacaoMesAnterior", analyticsService.calcularVariacaoMesAnterior(dados));
+        model.addAttribute("corComparacaoMesAnterior", analyticsService.calcularCorComparacaoMesAnterior(dados));
+
+        model.addAttribute("evolucaoEmissoesMensais", analyticsService.calcularEvolucaoEmissoesMensais(dados));
+        model.addAttribute("mediaGlobalEmissoesMensais", analyticsService.getMediaGlobalEmissoesMensais(dados));
+        model.addAttribute("mediaPorVeiculo", analyticsService.getMediaPorVeiculo(dados));
+
+        model.addAttribute("mesAtualLabel", analyticsService.getMesAtualLabel(dados));
+        model.addAttribute("mesAtualCo2", analyticsService.getMesAtualCo2(dados));
+
+        model.addAttribute("mediaAnoAnterior", analyticsService.getMediaAnoAnterior(dados));
+        model.addAttribute("mediaAnoAtual", analyticsService.getMediaAnoAtual(dados));
+
+        Map<String, Object> nivelMunicipio = analyticsService.calcularNivelMunicipio(dados);
+        model.addAttribute("nivelMunicipio", nivelMunicipio.get("nivel"));
+        model.addAttribute("nivelMunicipioPct", nivelMunicipio.get("pct"));
+        model.addAttribute("nivelMunicipioIndex", nivelMunicipio.get("index"));
+        model.addAttribute("mesesAtingidos", nivelMunicipio.get("mesesAtingidos"));
+
+        model.addAttribute("mesesOrdenados", analyticsService.getMesesOrdenados(dados));
+        model.addAttribute("somaEmissoesMensais", analyticsService.calcularSomaEmissoesMensais(dados));
+
+        // Adiciona ano atual e anterior
+        int anoAtual = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+        model.addAttribute("anoAtual", anoAtual);
+        model.addAttribute("anoAnterior", anoAtual - 1);
     }
 }

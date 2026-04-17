@@ -117,7 +117,7 @@ public class CidadaoController {
         }
 
         // Guarda as alterações na base de dados
-        cidadaoService.salvarAlteracoes(cidadao);
+        cidadaoService.guardarAlteracoes(cidadao);
 
         // Atualiza também o objeto de autenticação para refletir os novos dados em sessão
         Authentication oldAuth = SecurityContextHolder.getContext().getAuthentication();

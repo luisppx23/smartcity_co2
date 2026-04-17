@@ -27,9 +27,6 @@ public class RegistoKmsController {
     private RegistoKmsService registoKmsService;
 
     @Autowired
-    private CidadaoRepository cidadaoRepository;
-
-    @Autowired
     private CidadaoService cidadaoService; // usado para carregar o cidadão completo
 
     @Autowired
