@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>m5_spring_2026</name>
     <description>smart_city_co2</description>
+    <packaging>war</packaging>
     <url/>
     <licenses>
         <license/>
