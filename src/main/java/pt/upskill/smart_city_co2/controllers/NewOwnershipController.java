@@ -101,7 +101,7 @@ public class NewOwnershipController {
             cidadao.setListaDeVeiculos(ownershipsAtuais);
 
             // Salvar o cidadão através do service
-            cidadaoService.salvarAlteracoes(cidadao);
+            cidadaoService.guardarAlteracoes(cidadao);
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
