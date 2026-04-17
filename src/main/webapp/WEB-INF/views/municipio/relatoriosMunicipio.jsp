@@ -29,7 +29,7 @@
 
 <main class="mun-page-content">
 
-    <%-- ── RESUMO MENSAL ── --%>
+    <%-- ── RESUMO MENSAL (ordenado por data decrescente) ── --%>
     <div class="mun-card mun-section">
         <h3 class="mun-card-title">Resumo Mensal</h3>
         <div class="table-responsive">
@@ -48,53 +48,48 @@
                 </tr>
                 </thead>
                 <tbody id="resumoBody">
-                <c:forEach var="mesAno" items="${totalKmsPorMes.keySet()}" varStatus="status">
+                <c:forEach var="mesAno" items="${mesesOrdenados}" varStatus="status">
+                    <c:set var="mesReverso" value="${mesesOrdenados[mesesOrdenados.size() - 1 - status.index]}"/>
                     <tr data-index="${status.index}">
-                        <td><strong>${mesAno}</strong></td>
-                        <td><fmt:formatNumber value="${totalKmsPorMes[mesAno]}" minFractionDigits="1"
-                                              maxFractionDigits="1"/> km
+                        <td><strong>${mesReverso}</strong></td>
+                        <td><fmt:formatNumber value="${totalKmsPorMes[mesReverso]}" minFractionDigits="1" maxFractionDigits="1"/> km
                         </td>
-                        <td><fmt:formatNumber value="${totalCo2PorMes[mesAno]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td><fmt:formatNumber value="${totalCo2PorMes[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
                         <td>${numeroHabitantes}</td>
-                        <td><fmt:formatNumber value="${mediaCo2PorHabitantePorMes[mesAno]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td><fmt:formatNumber value="${mediaCo2PorHabitantePorMes[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
-                        <td><fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td><fmt:formatNumber value="${municipio.objetivo_co2_mes_hab}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${objetivoAtingidoPorMes[mesAno]}">
-                                            <span class="mun-badge mun-badge-success">
-                                                <i class="bi bi-check-circle"></i> Atingido
-                                            </span>
+                                <c:when test="${objetivoAtingidoPorMes[mesReverso]}">
+                                    <span class="mun-badge mun-badge-success">
+                                        <i class="bi bi-check-circle"></i> Atingido
+                                    </span>
                                 </c:when>
                                 <c:otherwise>
-                                            <span class="mun-badge mun-badge-danger">
-                                                <i class="bi bi-x-circle"></i> Não atingido
-                                            </span>
+                                    <span class="mun-badge mun-badge-danger">
+                                        <i class="bi bi-x-circle"></i> Não atingido
+                                    </span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${not empty variacaoMesAnterior[mesAno]}">
+                                <c:when test="${not empty variacaoMesAnterior[mesReverso]}">
                                     <c:choose>
-                                        <c:when test="${corComparacaoMesAnterior[mesAno] == 'green'}">
-                                                    <span class="mun-variacao-negativa">
-                                                        <i class="bi bi-arrow-down"></i>
-                                                        <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}"
-                                                                          minFractionDigits="2" maxFractionDigits="2"/> kg
-                                                    </span>
+                                        <c:when test="${corComparacaoMesAnterior[mesReverso] == 'green'}">
+                                            <span class="mun-variacao-negativa">
+                                                <i class="bi bi-arrow-down"></i>
+                                                <fmt:formatNumber value="${variacaoMesAnterior[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                            </span>
                                         </c:when>
-                                        <c:when test="${corComparacaoMesAnterior[mesAno] == 'red'}">
-                                                    <span class="mun-variacao-positiva">
-                                                        <i class="bi bi-arrow-up"></i>
-                                                        <fmt:formatNumber value="${variacaoMesAnterior[mesAno]}"
-                                                                          minFractionDigits="2" maxFractionDigits="2"/> kg
-                                                    </span>
+                                        <c:when test="${corComparacaoMesAnterior[mesReverso] == 'red'}">
+                                            <span class="mun-variacao-positiva">
+                                                <i class="bi bi-arrow-up"></i>
+                                                <fmt:formatNumber value="${variacaoMesAnterior[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                            </span>
                                         </c:when>
                                         <c:otherwise>
                                             <span class="mun-variacao-neutra">—</span>
@@ -108,21 +103,19 @@
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${not empty variacaoAnoAnteriorPorMes[mesAno]}">
+                                <c:when test="${not empty variacaoAnoAnteriorPorMes[mesReverso]}">
                                     <c:choose>
-                                        <c:when test="${corComparacaoAnoAnteriorPorMes[mesAno] == 'green'}">
-                                                    <span class="mun-variacao-negativa">
-                                                        <i class="bi bi-arrow-down"></i>
-                                                        <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}"
-                                                                          minFractionDigits="2" maxFractionDigits="2"/> kg
-                                                    </span>
+                                        <c:when test="${corComparacaoAnoAnteriorPorMes[mesReverso] == 'green'}">
+                                            <span class="mun-variacao-negativa">
+                                                <i class="bi bi-arrow-down"></i>
+                                                <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                            </span>
                                         </c:when>
-                                        <c:when test="${corComparacaoAnoAnteriorPorMes[mesAno] == 'red'}">
-                                                    <span class="mun-variacao-positiva">
-                                                        <i class="bi bi-arrow-up"></i>
-                                                        <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesAno]}"
-                                                                          minFractionDigits="2" maxFractionDigits="2"/> kg
-                                                    </span>
+                                        <c:when test="${corComparacaoAnoAnteriorPorMes[mesReverso] == 'red'}">
+                                            <span class="mun-variacao-positiva">
+                                                <i class="bi bi-arrow-up"></i>
+                                                <fmt:formatNumber value="${variacaoAnoAnteriorPorMes[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
+                                            </span>
                                         </c:when>
                                         <c:otherwise>
                                             <span class="mun-variacao-neutra">—</span>
@@ -142,7 +135,7 @@
         <div class="pagination-container" id="paginationResumo"></div>
     </div>
 
-    <%-- ── EVOLUÇÃO MENSAL ── --%>
+    <%-- ── EVOLUÇÃO MENSAL (ordenado por data decrescente) ── --%>
     <div class="mun-card mun-section">
         <h3 class="mun-card-title">Evolução das Emissões Mensais</h3>
         <div class="table-responsive">
@@ -154,11 +147,11 @@
                 </tr>
                 </thead>
                 <tbody id="evolucaoBody">
-                <c:forEach var="mesAno" items="${evolucaoEmissoesMensais.keySet()}" varStatus="status">
+                <c:forEach var="mesAno" items="${mesesOrdenados}" varStatus="status">
+                    <c:set var="mesReverso" value="${mesesOrdenados[mesesOrdenados.size() - 1 - status.index]}"/>
                     <tr data-index="${status.index}">
-                        <td>${mesAno}</td>
-                        <td><fmt:formatNumber value="${evolucaoEmissoesMensais[mesAno]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td>${mesReverso}</td>
+                        <td><fmt:formatNumber value="${evolucaoEmissoesMensais[mesReverso]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
                     </tr>
                 </c:forEach>
@@ -186,17 +179,13 @@
                 <c:forEach var="combustivel" items="${totalKmsPorCombustivel.keySet()}" varStatus="status">
                     <tr data-index="${status.index}">
                         <td>${combustivel}</td>
-                        <td><fmt:formatNumber value="${totalKmsPorCombustivel[combustivel]}" minFractionDigits="1"
-                                              maxFractionDigits="1"/> km
+                        <td><fmt:formatNumber value="${totalKmsPorCombustivel[combustivel]}" minFractionDigits="1" maxFractionDigits="1"/> km
                         </td>
-                        <td><fmt:formatNumber value="${percentagemKmsPorCombustivel[combustivel]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/>%
+                        <td><fmt:formatNumber value="${percentagemKmsPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
                         </td>
-                        <td><fmt:formatNumber value="${totalCo2PorCombustivel[combustivel]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td><fmt:formatNumber value="${totalCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
-                        <td><fmt:formatNumber value="${percentagemCo2PorCombustivel[combustivel]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/>%
+                        <td><fmt:formatNumber value="${percentagemCo2PorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/>%
                         </td>
                     </tr>
                 </c:forEach>
@@ -221,8 +210,7 @@
                 <c:forEach var="combustivel" items="${emissaoMediaPorCombustivel.keySet()}" varStatus="status">
                     <tr data-index="${status.index}">
                         <td>${combustivel}</td>
-                        <td><fmt:formatNumber value="${emissaoMediaPorCombustivel[combustivel]}" minFractionDigits="2"
-                                              maxFractionDigits="2"/> kg
+                        <td><fmt:formatNumber value="${emissaoMediaPorCombustivel[combustivel]}" minFractionDigits="2" maxFractionDigits="2"/> kg
                         </td>
                     </tr>
                 </c:forEach>
@@ -349,10 +337,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById('tabelaResumo')) criarPaginacao('tabelaResumo', 'resumoBody', 8, 'paginationResumo');
-        if (document.getElementById('tabelaEvolucao')) criarPaginacao('tabelaEvolucao', 'evolucaoBody', 8, 'paginationEvolucao');
-        if (document.getElementById('tabelaCombustivel')) criarPaginacao('tabelaCombustivel', 'combustivelBody', 8, 'paginationCombustivel');
-        if (document.getElementById('tabelaEmissoesMedias')) criarPaginacao('tabelaEmissoesMedias', 'emissoesMediasBody', 8, 'paginationEmissoesMedias');
+        // Limitar a 5 registos por página (linhasPorPagina = 5)
+        if (document.getElementById('tabelaResumo')) criarPaginacao('tabelaResumo', 'resumoBody', 5, 'paginationResumo');
+        if (document.getElementById('tabelaEvolucao')) criarPaginacao('tabelaEvolucao', 'evolucaoBody', 5, 'paginationEvolucao');
+        if (document.getElementById('tabelaCombustivel')) criarPaginacao('tabelaCombustivel', 'combustivelBody', 5, 'paginationCombustivel');
+        if (document.getElementById('tabelaEmissoesMedias')) criarPaginacao('tabelaEmissoesMedias', 'emissoesMediasBody', 5, 'paginationEmissoesMedias');
     });
 </script>
 

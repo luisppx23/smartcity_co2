@@ -37,7 +37,7 @@
 
     <!-- AÇÕES PRINCIPAIS -->
     <section class="home-grid">
-        <a href="${pageContext.request.contextPath}/cidadao/registoVeiculo" class="home-card">
+        <a href="${pageContext.request.contextPath}/auth/cidadao/registoVeiculo" class="home-card">
             <div class="card-icon">
                 <i class="bi bi-car-front"></i>
             </div>

@@ -21,7 +21,7 @@
 <body class="dashboard-body">
 <jsp:include page="../navbar.jsp"/>
 
-<div class="dashboard-wrapper dashboard-wrapper-cidadao-style page-internal-cidadao">
+<div class="dashboard-wrapper dashboard-wrapper-cidadao-style">
     <section class="dashboard-page-header">
         <h1>O Meu Perfil</h1>
         <p>Consulte e gira os seus dados pessoais</p>
