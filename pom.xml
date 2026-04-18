@@ -11,9 +11,9 @@
     <groupId>smart_city_co2</groupId>
     <artifactId>smart_city_co2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>m5_spring_2026</name>
     <description>smart_city_co2</description>
-    <packaging>war</packaging>
     <url/>
     <licenses>
         <license/>
