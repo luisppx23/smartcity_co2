@@ -96,7 +96,47 @@
 
             <div class="dashboard-row row-vehicles dashboard-recent-summary dashboard-recent-summary-cards">
                 <c:forEach var="veiculo" items="${listaVeiculos}" varStatus="st">
-                    <div class="vehicle-month-card ${st.index % 2 == 0 ? 'vehicle-month-card--orange' : 'vehicle-month-card--blue'}">
+                    <%-- Calcular o índice da cor baseado no ID do veículo para consistência --%>
+                    <c:set var="corIndex" value="${veiculo.id % 6}"/>
+                    <c:set var="corClasse" value=""/>
+                    <c:set var="corPrimaria" value=""/>
+                    <c:set var="corSecundaria" value=""/>
+
+                    <%-- Mapeamento das cores do array CORES do JavaScript --%>
+                    <c:choose>
+                        <c:when test="${corIndex == 0}">
+                            <c:set var="corClasse" value="vehicle-month-card--green"/>
+                            <c:set var="corPrimaria" value="#04523B"/>
+                            <c:set var="corSecundaria" value="#04523B"/>
+                        </c:when>
+                        <c:when test="${corIndex == 1}">
+                            <c:set var="corClasse" value="vehicle-month-card--gold"/>
+                            <c:set var="corPrimaria" value="#D4AF37"/>
+                            <c:set var="corSecundaria" value="#D4AF37"/>
+                        </c:when>
+                        <c:when test="${corIndex == 2}">
+                            <c:set var="corClasse" value="vehicle-month-card--dark-green"/>
+                            <c:set var="corPrimaria" value="#2F7D32"/>
+                            <c:set var="corSecundaria" value="#2F7D32"/>
+                        </c:when>
+                        <c:when test="${corIndex == 3}">
+                            <c:set var="corClasse" value="vehicle-month-card--brown"/>
+                            <c:set var="corPrimaria" value="#8B6914"/>
+                            <c:set var="corSecundaria" value="#8B6914"/>
+                        </c:when>
+                        <c:when test="${corIndex == 4}">
+                            <c:set var="corClasse" value="vehicle-month-card--teal"/>
+                            <c:set var="corPrimaria" value="#2b6a49"/>
+                            <c:set var="corSecundaria" value="#2b6a49"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set var="corClasse" value="vehicle-month-card--mustard"/>
+                            <c:set var="corPrimaria" value="#c49b28"/>
+                            <c:set var="corSecundaria" value="#c49b28"/>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <div class="vehicle-month-card ${corClasse}" data-vehicle-id="${veiculo.id}" data-vehicle-color="${corPrimaria}">
                         <div class="vehicle-month-card-header">
                             <div class="vehicle-month-card-title-group">
                                 <h3 class="vehicle-month-card-title">

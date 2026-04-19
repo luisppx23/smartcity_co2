@@ -451,7 +451,7 @@ body.dashboard-body {
     transform: translateY(-1px);
 }
 
-/*CARDS*/
+/* CARDS DE VEÍCULOS - ESTILOS BASE */
 .dashboard-recent-summary-cards {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 12px;
@@ -473,13 +473,110 @@ body.dashboard-body {
     box-shadow: 0 6px 14px rgba(44, 62, 52, 0.10);
 }
 
-/* barra lateral mais discreta */
+/* Cores específicas para cada veículo baseado nos gráficos */
+/* Verde escuro (#04523B) */
+.vehicle-month-card--green {
+    border-left: 3px solid #04523B;
+}
+.vehicle-month-card--green .vehicle-month-card-stat strong {
+    color: #04523B;
+}
+.vehicle-month-card--green .vehicle-month-card-icon {
+    color: #04523B;
+}
+.vehicle-month-card--green:hover {
+    box-shadow: 0 6px 14px rgba(4, 82, 59, 0.15);
+}
+
+/* Dourado (#D4AF37) */
+.vehicle-month-card--gold {
+    border-left: 3px solid #D4AF37;
+}
+.vehicle-month-card--gold .vehicle-month-card-stat strong {
+    color: #D4AF37;
+}
+.vehicle-month-card--gold .vehicle-month-card-icon {
+    color: #D4AF37;
+}
+.vehicle-month-card--gold:hover {
+    box-shadow: 0 6px 14px rgba(212, 175, 55, 0.15);
+}
+
+/* Verde médio (#2F7D32) */
+.vehicle-month-card--dark-green {
+    border-left: 3px solid #2F7D32;
+}
+.vehicle-month-card--dark-green .vehicle-month-card-stat strong {
+    color: #2F7D32;
+}
+.vehicle-month-card--dark-green .vehicle-month-card-icon {
+    color: #2F7D32;
+}
+.vehicle-month-card--dark-green:hover {
+    box-shadow: 0 6px 14px rgba(47, 125, 50, 0.15);
+}
+
+/* Castanho (#8B6914) */
+.vehicle-month-card--brown {
+    border-left: 3px solid #8B6914;
+}
+.vehicle-month-card--brown .vehicle-month-card-stat strong {
+    color: #8B6914;
+}
+.vehicle-month-card--brown .vehicle-month-card-icon {
+    color: #8B6914;
+}
+.vehicle-month-card--brown:hover {
+    box-shadow: 0 6px 14px rgba(139, 105, 20, 0.15);
+}
+
+/* Verde azulado (#2b6a49) */
+.vehicle-month-card--teal {
+    border-left: 3px solid #2b6a49;
+}
+.vehicle-month-card--teal .vehicle-month-card-stat strong {
+    color: #2b6a49;
+}
+.vehicle-month-card--teal .vehicle-month-card-icon {
+    color: #2b6a49;
+}
+.vehicle-month-card--teal:hover {
+    box-shadow: 0 6px 14px rgba(43, 106, 73, 0.15);
+}
+
+/* Mostarda (#c49b28) */
+.vehicle-month-card--mustard {
+    border-left: 3px solid #c49b28;
+}
+.vehicle-month-card--mustard .vehicle-month-card-stat strong {
+    color: #c49b28;
+}
+.vehicle-month-card--mustard .vehicle-month-card-icon {
+    color: #c49b28;
+}
+.vehicle-month-card--mustard:hover {
+    box-shadow: 0 6px 14px rgba(196, 155, 40, 0.15);
+}
+
+/* Classes antigas - manter para compatibilidade (opcional) */
 .vehicle-month-card--orange {
     border-left: 3px solid #f97316;
+}
+.vehicle-month-card--orange .vehicle-month-card-stat strong {
+    color: #f97316;
+}
+.vehicle-month-card--orange .vehicle-month-card-icon {
+    color: #f97316;
 }
 
 .vehicle-month-card--blue {
     border-left: 3px solid #3b82f6;
+}
+.vehicle-month-card--blue .vehicle-month-card-stat strong {
+    color: #3b82f6;
+}
+.vehicle-month-card--blue .vehicle-month-card-icon {
+    color: #3b82f6;
 }
 
 .vehicle-month-card-header {
@@ -510,20 +607,11 @@ body.dashboard-body {
     line-height: 1.25;
 }
 
-/* ícone mais leve */
 .vehicle-month-card-icon {
     font-size: 0.95rem;
     line-height: 1;
     margin-top: 2px;
     opacity: 0.9;
-}
-
-.vehicle-month-card--orange .vehicle-month-card-icon {
-    color: #f97316;
-}
-
-.vehicle-month-card--blue .vehicle-month-card-icon {
-    color: #3b82f6;
 }
 
 .vehicle-month-card-stats {
@@ -537,7 +625,6 @@ body.dashboard-body {
     text-align: center;
 }
 
-/* números menos agressivos e mais próximos do dashboard */
 .vehicle-month-card-stat strong {
     display: block;
     font-size: 1.55rem;
@@ -545,14 +632,6 @@ body.dashboard-body {
     line-height: 1.1;
     margin-bottom: 4px;
     letter-spacing: -0.02em;
-}
-
-.vehicle-month-card--orange .vehicle-month-card-stat strong {
-    color: #f97316;
-}
-
-.vehicle-month-card--blue .vehicle-month-card-stat strong {
-    color: #3b82f6;
 }
 
 .vehicle-month-card-stat span {
@@ -563,12 +642,10 @@ body.dashboard-body {
     line-height: 1.2;
 }
 
-/* opcional: separadores subtis entre métricas */
 .vehicle-month-card-stat:not(:last-child) {
     border-right: 1px solid rgba(22, 50, 79, 0.06);
 }
 
-/* garantir coerência com a linha */
 .dashboard-recent-summary {
     align-items: stretch;
 }
