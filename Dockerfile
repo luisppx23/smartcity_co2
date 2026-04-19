@@ -19,7 +19,5 @@ WORKDIR /app
 # Copy the war from the build stage using a wildcard
 COPY --from=build /app/target/*.war app.war
 
-EXPOSE 8080
-
 # Run the app (Yes, java -jar works perfectly on Spring Boot WARs!)
 ENTRYPOINT ["java", "-jar", "app.war"]
